@@ -1,0 +1,117 @@
+# Portfolio Design System — Cursor Rules
+
+This file is the single source of truth for how to edit and extend this project. The design system overrides conventional patterns for creative portfolios. Apply these rules exactly.
+
+---
+
+## 1. Stack & File Structure
+
+- **Stack**: React + TypeScript + Tailwind CSS (or CSS Modules)
+- **Tokens**: `src/tokens/` — TypeScript constants for colors, spacing, typography, motion, layout
+- **Atomic components**: `src/components/ui/` — Button, Card, Input, etc.
+- **Layout components**: `src/components/layout/` — Header, Footer, etc.
+- **Styles**: `src/styles/globals.css` — CSS custom properties (design tokens)
+- **Utils**: `src/utils/` — cn, helpers
+
+---
+
+## 2. Color Usage — CRITICAL
+
+**Never use arbitrary inline colors** (`bg-[#27E5EF]`, `text-[#18181b]`, `border-[rgba(0,0,0,0.12)]`, etc.).
+
+**Always use semantic token-based utilities** that resolve to CSS variables or Tailwind theme colors:
+
+| Use Case | ✅ Semantic Class | ❌ Forbidden |
+|----------|-------------------|--------------|
+| Page background | `bg-background` | `bg-[#fafafa]` |
+| Surface | `bg-surface-1`, `bg-surface-2`, `bg-surface-dark-1` | `bg-[#f4f4f5]` |
+| Primary color | `bg-primary-base`, `text-primary-base` | `text-[#27E5EF]` |
+| Accent | `bg-accent-base`, `text-accent-base` | `bg-[#FFC000]` |
+| Text | `text-text`, `text-text-muted`, `text-text-inverted-1` | `text-[#18181b]` |
+| Borders | `border-border-base`, `border-border-divider` | `border-[rgba(0,0,0,0.12)]` |
+| Focus ring | `focus:outline focus:outline-2 focus:outline-focus-outline focus:outline-offset-2` | `focus:ring-[#206cdf]` |
+| Overlays | `bg-overlay-backdrop`, `bg-overlay-uniform` | `bg-[rgba(0,0,0,0.6)]` |
+
+If a semantic utility does not exist for a token, add it to `tailwind.config.ts` first by mapping to a CSS variable in `globals.css`.
+
+**Exception**: `src/styles/globals.css` and `src/tokens/colors.ts` define the raw hex/rgba values. These are the source of truth — only these files may contain raw color values. Components reference them via semantic Tailwind classes or CSS variables.
+
+---
+
+## 3. Design Tokens — Source of Truth
+
+- **Colors**: `src/tokens/colors.ts` + `src/styles/globals.css` (`--color-*`)
+- **Spacing**: `src/tokens/spacing.ts` + `--spacing-*` (use: 3px, 5px, 8px, 10px, 15px, 20px, 30px, 40px, 60px, 80px, 120px)
+- **Typography**: `src/tokens/typography.ts` + `--font-sans`, `--font-mono`
+- **Motion**: `src/tokens/motion.ts` + `--motion-*`, `--motion-easing-*`
+- **Layout**: `src/tokens/layout.ts` — container 1200px, 12-col grid, gutters, margins
+
+Use only the values defined in tokens. Do not introduce new values.
+
+---
+
+## 4. Layout & Grid
+
+- **Container**: `max-w-[1200px] mx-auto px-5` (or `max-w-container mx-auto px-container`)
+- **Grid**: `grid grid-cols-12 gap-[15px]` (responsive per breakpoints)
+- **Breakpoints**: xs (base), sm (640px), md (768px), lg (1024px), xl (1280px), 2xl (1536px)
+- **Spacing**: Use `spacing-*` tokens — e.g. `p-spacing-md`, `gap-spacing-sm`
+
+---
+
+## 5. Typography
+
+- **Sans (primary)**: Satoshi Variable — titles, headers, body
+- **Mono**: Oxygen Mono — subtitles, UI labels, buttons
+- Apply via `font-sans` and `font-mono` (Tailwind) or `.mono` utility class
+
+---
+
+## 6. Surfaces & Cards
+
+- **Card**: `bg-surface-dark-1` (or card bg token), `border border-border-base`, `rounded-none`, padding `p-[15px]`
+- **Border radius**: 4px or 8px only; cards use 0px (sharp edges)
+- **Elevation**: No decorative box-shadow. Use 1px borders or background contrast.
+- **Card layouts**: Cover, top-image, inset, horizontal — defined in design system
+
+---
+
+## 7. Motion
+
+- **Micro (hover, focus)**: 60ms `cubic-bezier(0,.9,.1,1)`
+- **Transitions**: `transition-all duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]`
+- **Reduced motion**: Respect `@media (prefers-reduced-motion: reduce)` — disable or shorten animations
+
+---
+
+## 8. Components
+
+- **Buttons**: Use `Button` from `src/components/ui/Button.tsx`. Variants: primary, secondary, ghost.
+- **Cards**: Use `Card` from `src/components/ui/Card.tsx`. Variants: default, cover, top-image, inset, horizontal.
+- **Icons**: Lucide React (`lucide-react`), 20px default, stroke-width 2.
+- **Interactive states**: Implement hover, focus, active, disabled for all interactive elements.
+
+---
+
+## 9. Accessibility
+
+- WCAG AA contrast; focus outlines 2px `#206cdf`; ARIA labels on icon-only buttons; keyboard navigation.
+- Never remove focus styles without a visible replacement.
+
+---
+
+## 10. SEO & Performance
+
+- Semantic HTML: `header`, `main`, `nav`, `article`, `footer`
+- Metadata and Open Graph in layout/page files
+- Static generation where possible; above-the-fold performance priority
+
+---
+
+## 11. Adding New Features
+
+1. Add tokens to `src/tokens/` and `globals.css` if new values are needed
+2. Extend Tailwind theme in `tailwind.config.ts` with semantic mappings to CSS vars
+3. Build atomic components in `src/components/ui/` using only token-based classes
+4. Compose layout components in `src/components/layout/`
+5. Never add arbitrary hex/rgba values in className — always use semantic utilities
