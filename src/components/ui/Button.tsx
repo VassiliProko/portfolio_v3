@@ -15,7 +15,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-focus-outline disabled:opacity-40 disabled:pointer-events-none';
+  const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline disabled:opacity-40 disabled:pointer-events-none';
   
   const variantStyles = {
     primary: 'bg-primary-base text-text hover:bg-primary-darker active:bg-primary-darker active:scale-[0.98]',

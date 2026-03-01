@@ -5,6 +5,8 @@ import '@/src/styles/globals.css';
 import { Header } from '@/src/components/layout/Header';
 import { Footer } from '@/src/components/layout/Footer';
 
+
+
 const satoshiVariable = localFont({
   src: '../public/fonts/Satoshi-Variable.ttf',
   variable: '--font-satoshi',
@@ -45,11 +47,12 @@ export default function RootLayout({
     <html lang="en" className={`${satoshiVariable.variable} ${oxygenMono.variable}`}>
       <body>
         {/* Spacer above header */}
-        <div className="h-[78px]" />
+        <div className="h-[78px] bg-background" />
 
         <Header />
         <main>{children}</main>
         <Footer />
+
       </body>
     </html>
   );

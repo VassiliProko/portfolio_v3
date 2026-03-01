@@ -9,7 +9,7 @@ export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="w-full bg-background sticky top-0 z-50">
+    <header className="w-full bg-background top-0 z-50">
       <div className="max-w-[1200px] mx-auto px-5 py-4">
         <div className="flex items-start justify-between">
           {/* Left: Logo/Name Section - Flex Row Container */}
@@ -36,22 +36,22 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Right: Navigation - Aligned to top with padding above */}
-          <nav className="hidden md:flex flex-row items-start gap-2 bg-surface-1 px-2 py-[7px] rounded-lg pt-2">
+          <nav className="hidden md:flex flex-row items-start gap-2">
             <Link
               href="/work"
-              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-focus-outline"
+              className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
             >
               Work
             </Link>
             <Link
               href="/play"
-              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-focus-outline"
+              className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
             >
-              Play
+              Art
             </Link>
             <Link
               href="/about"
-              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-focus-outline"
+              className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
             >
               About
             </Link>
@@ -59,7 +59,7 @@ export const Header: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-text focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-focus-outline"
+            className="md:hidden p-2 text-text focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
             aria-expanded={isMenuOpen}
@@ -77,21 +77,21 @@ export const Header: React.FC = () => {
           <nav className="md:hidden mt-4 flex flex-col gap-2 bg-surface-1 p-2 rounded-lg">
             <Link
               href="/work"
-              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-focus-outline"
+              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
               onClick={() => setIsMenuOpen(false)}
             >
               Work
             </Link>
             <Link
               href="/play"
-              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-focus-outline"
+              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
               onClick={() => setIsMenuOpen(false)}
             >
               Play
             </Link>
             <Link
               href="/about"
-              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-focus-outline"
+              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
               onClick={() => setIsMenuOpen(false)}
             >
               About
