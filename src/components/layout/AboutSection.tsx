@@ -48,7 +48,7 @@ export const AboutSection: React.FC = () => {
               loading="eager"
             />
           </div>
-          <div className="flex flex-col rounded-lg bg-surface-1 px-sm py-md flex-1">
+          <div className="flex flex-col rounded-lg bg-surface-1 px-sm py-md flex-1 bg-[url('/images/optimized/ui/about-sky.webp')] bg-cover bg-center bg-no-repeat bg-blend-soft-light">
             <h3 className="text-text font-sans font-medium text-xl md:text-2xl mb-4">
               Vassili Prokopenko
             </h3>

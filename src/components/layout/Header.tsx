@@ -14,6 +14,14 @@ function scrollToWork(e: React.MouseEvent<HTMLAnchorElement>) {
   }
 }
 
+function scrollToAbout(e: React.MouseEvent<HTMLAnchorElement>) {
+  const target = document.getElementById('about');
+  if (target) {
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -64,6 +72,7 @@ export const Header: React.FC = () => {
             <Link
               href="/#about"
               className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
+              onClick={isHome ? scrollToAbout : undefined}
             >
               About
             </Link>
@@ -105,7 +114,10 @@ export const Header: React.FC = () => {
                 <Link
                   href="/#about"
                   className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={(e) => {
+                    if (isHome) scrollToAbout(e);
+                    setIsMenuOpen(false);
+                  }}
                 >
                   About
                 </Link>

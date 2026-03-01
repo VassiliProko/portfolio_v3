@@ -51,19 +51,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-
-/* Vector 1 */
-
-// position: absolute;
-// width: 1079.57px;
-// height: 508px;
-// left: -68.57px;
-// top: -45px;
-
-// background: radial-gradient(106.34% 278.03% at 68.97% 99.21%, #64CBE5 0%, #F1FBFE 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, #E7E3E3;
-// mix-blend-mode: soft-light;
-// opacity: 0.8;
-// filter: blur(56px);
-
-

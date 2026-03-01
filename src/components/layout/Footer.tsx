@@ -48,8 +48,19 @@ function renderConsoleLine(
 
   const isHomeLink = line.href === '/';
   const isOnHome = ctx.pathname === '/';
+  const hashMatch = line.href.match(/^\/#(.+)$/);
+  const hashId = hashMatch ? hashMatch[1] : null;
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: ctx.prefersReducedMotion ? 'auto' : 'smooth' });
+  };
+  const scrollToHash = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (hashId && isOnHome) {
+      const target = document.getElementById(hashId);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: ctx.prefersReducedMotion ? 'auto' : 'smooth' });
+      }
+    }
   };
 
   return (
@@ -58,7 +69,13 @@ function renderConsoleLine(
         <Link
           href={line.href}
           className={linkClass}
-          onClick={isHomeLink && isOnHome ? (e) => { e.preventDefault(); scrollToTop(); } : undefined}
+          onClick={
+            isHomeLink && isOnHome
+              ? (e) => { e.preventDefault(); scrollToTop(); }
+              : hashId && isOnHome
+                ? scrollToHash
+                : undefined
+          }
         >
           {line.linkText.slice(0, linkShow)}
         </Link>
