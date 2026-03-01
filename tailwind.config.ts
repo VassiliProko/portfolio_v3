@@ -46,6 +46,7 @@ const config: Config = {
   				backdrop: 'var(--color-overlay-backdrop)',
   				uniform: 'var(--color-overlay-uniform)'
   			},
+  			'navbar-dropdown': 'var(--color-navbar-dropdown-bg)',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'

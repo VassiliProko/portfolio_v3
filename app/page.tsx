@@ -3,6 +3,7 @@
 import React from 'react';
 import { Hero_stat } from '@/src/components/layout/Hero-stats';
 import { SelectedWorkSection } from '@/src/components/layout/SelectedWorkSection';
+import { AboutSection } from '@/src/components/layout/AboutSection';
 import LightRays from "@/components/LightRays";
 
 export default function HomePage() {
@@ -28,7 +29,7 @@ export default function HomePage() {
                 distortion={0}
               />
             </div>
-            <div className="p-8 md:p-12 lg:p-16">
+            <div className="p-8 md:p-12 lg:p-16 min-h-[360px]">
               <h2 className="text-text-inverted-1 text-2xl md:text-3xl lg:text-4xl font-medium leading-tight mb-20">
                 Hey, I&apos;m Vassili, a designer who believes in crafting delightful experiences for social good
               </h2>
@@ -44,6 +45,9 @@ export default function HomePage() {
 
       {/* Selected Work / Case Studies */}
       <SelectedWorkSection />
+
+      {/* About Me */}
+      <AboutSection />
     </div>
   );
 }

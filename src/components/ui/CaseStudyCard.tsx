@@ -47,8 +47,8 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
         style={gradientStyles[gradient]}
         aria-hidden
       />
-      <div className="p-[15px] flex flex-col gap-1">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0">
+      <div className="flex flex-col gap-1">
+        <div className="mt-xs px-sm py-xs flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0 bg-surface-1 rounded-lg">
           <h3 className="text-text font-sans font-medium text-lg leading-tight">
             {title}
           </h3>
@@ -56,7 +56,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
             {duration}
           </span>
         </div>
-        <p className="text-text-subtle font-sans text-sm leading-relaxed">
+        <p className="px-sm text-text-subtle font-sans text-md leading-relaxed mb-4">
           {description}
         </p>
       </div>
@@ -66,7 +66,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
   const cardClasses = cn(
     'flex flex-col overflow-hidden bg-background',
     'transition-all duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
-    href && 'focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-focus-outline',
+    href && 'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
     className
   );
 

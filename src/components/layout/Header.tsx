@@ -3,10 +3,21 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
+
+function scrollToWork(e: React.MouseEvent<HTMLAnchorElement>) {
+  const target = document.getElementById('work');
+  if (target) {
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth' });
+  }
+}
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === '/';
 
   return (
     <header className="w-full bg-background top-0 z-50">
@@ -38,66 +49,70 @@ export const Header: React.FC = () => {
           {/* Right: Navigation - Aligned to top with padding above */}
           <nav className="hidden md:flex flex-row items-start gap-2">
             <Link
-              href="/work"
+              href="/#work"
               className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
+              onClick={isHome ? scrollToWork : undefined}
             >
               Work
             </Link>
             <Link
-              href="/play"
+              href="/art"
               className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
             >
               Art
-            </Link>
+            </Link> 
             <Link
-              href="/about"
+              href="/#about"
               className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
             >
               About
             </Link>
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 text-text focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-            aria-expanded={isMenuOpen}
-          >
-            {isMenuOpen ? (
-              <X size={20} strokeWidth={2} />
-            ) : (
-              <Menu size={20} strokeWidth={2} />
+          {/* Mobile: hamburger + dropdown column */}
+          <div className="md:hidden relative flex flex-col items-end">
+            <button
+              className="p-2 text-text focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+              aria-expanded={isMenuOpen}
+            >
+              {isMenuOpen ? (
+                <X size={20} strokeWidth={2} />
+              ) : (
+                <Menu size={20} strokeWidth={2} />
+              )}
+            </button>
+            {isMenuOpen && (
+              <nav className="absolute top-full right-0 mt-2 flex flex-col gap-2 items-end rounded-lg border border-border-base bg-navbar-dropdown py-2 pl-2 pr-3 backdrop-blur-md z-10">
+                <Link
+                  href="/#work"
+                  className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
+                  onClick={(e) => {
+                    if (isHome) scrollToWork(e);
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  Work
+                </Link>
+                <Link
+                  href="/art"
+                  className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Art
+                </Link>
+                <Link
+                  href="/#about"
+                  className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  About
+                </Link>
+              </nav>
             )}
-          </button>
+          </div>
         </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <nav className="md:hidden mt-4 flex flex-col gap-2 bg-surface-1 p-2 rounded-lg">
-            <Link
-              href="/work"
-              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Work
-            </Link>
-            <Link
-              href="/play"
-              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Play
-            </Link>
-            <Link
-              href="/about"
-              className="px-2 py-1.5 rounded-sm bg-surface-2 text-text text-base font-mono leading-tight hover:bg-surface-3 transition-colors duration-[60ms] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About
-            </Link>
-          </nav>
-        )}
       </div>
     </header>
   );

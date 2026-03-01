@@ -49,6 +49,9 @@
   --color-overlay-backdrop: rgba(0, 0, 0, 0.6);
   --color-overlay-uniform: rgba(0, 0, 0, 0.35);
 
+  /* Navbar dropdown glass */
+  --color-navbar-dropdown-bg: rgba(255, 255, 255, 0.88);
+
   /* Borders */
   --color-border-base: rgba(0, 0, 0, 0.12);
   --color-border-divider: rgba(0, 0, 0, 0.06);
@@ -99,6 +102,10 @@
   margin: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   max-width: 100vw;
@@ -143,8 +150,11 @@ body {
   font-family: var(--font-mono);
 }
 
-/* Focus Styles */
-.focus-ring {
+/* Focus ring: keyboard-only (visible when tabbing, not on click) */
+.focus-ring:focus {
+  outline: none;
+}
+.focus-ring:focus-visible {
   outline: 2px solid var(--color-focus-outline);
   outline-offset: 2px;
 }
@@ -165,7 +175,17 @@ body {
   background-blend-mode: soft-light, normal;
 }
 
+/* Hero stat: pulsing back dot (1s repeat) */
+@keyframes hero-stat-dot-pulse {
+  0%, 100% { transform: scale(0.9); }
+  50% { transform: scale(1.2); }
+}
 
+@media (prefers-reduced-motion: reduce) {
+  @keyframes hero-stat-dot-pulse {
+    0%, 100% { transform: scale(1); }
+  }
+}
 
 @layer base {
   :root {
