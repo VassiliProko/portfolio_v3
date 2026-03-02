@@ -33,11 +33,11 @@ export const ArtGallery: React.FC<ArtGalleryProps> = ({ items }) => {
 
   return (
     <>
-      <div className="columns-2 [column-gap:0.75rem] md:[column-gap:1rem]">
+      <div className="columns-1 sm:columns-2 [column-gap:0.75rem] md:[column-gap:1rem]">
         {items.map((item, index) => (
           <article
             key={`${item.title}-${item.year}-${index}`}
-            className="flex flex-col break-inside-avoid mb-3 md:mb-4 [&:last-child]:mb-0"
+            className="flex flex-col break-inside-avoid mb-6 [&:last-child]:mb-0"
           >
             {/* Image area — no fixed aspect; image height shows fully, hover zoom, click opens lightbox */}
             <div className="relative w-full rounded-lg overflow-hidden bg-surface-1 border border-border-base">
