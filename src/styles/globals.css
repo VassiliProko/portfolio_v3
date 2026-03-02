@@ -52,11 +52,24 @@
   /* Navbar dropdown glass */
   --color-navbar-dropdown-bg: rgba(255, 255, 255, 0.88);
 
+  /* Case study header: Home button on dark bar */
+  --color-case-study-header-btn-bg: rgba(137, 137, 137, 0.35);
+
+  /* Case study card: MCSS custom gradient */
+  --gradient-mcss: linear-gradient(180deg, #4C133C 0%, #291307 18.27%, #4B1614 46.15%, #AB2039 77.4%, #BB191B 100%);
+
+  /* Case study card: Prettify Minerva (gray base + red overlay) */
+  --gradient-prettify-minerva: linear-gradient(180deg, #464646 0%, #232323 48.56%, #1A1A1A 100%),
+    linear-gradient(180deg, #4C133C 0%, #291307 18.27%, #4B1614 46.15%, #AB2039 77.4%, #BB191B 100%);
+
   /* Borders */
   --color-border-base: rgba(0, 0, 0, 0.12);
   --color-border-divider: rgba(0, 0, 0, 0.06);
   --color-border-hover: rgba(0, 0, 0, 0.18);
   --color-border-focus: rgba(0, 0, 0, 0.24);
+
+  /* Compare image divider */
+  --shadow-compare-divider: -6px 0 14px rgba(0, 0, 0, 0.18);
 
   /* Spacing */
   --spacing-4xs: 3px;

@@ -37,21 +37,32 @@ export const AboutSection: React.FC = () => {
         
         <div className="flex flex-col lg:flex-row gap-4 overflow-hidden">
           <div className="relative w-full lg:w-[40%] lg:max-w-[360px] shrink-0 aspect-[1/1] lg:min-h-[320px] rounded-lg overflow-hidden">
+            
+          <div className="rounded-lg border-none bg-surface-dark-1 text-text-inverted-1 absolute bottom-0 left-0 right-0 mx-xs my-xs">
+            <div className="mx-auto px-3 py-3">
+              <div className="flex flex-col sm:flex-row justify-between gap-4">
+                <div className="px-2 py-1 rounded-sm bg-primary-darker text-sm font-mono text-text-primary">
+                  Name:
+                </div>
+                <div className="px-2 py-1 rounded-sm text-sm font-mono">
+                  Vassili Prokopenko
+                </div>
+              </div>
+            </div>
+          </div>
+            
             <img
-              src="/images/optimized/ui/about.webp"
+              src="/images/optimized/home/about.webp"
               alt="Vassili Prokopenko"
               className="w-full h-full object-cover"
               srcSet="
-                /images/optimized/ui/about.webp 1600w,
+                /images/optimized/home/about.webp 1600w,
               "
               sizes="(max-width: 1023px) min(calc(100vw - 2.5rem), 1160px), 720px"
               loading="eager"
             />
           </div>
-          <div className="flex flex-col rounded-lg bg-surface-1 px-sm py-md flex-1 bg-[url('/images/optimized/ui/about-sky.webp')] bg-cover bg-center bg-no-repeat bg-blend-soft-light">
-            <h3 className="text-text font-sans font-medium text-xl md:text-2xl mb-4">
-              Vassili Prokopenko
-            </h3>
+          <div className="flex flex-col rounded-lg bg-surface-1 px-sm py-md flex-1 bg-[url('/images/optimized/home/about-sky.webp')] bg-cover bg-center bg-no-repeat bg-blend-soft-light">
             <p className="text-text-subtle font-sans text-base leading-relaxed mb-4">
               I&apos;m a multidisciplinary designer and business analytics student at McGill,
               currently on exchange at HKUST.

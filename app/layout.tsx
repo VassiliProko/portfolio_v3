@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Oxygen_Mono } from 'next/font/google';
 import '@/src/styles/globals.css';
-import { Header } from '@/src/components/layout/Header';
+import { ConditionalHeader } from '@/src/components/layout/ConditionalHeader';
 import { Footer } from '@/src/components/layout/Footer';
 
 
@@ -46,10 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${satoshiVariable.variable} ${oxygenMono.variable}`}>
       <body>
-        {/* Spacer above header */}
-        <div className="h-[78px] bg-background" />
-
-        <Header />
+        <ConditionalHeader />
         <main>{children}</main>
         <Footer />
 

@@ -34,7 +34,11 @@ export const Header: React.FC = () => {
           {/* Left: Logo/Name Section - Flex Row Container */}
           <div className="flex flex-row items-start gap-6">
             {/* Col 1: SVG Logo */}
-            <div className="relative w-[80px] h-[80px] shrink-0 overflow-hidden rounded-lg">
+            <Link
+              href="/"
+              className="relative w-[80px] h-[80px] shrink-0 overflow-hidden rounded-lg block focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
+              aria-label="Home"
+            >
               <Image
                 src="/logo.svg"
                 alt="Vassili Prokopenko Logo"
@@ -42,7 +46,7 @@ export const Header: React.FC = () => {
                 className="object-contain"
                 priority
               />
-            </div>
+            </Link>
             {/* Col 2: Flex Col Container */}
             <div className="flex flex-col gap-1.5">
               <h1 className="text-text-muted font-bold text-2xl leading-tight font-sans">

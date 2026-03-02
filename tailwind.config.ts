@@ -47,6 +47,7 @@ const config: Config = {
   				uniform: 'var(--color-overlay-uniform)'
   			},
   			'navbar-dropdown': 'var(--color-navbar-dropdown-bg)',
+  			'case-study-header-btn': 'var(--color-case-study-header-btn-bg)',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'

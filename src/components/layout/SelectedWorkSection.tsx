@@ -3,13 +3,22 @@
 import React from 'react';
 import { CaseStudyCard } from '@/src/components/ui/CaseStudyCard';
 
-const CASE_STUDIES = [
+const CASE_STUDIES: Array<{
+  title: string;
+  duration: string;
+  description: string;
+  gradient: 'primary' | 'dark' | 'mcss' | 'prettify';
+  coverImageSrc?: string;
+  coverFullBleed?: boolean;
+  href: string;
+}> = [
   {
     title: "McGill Chinese Students' Society",
     duration: '2025',
     description:
-      "Exploring how Chinese + society culture could be captured in an intuitive, mobile-responsive website",
-    gradient: 'primary' as const,
+      "I revamped the MCSS website with a cleaner layout and improved mobile navigation, making it easier for students to discover events, sponsors, and society events.",
+    gradient: 'mcss',
+    coverImageSrc: '/images/optimized/home/mcss-cover.webp',
     href: '/mcss',
   },
   {
@@ -17,7 +26,8 @@ const CASE_STUDIES = [
     duration: '2025',
     description:
       "Improving the appearance of Minerva, McGill's central university portal",
-    gradient: 'dark' as const,
+    gradient: 'prettify',
+    coverImageSrc: '/images/optimized/home/prettify-minerva-cover2.webp',
     href: '/prettify-minerva',
   },
 ];
@@ -40,6 +50,8 @@ export const SelectedWorkSection: React.FC = () => {
               duration={study.duration}
               description={study.description}
               gradient={study.gradient}
+              coverImageSrc={study.coverImageSrc}
+              coverFullBleed={study.coverFullBleed}
               href={study.href}
             />
           ))}

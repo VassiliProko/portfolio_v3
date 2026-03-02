@@ -48,6 +48,8 @@ function renderConsoleLine(
 
   const isHomeLink = line.href === '/';
   const isOnHome = ctx.pathname === '/';
+  const isArtLink = line.href === '/art';
+  const isOnArt = ctx.pathname === '/art';
   const hashMatch = line.href.match(/^\/#(.+)$/);
   const hashId = hashMatch ? hashMatch[1] : null;
   const scrollToTop = () => {
@@ -62,6 +64,12 @@ function renderConsoleLine(
       }
     }
   };
+  const handleArtClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isOnArt) {
+      e.preventDefault();
+      scrollToTop();
+    }
+  };
 
   return (
     <>
@@ -72,9 +80,11 @@ function renderConsoleLine(
           onClick={
             isHomeLink && isOnHome
               ? (e) => { e.preventDefault(); scrollToTop(); }
-              : hashId && isOnHome
-                ? scrollToHash
-                : undefined
+              : isArtLink
+                ? handleArtClick
+                : hashId && isOnHome
+                  ? scrollToHash
+                  : undefined
           }
         >
           {line.linkText.slice(0, linkShow)}
@@ -193,7 +203,7 @@ export const Footer: React.FC = () => {
             ref={consoleRef}
             className="relative z-10 flex flex-col justify-between h-full min-h-[280px] md:min-h-[320px] p-5 md:p-6"
           >
-            <pre className="font-mono text-sm md:text-base text-text-inverted-1 leading-relaxed flex flex-col gap-0">
+            <pre className="font-mono text-sm md:text-base text-text-inverted-1 leading-relaxed flex flex-col gap-0 min-w-0 whitespace-pre-wrap break-words">
               {CONSOLE_LINES.map((line, index) => (
                 <span key={line.id} className="inline-block">
                   <span className="text-primary-base">&gt;</span>{' '}
@@ -226,7 +236,7 @@ export const Footer: React.FC = () => {
               className={cn(
                 'font-mono text-sm inline-flex items-center justify-center py-1 px-2 rounded-md',
                 'bg-surface-dark-2 text-text-inverted-1',
-                'hover:bg-white/10 transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
+                'hover:bg-white/20 transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
                 'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline'
               )}
             >
@@ -237,7 +247,7 @@ export const Footer: React.FC = () => {
               className={cn(
                 'font-mono text-sm inline-flex items-center justify-center py-1 px-2 rounded-md',
                 'bg-surface-dark-2 text-text-inverted-1',
-                'hover:bg-white/10 transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
+                'hover:bg-white/20 transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
                 'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline'
               )}
             >
