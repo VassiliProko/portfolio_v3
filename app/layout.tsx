@@ -4,7 +4,7 @@ import { Oxygen_Mono } from 'next/font/google';
 import '@/src/styles/globals.css';
 import { ConditionalHeader } from '@/src/components/layout/ConditionalHeader';
 import { Footer } from '@/src/components/layout/Footer';
-
+import { Analytics } from "@vercel/analytics/next"
 
 
 const satoshiVariable = localFont({
@@ -49,7 +49,7 @@ export default function RootLayout({
         <ConditionalHeader />
         <main>{children}</main>
         <Footer />
-
+        <Analytics />
       </body>
     </html>
   );
