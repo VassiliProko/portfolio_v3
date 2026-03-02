@@ -23,18 +23,18 @@ const oxygenMono = Oxygen_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Vassili Prokopenko — Designer',
-  description: 'Designer who believes in crafting delightful experiences for social good. Currently a student at McGill.',
+  title: 'Vassili Prokopenko',
+  description: 'A designer crafting delightful experiences for social good.',
   openGraph: {
-    title: 'Vassili Prokopenko — Designer',
-    description: 'Designer who believes in crafting delightful experiences for social good.',
+    title: 'Vassili Prokopenko',
+    description: 'A designer crafting delightful experiences for social good.',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vassili Prokopenko — Designer',
-    description: 'Designer who believes in crafting delightful experiences for social good.',
+    title: 'Vassili Prokopenko',
+    description: 'A designer crafting delightful experiences for social good.',
   },
 };
 
