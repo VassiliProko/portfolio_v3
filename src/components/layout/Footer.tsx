@@ -179,7 +179,7 @@ export const Footer: React.FC = () => {
           {/* Background image: grayscale by default, color on hover over this card */}
           <div className="absolute inset-0">
             <Image
-              src="/images/optimized/ui/footer-image.webp"
+              src="/images/optimized/home/footer-image.webp"
               alt=""
               fill
               className="object-cover grayscale group-hover:grayscale-0 transition-[filter] duration-1000 ease-[cubic-bezier(0,.9,.1,1)]"

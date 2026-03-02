@@ -8,7 +8,7 @@ const EXPERIENCES = [
   { title: 'USThing', subtitle: 'Product Designer', date: '2025 - Present', href: 'https://usthing.xyz' },
   { title: 'MCSS', subtitle: 'Designer', date: '2024 - Present', href: 'https://www.mcss.ca/' },
   { title: 'MUS', subtitle: 'Web Designer', date: '2026', href: 'https://www.musmcgill.com/' },
-  { title: 'Lyft', subtitle: 'UX Research Intern • McGill MicroEXP', date: '2025', href: 'https://lyfturbansolutions.com/' }
+  { title: 'Lyft', subtitle: 'UX Research Intern • MicroEXP', date: '2025', href: 'https://lyfturbansolutions.com/' }
 ];
 
 const EDUCATION = [
@@ -40,7 +40,7 @@ export const AboutSection: React.FC = () => {
             
           <div className="rounded-lg border-none bg-surface-dark-1 text-text-inverted-1 absolute bottom-0 left-0 right-0 mx-xs my-xs">
             <div className="mx-auto px-3 py-3">
-              <div className="flex flex-col sm:flex-row justify-between gap-4">
+              <div className="flex flex-row justify-between gap-4">
                 <div className="px-2 py-1 rounded-sm bg-primary-darker text-sm font-mono text-text-primary">
                   Name:
                 </div>
