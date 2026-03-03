@@ -41,7 +41,7 @@
   --color-disabled-opacity: 0.4;
 
   /* Focus */
-  --color-focus-outline: #206cdf;
+  --color-focus-outline: var(--color-primary-base);
   --color-focus-input-border: #D94030;
   --color-focus-input-ring: rgba(217, 64, 48, 0.2);
 

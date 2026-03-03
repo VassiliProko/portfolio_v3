@@ -49,7 +49,18 @@ export default function ArtPage() {
       {/* Hero Section */}
       <section className="w-full pt-12 md:pt-20">
         <div className="max-w-[1200px] mx-auto px-5">
-          <div className="bg-surface-dark-1 rounded-lg border-none overflow-hidden mb-3 relative flex">
+        <div className="rounded-lg border-none bg-surface-dark-1 text-text-inverted-1">
+          <div className="mx-auto px-3 py-3">
+            <div className="flex flex-col sm:flex-row justify-between gap-4">
+              <div className="px-2 py-1 rounded-sm bg-surface-dark-2 text-sm font-mono">
+                Art Gallery
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </section>
+          {/* <div className="bg-surface-dark-1 rounded-lg border-none overflow-hidden mb-3 relative flex">
             <div className="p-8 md:p-12 lg:p-16">
               <h2 className="text-text-inverted-1 text-2xl md:text-3xl lg:text-4xl font-medium leading-tight">
                 Art Gallery
@@ -57,7 +68,7 @@ export default function ArtPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Art Gallery — 2 columns, title + year under each (hero-stats style) */}
       <section className="w-full pb-12 md:pb-20 pt-2" aria-label="Art gallery">

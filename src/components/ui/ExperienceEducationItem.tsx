@@ -33,6 +33,8 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
       <div className="flex flex-wrap items-baseline gap-x-0 gap-y-0">
         <Link
           href={href}
+          target="_blank"
+          rel="noopener noreferrer"
           className="font-sans font-medium text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]"
         >
           {title}&nbsp;

@@ -51,7 +51,7 @@ export const colors = {
 
   // Focus Indicator
   focus: {
-    outline: '#206cdf',
+    outline: '#27E5EF', // primary.base
     'input-border': '#D94030',
     'input-ring': 'rgba(217, 64, 48, 0.2)',
   },
