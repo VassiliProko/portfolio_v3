@@ -4,17 +4,25 @@ import React from 'react';
 import Image from 'next/image';
 import { ExperienceEducationItem } from '@/src/components/ui/ExperienceEducationItem';
 
-const EXPERIENCES = [
-  { title: 'USThing', subtitle: 'Product Designer', date: '2025 - Present', href: 'https://usthing.xyz' },
-  { title: 'MCSS', subtitle: 'Designer', date: '2024 - Present', href: 'https://www.mcss.ca/' },
-  { title: 'MUS', subtitle: 'Web Designer', date: '2026', href: 'https://www.musmcgill.com/' },
-  { title: 'Lyft', subtitle: 'UX Research Intern • MicroEXP', date: '2025', href: 'https://lyfturbansolutions.com/' }
+interface ExperienceEducationEntry {
+  title: string;
+  subtitle: string;
+  date: string;
+  href: string;
+  imageSrc?: string;
+}
+
+const EXPERIENCES: ExperienceEducationEntry[] = [
+  { title: 'USThing', subtitle: 'Product Designer', date: '2025 - Present', href: 'https://usthing.xyz', imageSrc: '/images/optimized/home/usthing.webp' },
+  { title: 'MCSS', subtitle: 'Designer', date: '2024 - Present', href: 'https://www.mcss.ca/', imageSrc: '/images/optimized/home/mcss.webp' },
+  { title: 'MUS', subtitle: 'Web Designer', date: '2026', href: 'https://www.musmcgill.com/', imageSrc: '/images/optimized/home/mus.webp' },
+  { title: 'Lyft', subtitle: 'UX Research Intern • MicroEXP', date: '2025', href: 'https://lyfturbansolutions.com/', imageSrc: '/images/optimized/home/lyft.webp' }
 ];
 
-const EDUCATION = [
-  { title: 'McGill', subtitle: 'BCom', date: '2024 - 2027', href: 'https://www.mcgill.ca/' },
-  { title: 'HKUST', subtitle: 'Exchange', date: '2025 - 2026', href: 'https://hkust.edu.hk/' },
-  { title: 'DFSG', subtitle: 'HCD x AI Program', date: '2026', href: 'https://www.studio-school.com/' },
+const EDUCATION: ExperienceEducationEntry[] = [
+  { title: 'McGill', subtitle: 'BCom', date: '2024 - 2027', href: 'https://www.mcgill.ca/', imageSrc: '/images/optimized/home/mcgill.webp' },
+  { title: 'HKUST', subtitle: 'Exchange', date: '2025 - 2026', href: 'https://hkust.edu.hk/', imageSrc: '/images/optimized/home/hkust.webp' },
+  { title: 'DFSG', subtitle: 'HCD x AI Program', date: '2026', href: 'https://www.studio-school.com/', imageSrc: '/images/optimized/home/dfsg.webp' },
 ];
 
 export const AboutSection: React.FC = () => {
@@ -87,6 +95,8 @@ export const AboutSection: React.FC = () => {
                   subtitle={item.subtitle}
                   date={item.date}
                   href={item.href}
+                  imageSrc={item.imageSrc}
+                  tone="experience"
                 />
               ))}
             </ul>
@@ -105,6 +115,8 @@ export const AboutSection: React.FC = () => {
                   subtitle={item.subtitle}
                   date={item.date}
                   href={item.href}
+                  imageSrc={item.imageSrc}
+                  tone="education"
                 />
               ))}
             </ul>

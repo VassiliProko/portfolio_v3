@@ -29,7 +29,7 @@ export default function HomePage() {
                 distortion={0}
               />
             </div>
-            <div className="p-8 md:p-12 lg:p-16 min-h-[360px]">
+            <div className="p-8 md:p-12 lg:p-16 min-h-[360px] animate-fade-in-up">
               <h2 className="text-text-inverted-1 text-2xl md:text-3xl lg:text-4xl font-medium leading-tight mb-20">
                 Hey, I&apos;m Vassili, a designer who believes in crafting delightful experiences for social good
               </h2>

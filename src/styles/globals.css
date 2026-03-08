@@ -10,7 +10,7 @@
   --color-primary-lighter: #B0F2F7;
 
   /* Accent Colors */
-  --color-accent-darker: #695312;
+  --color-accent-darker: #B55F14;
   --color-accent-base: #FFC000;
 
   /* Neutral Colors */
@@ -198,6 +198,71 @@ body {
   @keyframes hero-stat-dot-pulse {
     0%, 100% { transform: scale(1); }
   }
+}
+
+/* Text Generate Effect: word-by-word blur-to-focus reveal */
+@keyframes text-generate-word {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes text-generate-word-blur {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.animate-text-generate-word {
+  animation: text-generate-word 0.4s var(--motion-easing-enter) forwards;
+  animation-delay: var(--text-generate-delay, 0ms);
+  opacity: 0;
+}
+
+/* Fade-in on page load */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in var(--motion-large) var(--motion-easing-enter) forwards;
+  animation-delay: 400ms;
+  opacity: 0;
+}
+
+/* Fade-in + slide up on page load (smooth opacity + motion) */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 2000ms var(--motion-easing-enter) forwards;
+  animation-delay: 150ms;
+  opacity: 0;
+}
+
+.animate-text-generate-word-blur {
+  animation-name: text-generate-word-blur;
 }
 
 @layer base {

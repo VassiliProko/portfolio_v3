@@ -13,7 +13,7 @@ export const colors = {
 
   // Accent Color
   accent: {
-    darker: '#695312',
+    darker: '#B55F14',
     base: '#FFC000',
   },
 
