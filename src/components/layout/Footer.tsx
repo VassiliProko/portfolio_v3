@@ -19,7 +19,7 @@ const CONSOLE_LINES: ConsoleLineConfig[] = [
   { id: 2, type: 'text', text: 'display.pages()' },
   { id: 3, type: 'link', linkText: 'home', href: '/' },
   { id: 4, type: 'link', linkText: 'work', href: '/#work', suffix: ' [mcss, prettify minerva]' },
-  { id: 5, type: 'link', linkText: 'art', href: '/art' },
+  { id: 5, type: 'link', linkText: 'play', href: '/#play' },
   { id: 6, type: 'link', linkText: 'about', href: '/#about' },
 ];
 
@@ -48,8 +48,6 @@ function renderConsoleLine(
 
   const isHomeLink = line.href === '/';
   const isOnHome = ctx.pathname === '/';
-  const isArtLink = line.href === '/art';
-  const isOnArt = ctx.pathname === '/art';
   const hashMatch = line.href.match(/^\/#(.+)$/);
   const hashId = hashMatch ? hashMatch[1] : null;
   const scrollToTop = () => {
@@ -64,12 +62,6 @@ function renderConsoleLine(
       }
     }
   };
-  const handleArtClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (isOnArt) {
-      e.preventDefault();
-      scrollToTop();
-    }
-  };
 
   return (
     <>
@@ -80,11 +72,9 @@ function renderConsoleLine(
           onClick={
             isHomeLink && isOnHome
               ? (e) => { e.preventDefault(); scrollToTop(); }
-              : isArtLink
-                ? handleArtClick
-                : hashId && isOnHome
-                  ? scrollToHash
-                  : undefined
+              : hashId && isOnHome
+                ? scrollToHash
+                : undefined
           }
         >
           {line.linkText.slice(0, linkShow)}

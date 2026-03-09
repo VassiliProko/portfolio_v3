@@ -22,6 +22,14 @@ function scrollToAbout(e: React.MouseEvent<HTMLAnchorElement>) {
   }
 }
 
+function scrollToPlay(e: React.MouseEvent<HTMLAnchorElement>) {
+  const target = document.getElementById('play');
+  if (target) {
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -68,10 +76,11 @@ export const Header: React.FC = () => {
               Work
             </Link>
             <Link
-              href="/art"
+              href="/#play"
               className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
+              onClick={isHome ? scrollToPlay : undefined}
             >
-              Art
+              Play
             </Link> 
             <Link
               href="/#about"
@@ -109,11 +118,14 @@ export const Header: React.FC = () => {
                   Work
                 </Link>
                 <Link
-                  href="/art"
+                  href="/#play"
                   className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={(e) => {
+                    if (isHome) scrollToPlay(e);
+                    setIsMenuOpen(false);
+                  }}
                 >
-                  Art
+                  Play
                 </Link>
                 <Link
                   href="/#about"
