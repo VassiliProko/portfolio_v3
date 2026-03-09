@@ -4,7 +4,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { cn } from '@/src/utils/cn';
 
-const HOVER_IMAGE_WIDTH = 280;
+const HOVER_IMAGE_WIDTH = 320;
 const HOVER_IMAGE_HALF = HOVER_IMAGE_WIDTH / 2;
 const EDGE_MARGIN_RATIO = 0.3; // image center stays between 30% and 70% of row width
 
@@ -144,7 +144,7 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
             transform: 'translate(-50%, -50%)',
           }}
         >
-          <div className="w-[280px] aspect-[5/3] rounded-sm overflow-hidden border border-border-base">
+          <div className="w-[320px] aspect-[5/3] rounded-sm overflow-hidden border border-border-base">
             {imageContent}
           </div>
         </div>

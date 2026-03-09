@@ -13,15 +13,6 @@ const CASE_STUDIES: Array<{
   href: string;
 }> = [
   {
-    title: "McGill Chinese Students' Society",
-    duration: '2025',
-    description:
-      "I revamped the MCSS website with a cleaner layout and improved mobile navigation, making it easier for students to discover events, sponsors, and society events.",
-    gradient: 'mcss',
-    coverImageSrc: '/images/optimized/home/mcss-cover.webp',
-    href: '/mcss',
-  },
-  {
     title: 'Prettify Minerva',
     duration: '2025',
     description:
@@ -29,6 +20,15 @@ const CASE_STUDIES: Array<{
     gradient: 'prettify',
     coverImageSrc: '/images/optimized/home/prettify-minerva-cover2.webp',
     href: '/prettify-minerva',
+  },
+  {
+    title: "McGill Chinese Students' Society",
+    duration: '2025',
+    description:
+      "I revamped the MCSS website with a cleaner layout and improved mobile navigation, making it easier for students to discover events, sponsors, and society events.",
+    gradient: 'mcss',
+    coverImageSrc: '/images/optimized/home/mcss-cover.webp',
+    href: '/mcss',
   },
 ];
 

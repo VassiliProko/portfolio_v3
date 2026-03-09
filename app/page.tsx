@@ -4,6 +4,7 @@ import React from 'react';
 import { Hero_stat } from '@/src/components/layout/Hero-stats';
 import { SelectedWorkSection } from '@/src/components/layout/SelectedWorkSection';
 import { AboutSection } from '@/src/components/layout/AboutSection';
+import { PlaygroundSection } from '@/src/components/layout/PlaygroundSection';
 import LightRays from "@/components/LightRays";
 
 export default function HomePage() {
@@ -45,6 +46,9 @@ export default function HomePage() {
 
       {/* Selected Work / Case Studies */}
       <SelectedWorkSection />
+
+      {/* Playground */}
+      <PlaygroundSection />
 
       {/* About Me */}
       <AboutSection />
