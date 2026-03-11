@@ -266,6 +266,15 @@ body {
   opacity: 0;
 }
 
+/* Hide scrollbar while keeping scroll functional */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 .animate-text-generate-word-blur {
   animation-name: text-generate-word-blur;
 }

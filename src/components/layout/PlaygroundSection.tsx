@@ -14,9 +14,7 @@ export interface PlaygroundItem {
   videoSrc?: string;
   riveSrc?: string;
   riveStateMachine?: string;
-  /** Force item into a specific column (0 = left, 1 = right). Omit for auto (alternating). */
   col?: 0 | 1;
-  /** Extra CSS classes applied to the media wrapper (e.g. filters). */
   mediaClassName?: string;
 }
 
@@ -118,14 +116,12 @@ const PLAYGROUND_ITEMS: PlaygroundItem[] = [
   },
 ];
 
-const COLLAPSED_HEIGHT = 'clamp(600px, 60vw, 908px)';
-
-const TRANSITION_MS = 2200;
+const SECTION_HEIGHT = 'clamp(600px, 60vw, 908px)';
 
 export const PlaygroundSection: React.FC = () => {
-  const [expanded, setExpanded] = useState(false);
-  const [collapsing, setCollapsing] = useState(false);
   const [lightboxItem, setLightboxItem] = useState<PlaygroundItem | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [atBottom, setAtBottom] = useState(false);
 
   const closeLightbox = useCallback(() => setLightboxItem(null), []);
 
@@ -139,96 +135,16 @@ export const PlaygroundSection: React.FC = () => {
       document.body.style.overflow = '';
     };
   }, [lightboxItem, closeLightbox]);
-  const sectionRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [contentHeight, setContentHeight] = useState<string>(COLLAPSED_HEIGHT);
-  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const measure = useCallback(() => {
-    if (!contentRef.current) return;
-    if (expanded && !collapsing) {
-      setContentHeight(`${contentRef.current.scrollHeight}px`);
-    } else {
-      setContentHeight(COLLAPSED_HEIGHT);
-    }
-  }, [expanded, collapsing]);
-
-  useEffect(() => {
-    measure();
-  }, [measure]);
-
-  const expandListenerRef = useRef<((e: TransitionEvent) => void) | null>(null);
-
-  useEffect(() => {
-    if (!expanded || collapsing || !contentRef.current) return;
+  const handleContentScroll = useCallback(() => {
     const el = contentRef.current;
-    const onEnd = (e: TransitionEvent) => {
-      if (e.propertyName !== 'max-height') return;
-      el.style.maxHeight = 'none';
-    };
-    expandListenerRef.current = onEnd;
-    el.addEventListener('transitionend', onEnd);
-    return () => {
-      el.removeEventListener('transitionend', onEnd);
-      expandListenerRef.current = null;
-    };
-  }, [expanded, collapsing]);
-
-  const startCollapse = useCallback(() => {
-    if (!contentRef.current) return;
-    const el = contentRef.current;
-
-    if (expandListenerRef.current) {
-      el.removeEventListener('transitionend', expandListenerRef.current);
-      expandListenerRef.current = null;
-    }
-
-    setExpanded(false);
-    setCollapsing(true);
-    el.style.maxHeight = `${el.scrollHeight}px`;
-    void el.offsetHeight;
-
-    setContentHeight(COLLAPSED_HEIGHT);
-    el.style.maxHeight = '';
-
-    collapseTimerRef.current = setTimeout(() => {
-      collapseTimerRef.current = null;
-      setCollapsing(false);
-    }, TRANSITION_MS + 100);
+    if (!el) return;
+    setAtBottom(el.scrollTop + el.clientHeight >= el.scrollHeight - 2);
   }, []);
-
-  const handleToggle = () => {
-    if (collapsing) return;
-
-    if (expanded && contentRef.current) {
-      sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-      let ticks = 0;
-      let lastY = window.scrollY;
-      const check = () => {
-        const currentY = window.scrollY;
-        if (currentY === lastY) {
-          ticks++;
-        } else {
-          ticks = 0;
-        }
-        lastY = currentY;
-        if (ticks >= 3) {
-          startCollapse();
-        } else {
-          requestAnimationFrame(check);
-        }
-      };
-      requestAnimationFrame(check);
-    } else {
-      setExpanded(true);
-    }
-  };
 
   return (
     <>
     <section
-      ref={sectionRef}
       className="w-full py-12 md:py-20 bg-background animate-fade-in-up-fast"
       aria-labelledby="playground-heading"
       id="play"
@@ -249,11 +165,12 @@ export const PlaygroundSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Image grid */}
+          {/* Scrollable image grid */}
           <div
             ref={contentRef}
-            className="relative px-3 overflow-hidden transition-[max-height] duration-[2200ms] ease-[cubic-bezier(.4,0,.2,1)] motion-reduce:transition-none"
-            style={{ maxHeight: contentHeight }}
+            className="relative px-3 overflow-y-auto overscroll-y-contain scrollbar-hide"
+            style={{ maxHeight: SECTION_HEIGHT }}
+            onScroll={handleContentScroll}
           >
             <div className="flex flex-col md:flex-row gap-sm pb-3">
               {(() => {
@@ -327,35 +244,12 @@ export const PlaygroundSection: React.FC = () => {
                 </div>
               ))}
             </div>
-
-            {/* Gradient fade + floating button */}
-            {!expanded && (
-              <div className="absolute bottom-0 left-0 right-0 h-[200px] flex items-end justify-center pointer-events-none bg-gradient-to-t from-surface-dark-1 via-surface-dark-1/80 to-transparent">
-                <button
-                  type="button"
-                  onClick={handleToggle}
-                  className="pointer-events-auto mb-md px-5 py-2 rounded-lg bg-surface-dark-1 border-none appearance-none shadow-none ring-0 font-mono text-sm text-text-inverted-1 hover:bg-surface-dark-2 transition-colors duration-300 ease-move focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:shadow-none focus-visible:shadow-none"
-                  style={{ WebkitTapHighlightColor: 'transparent' }}
-                >
-                  <span className="text-primary-base">&gt;</span> Load Creations
-                </button>
-              </div>
-            )}
           </div>
 
-          {/* Collapse button — only visible when expanded */}
-          {expanded && (
-            <div className="flex justify-center pb-3">
-              <button
-                type="button"
-                onClick={handleToggle}
-                className="px-5 py-2 rounded-lg bg-surface-dark-1 border-none appearance-none shadow-none ring-0 font-mono text-sm text-text-inverted-1 hover:bg-surface-dark-2 transition-colors duration-300 ease-move focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:shadow-none focus-visible:shadow-none"
-                style={{ WebkitTapHighlightColor: 'transparent' }}
-              >
-                <span className="text-primary-base">&gt;</span> Show Less
-              </button>
-            </div>
-          )}
+          {/* Bottom fade gradient — hidden once scrolled to end */}
+          <div
+            className={`pointer-events-none h-[80px] -mt-[80px] relative z-10 bg-gradient-to-t from-surface-dark-1 to-transparent transition-opacity duration-300 ${atBottom ? 'opacity-0' : 'opacity-100'}`}
+          />
         </div>
       </div>
     </section>
