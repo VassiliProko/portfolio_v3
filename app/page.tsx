@@ -32,7 +32,7 @@ export default function HomePage() {
             </div>
             <div className="p-8 md:p-12 lg:p-16 min-h-[360px] animate-fade-in-up">
               <h2 className="text-text-inverted-1 text-2xl md:text-3xl lg:text-4xl font-medium leading-tight mb-20">
-                Hey, I&apos;m Vassili, a designer who believes in crafting delightful experiences for social good
+                Hey, I&apos;m Vassili, a designer who believes in crafting delightful experiences that make a meaningful difference
               </h2>
               <p className="text-text-subtle text-md md:text-lg font-medium">
                 Currently a student at McGill

@@ -46,7 +46,7 @@
   --color-focus-input-ring: rgba(217, 64, 48, 0.2);
 
   /* Overlay */
-  --color-overlay-backdrop: rgba(0, 0, 0, 0.6);
+  --color-overlay-backdrop: rgba(0, 0, 0, 0.85);
   --color-overlay-uniform: rgba(0, 0, 0, 0.35);
 
   /* Navbar dropdown glass */
