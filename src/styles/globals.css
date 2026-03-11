@@ -116,7 +116,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 html,
@@ -239,7 +239,7 @@ body {
 
 .animate-fade-in {
   animation: fade-in var(--motion-large) var(--motion-easing-enter) forwards;
-  animation-delay: 400ms;
+  animation-delay: 600ms;
   opacity: 0;
 }
 
@@ -247,7 +247,7 @@ body {
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(64px);
   }
   to {
     opacity: 1;
@@ -256,8 +256,13 @@ body {
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 2000ms var(--motion-easing-enter) forwards;
+  animation: fade-in-up 2400ms var(--motion-easing-enter) forwards;
   animation-delay: 150ms;
+  opacity: 0;
+}
+
+.animate-fade-in-up-fast {
+  animation: fade-in-up 1200ms var(--motion-easing-enter) forwards;
   opacity: 0;
 }
 

@@ -28,7 +28,7 @@ const EDUCATION: ExperienceEducationEntry[] = [
 export const AboutSection: React.FC = () => {
   return (
     <section
-      className="w-full py-12 md:py-20 bg-background"
+      className="w-full py-12 md:py-20 bg-background animate-fade-in-up-fast"
       aria-labelledby="about-heading"
       id="about"
     >

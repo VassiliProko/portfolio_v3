@@ -18,7 +18,7 @@ const CONSOLE_LINES: ConsoleLineConfig[] = [
   { id: 1, type: 'text', text: 'footer.log("you have the capacity to create beauty in this world")' },
   { id: 2, type: 'text', text: 'display.pages()' },
   { id: 3, type: 'link', linkText: 'home', href: '/' },
-  { id: 4, type: 'link', linkText: 'work', href: '/#work', suffix: ' [mcss, prettify minerva]' },
+  { id: 4, type: 'link', linkText: 'work', href: '/#work', suffix: ' [prettify minerva, mcss]' },
   { id: 5, type: 'link', linkText: 'play', href: '/#play' },
   { id: 6, type: 'link', linkText: 'about', href: '/#about' },
 ];

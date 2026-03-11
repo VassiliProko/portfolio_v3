@@ -68,7 +68,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
       <CaseStudyHeader title={title} backHref={backHref} />
 
       {heroImageSrc && (
-        <div className="w-full max-w-[1200px] mx-auto px-5 pt-6">
+        <div className="w-full max-w-[1200px] mx-auto px-5 pt-6 animate-fade-in-up-fast">
           <div className="relative w-full aspect-[4/3] md:aspect-video rounded-[8px] overflow-hidden bg-surface-2">
           <img
             src={heroImageSrc}

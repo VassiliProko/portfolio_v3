@@ -229,7 +229,7 @@ export const PlaygroundSection: React.FC = () => {
     <>
     <section
       ref={sectionRef}
-      className="w-full py-12 md:py-20 bg-background"
+      className="w-full py-12 md:py-20 bg-background animate-fade-in-up-fast"
       aria-labelledby="playground-heading"
       id="play"
     >
