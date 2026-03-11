@@ -51,6 +51,38 @@ export default function PrettifyMinervaCaseStudyPage() {
         src="/images/optimized/prettify-minerva/prettify-minerva-logo.webp"
         alt="Prettify Minerva case study — logo"
       />
+      <CaseStudyImage
+        src="/images/optimized/prettify-minerva/prettify-minerva-problem.webp"
+        alt="The Problem"
+      />
+      <CaseStudyImage
+        src="/images/optimized/prettify-minerva/prettify-minerva-goal.webp"
+        alt="The Goal"
+      />
+      <CaseStudyImage
+        src="/images/optimized/prettify-minerva/prettify-minerva-initial.webp"
+        alt="Initial Design"
+      />
+      <CaseStudyImage
+        src="/images/optimized/prettify-minerva/prettify-minerva-community.webp"
+        alt="Community Feedback"
+      />
+      <CaseStudyImage
+        src="/images/optimized/prettify-minerva/prettify-minerva-vscode.webp"
+        alt="VSCode Extension"
+      />
+      <CaseStudyImage
+        src="/images/optimized/prettify-minerva/prettify-minerva-solution.webp"
+        alt="The Solution"
+      />
+      <CaseStudyImage
+        src="/images/optimized/prettify-minerva/prettify-minerva-quicklinks.webp"
+        alt="Quick Links"
+      />
+      <CaseStudyImage
+        src="/images/optimized/prettify-minerva/prettify-minerva-result.webp"
+        alt="The Result"
+      />
     </CaseStudyLayout>
   );
 }
