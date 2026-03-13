@@ -120,6 +120,7 @@ const SECTION_HEIGHT = 'clamp(600px, 60vw, 908px)';
 
 export const PlaygroundSection: React.FC = () => {
   const [lightboxItem, setLightboxItem] = useState<PlaygroundItem | null>(null);
+  const [lightboxVisible, setLightboxVisible] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [atBottom, setAtBottom] = useState(false);
   const [scrollRatio, setScrollRatio] = useState(0);
@@ -127,16 +128,25 @@ export const PlaygroundSection: React.FC = () => {
   const [isScrolling, setIsScrolling] = useState(false);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const closeLightbox = useCallback(() => setLightboxItem(null), []);
+  const openLightbox = useCallback((item: PlaygroundItem) => {
+    setLightboxItem(item);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setLightboxVisible(true));
+    });
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    setLightboxVisible(false);
+    const timeout = setTimeout(() => setLightboxItem(null), 250);
+    return () => clearTimeout(timeout);
+  }, []);
 
   useEffect(() => {
     if (!lightboxItem) return;
     const onEscape = (e: KeyboardEvent) => e.key === 'Escape' && closeLightbox();
     document.addEventListener('keydown', onEscape);
-    document.body.style.overflow = 'hidden';
     return () => {
       document.removeEventListener('keydown', onEscape);
-      document.body.style.overflow = '';
     };
   }, [lightboxItem, closeLightbox]);
 
@@ -215,8 +225,8 @@ export const PlaygroundSection: React.FC = () => {
                     className={`relative w-full rounded-lg overflow-hidden group cursor-zoom-in${item.mediaClassName ? ` ${item.mediaClassName}` : ''}`}
                     role="button"
                     tabIndex={0}
-                    onClick={() => setLightboxItem(item)}
-                    onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setLightboxItem(item)}
+                    onClick={() => openLightbox(item)}
+                    onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && openLightbox(item)}
                     aria-label={`View ${item.title} full size`}
                   >
                     {item.riveSrc ? (
@@ -291,14 +301,14 @@ export const PlaygroundSection: React.FC = () => {
     {/* Lightbox */}
     {lightboxItem && (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4 md:p-8"
+        className={`fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 transition-all duration-250 ease-out motion-reduce:transition-none ${lightboxVisible ? 'bg-overlay-backdrop opacity-100' : 'bg-transparent opacity-0'}`}
         onClick={closeLightbox}
         role="dialog"
         aria-modal="true"
         aria-label={`Viewing ${lightboxItem.title}`}
       >
         <div
-          className="relative flex flex-col md:flex-row w-full max-w-[92vw] max-h-[92vh] gap-4"
+          className={`relative flex flex-col md:flex-row w-full max-w-[92vw] max-h-[92vh] gap-4 transition-all duration-250 ease-out motion-reduce:transition-none ${lightboxVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Media */}

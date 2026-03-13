@@ -129,8 +129,12 @@ export const Header: React.FC = () => {
                 <Menu size={20} strokeWidth={2} />
               )}
             </button>
-            {isMenuOpen && (
-              <nav className="absolute top-full right-0 mt-4 flex flex-col gap-2 items-end rounded-lg border border-border-base bg-navbar-dropdown py-2 pl-2 pr-3 backdrop-blur-md z-10">
+            <div
+              className={`absolute top-full right-0 mt-4 rounded-lg border border-border-base bg-navbar-dropdown backdrop-blur-md grid transition-[grid-template-rows,opacity] duration-200 ease-[cubic-bezier(0,.9,.1,1)] z-10 ${
+                isMenuOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+              }`}
+            >
+              <nav className="overflow-hidden min-h-0 w-max flex flex-col gap-2 items-end py-2 pl-2 pr-3">
                 <Link
                   href="/#work"
                   className="px-2 py-1.5 text-text text-base font-mono leading-tight hover:inline hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200"
@@ -138,6 +142,7 @@ export const Header: React.FC = () => {
                     if (isHome) scrollToWork(e);
                     setIsMenuOpen(false);
                   }}
+                  tabIndex={isMenuOpen ? 0 : -1}
                 >
                   Work
                 </Link>
@@ -148,6 +153,7 @@ export const Header: React.FC = () => {
                     if (isHome) scrollToPlay(e);
                     setIsMenuOpen(false);
                   }}
+                  tabIndex={isMenuOpen ? 0 : -1}
                 >
                   Play
                 </Link>
@@ -158,11 +164,12 @@ export const Header: React.FC = () => {
                     if (isHome) scrollToAbout(e);
                     setIsMenuOpen(false);
                   }}
+                  tabIndex={isMenuOpen ? 0 : -1}
                 >
                   About
                 </Link>
               </nav>
-            )}
+            </div>
           </div>
         </div>
       </div>
