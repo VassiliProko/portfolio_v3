@@ -75,7 +75,7 @@ export const Header: React.FC = () => {
             <div className={`flex flex-col transition-all duration-300 ease-[cubic-bezier(.4,0,.2,1)] ${
               isScrolled ? 'gap-0' : 'gap-1.5'
             }`}>
-              <h1 className={`text-text-muted font-bold leading-tight font-sans transition-all duration-300 ease-[cubic-bezier(.4,0,.2,1)] ${
+              <h1 className={` font-bold leading-tight font-sans transition-all duration-300 ease-[cubic-bezier(.4,0,.2,1)] ${
                 isScrolled ? 'text-base' : 'text-2xl'
               }`}>
                 Vassili Prokopenko

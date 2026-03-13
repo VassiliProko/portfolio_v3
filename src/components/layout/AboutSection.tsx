@@ -73,10 +73,10 @@ export const AboutSection: React.FC = () => {
           <div className="flex flex-col rounded-lg bg-surface-1 px-sm py-md flex-1 bg-[url('/images/optimized/home/about-sky.webp')] bg-cover bg-center bg-no-repeat bg-blend-soft-light">
             <p className="text-text-subtle font-sans text-base leading-relaxed mb-4">
               I&apos;m a multidisciplinary designer and business analytics student at McGill,
-              currently on exchange at HKUST.
+              currently on exchange at HKUST. Waddling around here and there, trying to make the best of it.
             </p>
             <p className="text-text-subtle font-sans text-base leading-relaxed">
-              I believe the future belongs to designers who build.
+              I believe the future belongs to designers who build. hehehe
             </p>
           </div>
         </div>

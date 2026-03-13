@@ -122,6 +122,10 @@ export const PlaygroundSection: React.FC = () => {
   const [lightboxItem, setLightboxItem] = useState<PlaygroundItem | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [atBottom, setAtBottom] = useState(false);
+  const [scrollRatio, setScrollRatio] = useState(0);
+  const [thumbSize, setThumbSize] = useState(100);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const closeLightbox = useCallback(() => setLightboxItem(null), []);
 
@@ -139,7 +143,21 @@ export const PlaygroundSection: React.FC = () => {
   const handleContentScroll = useCallback(() => {
     const el = contentRef.current;
     if (!el) return;
-    setAtBottom(el.scrollTop + el.clientHeight >= el.scrollHeight - 2);
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    const maxScroll = scrollHeight - clientHeight;
+    setAtBottom(scrollTop + clientHeight >= scrollHeight - 2);
+    setScrollRatio(maxScroll > 0 ? scrollTop / maxScroll : 0);
+    setThumbSize(maxScroll > 0 ? Math.max(20, (clientHeight / scrollHeight) * 100) : 100);
+
+    setIsScrolling(true);
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    scrollTimeoutRef.current = setTimeout(() => setIsScrolling(false), 1200);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
   }, []);
 
   return (
@@ -166,9 +184,10 @@ export const PlaygroundSection: React.FC = () => {
           </div>
 
           {/* Scrollable image grid */}
+          <div className="relative">
           <div
             ref={contentRef}
-            className="relative px-3 overflow-y-auto overscroll-y-contain scrollbar-hide"
+            className="px-3 overflow-y-auto scrollbar-hide"
             style={{ maxHeight: SECTION_HEIGHT }}
             onScroll={handleContentScroll}
           >
@@ -244,6 +263,21 @@ export const PlaygroundSection: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Scroll indicator track */}
+          <div
+            className={`absolute right-1 top-0 bottom-0 w-[4px] rounded-full transition-opacity duration-300 ${isScrolling ? 'opacity-100' : 'opacity-0'}`}
+            aria-hidden
+          >
+            <div
+              className="absolute w-full rounded-full bg-white/30"
+              style={{
+                height: `${thumbSize}%`,
+                top: `${scrollRatio * (100 - thumbSize)}%`,
+              }}
+            />
+          </div>
           </div>
 
           {/* Bottom fade gradient — hidden once scrolled to end */}
