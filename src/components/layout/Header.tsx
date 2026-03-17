@@ -38,6 +38,11 @@ export const Header: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
+      const locked = document.documentElement.dataset.scrollLocked;
+      if (locked !== undefined) {
+        setIsScrolled(parseInt(locked, 10) > 50);
+        return;
+      }
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
