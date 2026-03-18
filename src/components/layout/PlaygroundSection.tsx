@@ -103,6 +103,14 @@ const PLAYGROUND_ITEMS: PlaygroundItem[] = [
     imageAlt: 'Wet Reef',
   },
   {
+    title: 'MUS Website',
+    year: '2026',
+    description: 'a landing page concept for MUS',
+    tools: ['Figma','Procreate'],
+    imageSrc: '/images/optimized/art/mus_website.webp',
+    imageAlt: 'MUS Website',
+  },
+  {
     title: 'Crab Cave',
     year: '2025',
     description: 'just crabs yuh',
