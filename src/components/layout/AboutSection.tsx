@@ -22,7 +22,7 @@ const EXPERIENCES: ExperienceEducationEntry[] = [
 const EDUCATION: ExperienceEducationEntry[] = [
   { title: 'McGill', subtitle: 'BCom', date: '2024 - 2027', href: 'https://www.mcgill.ca/', imageSrc: '/images/optimized/home/mcgill.webp' },
   { title: 'HKUST', subtitle: 'Exchange', date: '2025 - 2026', href: 'https://hkust.edu.hk/', imageSrc: '/images/optimized/home/hkust.webp' },
-  { title: 'DFSG', subtitle: 'HCD x AI Program', date: '2026', href: 'https://www.studio-school.com/', imageSrc: '/images/optimized/home/dfsg.webp' },
+  { title: 'DFSG', subtitle: 'HCD x AI Program', date: '2026', href: 'https://www.studio-school.com/', imageSrc: '/images/optimized/home/DFSG.webp' },
 ];
 
 export const AboutSection: React.FC = () => {

@@ -123,7 +123,7 @@ const PLAYGROUND_ITEMS: PlaygroundItem[] = [
     year: '2024',
     description: 'A character from gacha game wuthering waves :p',
     tools: ['Procreate'],
-    imageSrc: '/images/optimized/art/yinlin.jpg',
+    imageSrc: '/images/optimized/art/Yinlin.jpg',
     imageAlt: 'Yinlin',
   },
   {
