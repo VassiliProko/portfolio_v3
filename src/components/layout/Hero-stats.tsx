@@ -80,7 +80,7 @@ export const Hero_stat: React.FC = () => {
       <div className="mx-auto px-3 py-3">
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           <div className="px-2 py-1 rounded-sm bg-primary-darker text-sm font-mono text-text-primary">
-            Based in Hong Kong
+            Currently based in Hong Kong
           </div>
           
 
