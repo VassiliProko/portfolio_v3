@@ -80,8 +80,9 @@ export const Hero_stat: React.FC = () => {
       <div className="mx-auto px-3 py-3">
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           <div className="px-2 py-1 rounded-sm bg-primary-darker text-sm font-mono text-text-primary">
-            Based in Washington D.C. Area
+            Based in Hong Kong
           </div>
+          
 
           {/* Time alive: 3 divs — (1) dot + "alive for", (2) number, (3) "min" */}
           <div className="flex items-center gap-2 mr-2">

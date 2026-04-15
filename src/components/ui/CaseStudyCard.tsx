@@ -55,6 +55,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
   className,
 }) => {
   const hasCoverImage = Boolean(coverImageSrc);
+  const isPreoptimizedLocalAsset = coverImageSrc?.startsWith('/images/optimized/');
 
   const content = (
     <>
@@ -84,6 +85,8 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
                 coverFullBleed ? 'object-cover w-full h-full' : 'w-full h-auto'
               )}
               sizes="(max-width: 768px) 100vw, 50vw"
+              priority
+              unoptimized={isPreoptimizedLocalAsset}
             />
           </div>
         )}

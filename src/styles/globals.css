@@ -98,6 +98,11 @@
   --motion-easing-exit: cubic-bezier(.4,0,1,1);
   --motion-easing-move: cubic-bezier(.4,0,.2,1);
 
+  /* RevisionDojo hero chip (hover expand / label fade) */
+  --rd-badge-expand-ms: 300ms;
+  --rd-badge-label-ms: 150ms;
+  --rd-badge-label-delay: 100ms;
+
   /* Layout */
   --container-max-width: 1200px;
   --container-padding: 20px;
@@ -152,6 +157,26 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Hero RevisionDojo pill: the global reduced-motion rule above uses
+ * `transition-duration: 0.01ms !important` on *, which overrides Tailwind
+ * `duration-*` on this control. When motion is allowed, restore long
+ * transitions here (after the * rule) and use max-width (not grid tracks)
+ * for smooth width interpolation.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .rd-badge-shell {
+    transition:
+      max-width var(--rd-badge-expand-ms) cubic-bezier(0.45, 0, 0.2, 1),
+      padding var(--rd-badge-expand-ms) cubic-bezier(0.45, 0, 0.2, 1) !important;
+  }
+
+  .rd-badge-label {
+    transition: opacity var(--rd-badge-label-ms) cubic-bezier(0.45, 0, 0.2, 1)
+      var(--rd-badge-label-delay) !important;
   }
 }
 

@@ -1,12 +1,28 @@
 'use client'
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { Hero_stat } from '@/src/components/layout/Hero-stats';
+import { RevisionDojoExpandableBadge } from '@/src/components/layout/RevisionDojoExpandableBadge';
 import { SelectedWorkSection } from '@/src/components/layout/SelectedWorkSection';
 import { AboutSection } from '@/src/components/layout/AboutSection';
-import { PlaygroundSection } from '@/src/components/layout/PlaygroundSection';
-import LightRays from "@/components/LightRays";
+
+const LightRays = dynamic(() => import('@/components/LightRays'), { ssr: false });
+
+const PlaygroundSection = dynamic(
+  () =>
+    import('@/src/components/layout/PlaygroundSection').then((mod) => mod.PlaygroundSection),
+  {
+    loading: () => (
+      <section
+        className="w-full py-12 md:py-20 bg-background min-h-[480px] border-b border-border-divider"
+        aria-busy="true"
+        aria-label="Loading playground"
+      />
+    ),
+  }
+);
 
 export default function HomePage() {
   return (
@@ -32,30 +48,33 @@ export default function HomePage() {
               />
             </div>
             <div className="p-8 md:p-12 lg:p-16 min-h-[360px] animate-fade-in-up">
-              <h2 className="text-text-inverted-1 text-2xl md:text-3xl lg:text-4xl font-medium leading-tight mb-20">
-                Hey, I&apos;m Vassili, a designer who believes in crafting delightful experiences that make a meaningful difference
+              <h2 className="text-text-inverted-1 text-3xl lg:text-4xl font-medium leading-tight mb-12">
+                just a young lad busy munching & cooking delightful ideas
               </h2>
-              <div className="inline-flex flex-col bg-surface-1 rounded-lg overflow-hidden">
-                <div className="flex items-center gap-3 px-2 py-1">
-                  <span className="text-text-subtle text-md md:text-lg font-medium">
-                    Currently a student at McGill
-                  </span>
-                  <Image
-                    src="/images/optimized/home/mcgill.svg"
-                    alt="McGill University"
-                    width={24}
-                    height={24}
-                    className="shrink-0"
-                  />
+              <div className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center">
+                <div className="inline-flex flex-col bg-surface-1 rounded-lg overflow-hidden shrink-0">
+                  <div className="flex items-center gap-3 px-2 py-1">
+                    <span className="text-text-subtle text-md md:text-lg font-medium">
+                      Student at McGill
+                    </span>
+                    <Image
+                      src="/images/optimized/home/mcgill.svg"
+                      alt="McGill University"
+                      width={24}
+                      height={24}
+                      className="shrink-0"
+                    />
+                  </div>
+                  <div className="flex w-full h-2 overflow-hidden shrink-0">
+                    <div className="flex-[3] bg-surface-dark-1" />
+                    <div className="flex-[2] bg-surface-dark-2" />
+                    <div className="flex-[2] bg-primary-base" />
+                    <div className="flex-[1.5] bg-primary-darker" />
+                    <div className="flex-[0.75] bg-accent-base" />
+                    <div className="flex-[1] bg-text-inverted-1" />
+                  </div>
                 </div>
-                <div className="flex w-full h-2 overflow-hidden shrink-0">
-                  <div className="flex-[3] bg-surface-dark-1" />
-                  <div className="flex-[2] bg-surface-dark-2" />
-                  <div className="flex-[2] bg-primary-base" />
-                  <div className="flex-[1.5] bg-primary-darker" />
-                  <div className="flex-[0.75] bg-accent-base" />
-                  <div className="flex-[1] bg-text-inverted-1" />
-                </div>
+                <RevisionDojoExpandableBadge />
               </div>
             </div>
           </div>
