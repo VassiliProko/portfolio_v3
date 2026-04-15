@@ -88,7 +88,7 @@ export const Header: React.FC = () => {
               <p className={`text-primary-base text-base font-mono leading-tight transition-all duration-300 ease-[cubic-bezier(.4,0,.2,1)] overflow-hidden ${
                 isScrolled ? 'opacity-0 max-h-0' : 'opacity-100 max-h-8'
               }`}>
-                Designer
+                Designer x Artist
               </p>
             </div>
           </div>
