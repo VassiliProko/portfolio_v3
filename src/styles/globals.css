@@ -59,6 +59,9 @@
   /* Case study card: MCSS custom gradient */
   --gradient-mcss: linear-gradient(180deg, #4C133C 0%, #291307 18.27%, #4B1614 46.15%, #AB2039 77.4%, #BB191B 100%);
 
+  /* Case study card: USThing app feature (Figma node 545:623) */
+  --gradient-usthing-app: linear-gradient(-43.4788deg, #186CC7 0%, #D5F6FA 100%);
+
   /* Case study card: Prettify Minerva (gray base + red overlay) */
   --gradient-prettify-minerva: linear-gradient(180deg, #464646 0%, #232323 48.56%, #1A1A1A 100%),
     linear-gradient(180deg, #4C133C 0%, #291307 18.27%, #4B1614 46.15%, #AB2039 77.4%, #BB191B 100%);
@@ -99,9 +102,16 @@
   --motion-easing-move: cubic-bezier(.4,0,.2,1);
 
   /* RevisionDojo hero chip (hover expand / label fade) */
-  --rd-badge-expand-ms: 300ms;
-  --rd-badge-label-ms: 150ms;
-  --rd-badge-label-delay: 100ms;
+  --rd-badge-expand-ms: 680ms;
+  --rd-badge-label-ms: 420ms;
+  --rd-badge-label-delay: 180ms;
+  --rd-badge-icon-ms: 900ms;
+  --rd-badge-icon-delay: 30ms;
+  --rd-badge-icon-shift: 0.6rem;
+  --rd-badge-label-shift: 0.5rem;
+  --rd-badge-expand-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --rd-badge-label-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --rd-badge-icon-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Layout */
   --container-max-width: 1200px;
@@ -168,15 +178,61 @@ body {
  * for smooth width interpolation.
  */
 @media (prefers-reduced-motion: no-preference) {
+  @keyframes rd-badge-icon-engine {
+    0% {
+      transform: translateX(0) rotate(0deg);
+    }
+    46% {
+      transform: translateX(var(--rd-badge-icon-shift)) rotate(14deg);
+    }
+    76% {
+      transform: translateX(var(--rd-badge-icon-shift)) rotate(-7deg);
+    }
+    100% {
+      transform: translateX(var(--rd-badge-icon-shift)) rotate(0deg);
+    }
+  }
+
   .rd-badge-shell {
     transition:
-      max-width var(--rd-badge-expand-ms) cubic-bezier(0.45, 0, 0.2, 1),
-      padding var(--rd-badge-expand-ms) cubic-bezier(0.45, 0, 0.2, 1) !important;
+      max-width var(--rd-badge-expand-ms) var(--rd-badge-expand-ease),
+      padding var(--rd-badge-expand-ms) var(--rd-badge-expand-ease) !important;
+  }
+
+  .rd-badge-icon {
+    transform: translateX(0) rotate(0deg);
+    transition: transform calc(var(--rd-badge-icon-ms) * 0.55) var(--rd-badge-icon-ease)
+      var(--rd-badge-icon-delay) !important;
+    transform-origin: 50% 50%;
+    will-change: transform;
   }
 
   .rd-badge-label {
-    transition: opacity var(--rd-badge-label-ms) cubic-bezier(0.45, 0, 0.2, 1)
-      var(--rd-badge-label-delay) !important;
+    max-width: 0;
+    padding-left: 0;
+    padding-right: 0;
+    transform: translateX(var(--rd-badge-label-shift));
+    transition:
+      max-width var(--rd-badge-expand-ms) var(--rd-badge-expand-ease),
+      padding-left var(--rd-badge-expand-ms) var(--rd-badge-expand-ease),
+      padding-right var(--rd-badge-expand-ms) var(--rd-badge-expand-ease),
+      opacity var(--rd-badge-label-ms) var(--rd-badge-label-ease) var(--rd-badge-label-delay),
+      transform var(--rd-badge-label-ms) var(--rd-badge-label-ease) var(--rd-badge-label-delay) !important;
+  }
+
+  .group:hover .rd-badge-icon,
+  .group:focus-visible .rd-badge-icon {
+    animation: rd-badge-icon-engine var(--rd-badge-icon-ms) var(--rd-badge-icon-ease)
+      var(--rd-badge-icon-delay) both;
+  }
+
+  .group:hover .rd-badge-label,
+  .group:focus-visible .rd-badge-label {
+    max-width: 22rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 

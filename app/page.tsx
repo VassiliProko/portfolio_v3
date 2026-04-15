@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { Hero_stat } from '@/src/components/layout/Hero-stats';
 import { RevisionDojoExpandableBadge } from '@/src/components/layout/RevisionDojoExpandableBadge';
-import { SelectedWorkSection } from '@/src/components/layout/SelectedWorkSection';
+import { WorkBentoSection } from '@/src/components/layout/WorkBentoSection';
 import { AboutSection } from '@/src/components/layout/AboutSection';
 
 const LightRays = dynamic(() => import('@/components/LightRays'), { ssr: false });
@@ -84,7 +84,8 @@ export default function HomePage() {
       </section>
 
       {/* Selected Work / Case Studies */}
-      <SelectedWorkSection />
+      {/* <SelectedWorkSection /> */}
+      <WorkBentoSection />
 
       {/* Playground */}
       <PlaygroundSection />

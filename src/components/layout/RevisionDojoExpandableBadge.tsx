@@ -35,12 +35,22 @@ export function RevisionDojoExpandableBadge() {
         className={[
           'rd-badge-shell hidden h-11 max-h-11 min-w-0 max-w-[2.75rem] md:inline-flex',
           'items-center overflow-hidden rounded-full bg-surface-dark-3 pl-1 pr-1',
-          'group-hover:max-w-[min(26rem,calc(100vw-6rem))] group-hover:pr-3',
-          'group-focus-visible:max-w-[min(26rem,calc(100vw-6rem))] group-focus-visible:pr-3',
-          'motion-reduce:max-w-[min(26rem,calc(100vw-6rem))] motion-reduce:pr-3 motion-reduce:transition-none',
+          'group-hover:max-w-[min(26rem,calc(100vw-6rem))] group-hover:pr-4',
+          'group-focus-visible:max-w-[min(26rem,calc(100vw-6rem))] group-focus-visible:pr-4',
+          'motion-reduce:max-w-[min(26rem,calc(100vw-6rem))] motion-reduce:pr-4 motion-reduce:transition-none',
         ].join(' ')}
       >
-        <span className="relative z-[1] flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-surface-dark-3">
+        <span
+          className={[
+            'rd-badge-label shrink-0 overflow-hidden font-sans text-sm font-medium text-text-inverted-1',
+            'whitespace-nowrap opacity-0 select-none',
+            'motion-reduce:opacity-100',
+          ].join(' ')}
+          aria-hidden
+        >
+          {LABEL}
+        </span>
+        <span className="rd-badge-icon relative z-[1] flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-surface-dark-3">
           <Image
             src="/revision_dojo.svg"
             alt=""
@@ -49,17 +59,6 @@ export function RevisionDojoExpandableBadge() {
             className="h-9 w-9 object-cover"
             aria-hidden
           />
-        </span>
-        <span
-          className={[
-            'rd-badge-label shrink-0 overflow-hidden pl-2 font-sans text-sm font-medium text-text-inverted-1',
-            'whitespace-nowrap opacity-0 select-none',
-            'group-hover:opacity-100 group-focus-visible:opacity-100',
-            'motion-reduce:opacity-100 motion-reduce:transition-none',
-          ].join(' ')}
-          aria-hidden
-        >
-          {LABEL}
         </span>
       </span>
     </a>
