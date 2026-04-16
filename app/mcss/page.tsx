@@ -18,6 +18,9 @@ const MCSS_OVERVIEW = (
   </>
 );
 
+const MCSS_BACKGROUND =
+  "While Instagram handles most event announcements and daily traction for the society, the mcss.ca website serves as a more lasting space for showcasing past events, highlighting sponsors, and giving students a better sense of the community and society. A website redesign was warranted to make MCSS’s online presence clearer, more accessible, and more reflective of the society’s identity + aura.";
+
 export default function MCSSCaseStudyPage() {
   return (
     <CaseStudyLayout
@@ -49,6 +52,17 @@ export default function MCSSCaseStudyPage() {
         </div>
       </section>
       <McssMobileCarousel />
+      <section
+        className="w-full font-sans text-md md:text-lg leading-relaxed"
+        aria-labelledby="background-heading"
+      >
+        <div className="md:max-w-[52%]">
+          <h2 id="background-heading" className="mb-4 text-xl md:text-2xl font-bold text-text">
+            Background
+          </h2>
+          <p className="text-text-subtle">{MCSS_BACKGROUND}</p>
+        </div>
+      </section>
     </CaseStudyLayout>
   );
 }

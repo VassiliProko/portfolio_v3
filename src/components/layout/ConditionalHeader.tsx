@@ -4,7 +4,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import { Header } from '@/src/components/layout/Header';
 
-const CASE_STUDY_PATHS = ['/mcss', '/prettify-minerva'];
+const CASE_STUDY_PATHS = ['/mcss', '/prettify-minerva', '/usthing'];
 
 export const ConditionalHeader: React.FC = () => {
   const pathname = usePathname();

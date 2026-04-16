@@ -13,6 +13,8 @@ type WorkBentoItemProps = {
   hoverYear?: string;
   topRightContent?: React.ReactNode;
   domId?: string;
+  href?: string;
+  externalHref?: string;
 };
 
 
@@ -75,6 +77,8 @@ const WorkBentoItem: React.FC<WorkBentoItemProps> = ({
   hoverYear = '2026',
   topRightContent,
   domId,
+  href,
+  externalHref,
 }) => {
   const isPlayground = size === 'playground';
   const isLarge = size === 'large';
@@ -82,24 +86,21 @@ const WorkBentoItem: React.FC<WorkBentoItemProps> = ({
   const isApplicableSmallCaseCard = title === 'Case Study Small 01';
   const spanClass = isPlayground ? 'col-span-full md:col-span-2 lg:col-span-3' : isLarge ? 'md:col-span-2 lg:col-span-2' : 'lg:col-span-1';
 
-  return (
-    <article
-      id={domId}
-      className={[
-        'group relative overflow-hidden rounded-lg border border-border-base bg-surface-dark-1',
-        domId === 'play' ? 'scroll-mt-16 md:scroll-mt-20' : '',
-        isApplicableSmallCaseCard ? 'px-sm pt-sm pb-0' : 'p-sm',
-        isApplicableSmallCaseCard ? 'flex flex-col' : 'flex items-end',
-        spanClass,
-        isPlayground
-          ? 'col-span-full min-h-[520px] lg:h-[600px]'
-          : isApplicableSmallCaseCard
-            ? ''
-            : 'min-h-[450px]',
-      ].join(' ')}
-      style={isSecondSmallCaseCard ? { background: 'var(--gradient-usthing-app)' } : undefined}
-      aria-label={`${title} placeholder`}
-    >
+  const rootClassName = [
+    'group relative overflow-hidden rounded-lg border border-border-base bg-surface-dark-1',
+    domId === 'play' ? 'scroll-mt-16 md:scroll-mt-20' : '',
+    isApplicableSmallCaseCard ? 'px-sm pt-sm pb-0' : 'p-sm',
+    isApplicableSmallCaseCard ? 'flex flex-col' : 'flex items-end',
+    spanClass,
+    isPlayground
+      ? 'col-span-full min-h-[520px] lg:h-[600px]'
+      : isApplicableSmallCaseCard
+        ? ''
+        : 'min-h-[450px]',
+  ].join(' ');
+
+  const content = (
+    <>
       <span className="sr-only">{title}</span>
       {isSecondSmallCaseCard ? (
         <div className="absolute inset-x-0 top-0 flex items-start justify-center overflow-hidden pt-3">
@@ -181,6 +182,53 @@ const WorkBentoItem: React.FC<WorkBentoItemProps> = ({
       ) : null}
       {!isPlayground && topRightContent ? <HoverTopRightChip compact>{topRightContent}</HoverTopRightChip> : null}
       <HoverMetaPills title={hoverTitle} year={hoverYear} />
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        id={domId}
+        aria-label={`Open ${hoverTitle} case study`}
+        className={[
+          rootClassName,
+          'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
+        ].join(' ')}
+        style={isSecondSmallCaseCard ? { background: 'var(--gradient-usthing-app)' } : undefined}
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  if (externalHref) {
+    return (
+      <a
+        href={externalHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        id={domId}
+        aria-label={`Open ${hoverTitle} website`}
+        className={[
+          rootClassName,
+          'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
+        ].join(' ')}
+        style={isSecondSmallCaseCard ? { background: 'var(--gradient-usthing-app)' } : undefined}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <article
+      id={domId}
+      className={rootClassName}
+      style={isSecondSmallCaseCard ? { background: 'var(--gradient-usthing-app)' } : undefined}
+      aria-label={`${title} placeholder`}
+    >
+      {content}
     </article>
   );
 };
@@ -274,8 +322,15 @@ export const WorkBentoSection: React.FC = () => {
             hoverTitle="USThing"
             hoverYear="App Feature"
             topRightContent={<Maximize2 size={14} strokeWidth={2} aria-hidden />}
+            href="/usthing"
           />
-          <WorkBentoItem title="Case Study Small 01" size="small" hoverTitle="Applicable" hoverYear="Web App" />
+          <WorkBentoItem
+            title="Case Study Small 01"
+            size="small"
+            hoverTitle="Applicable"
+            hoverYear="Web App"
+            externalHref="https://applicable-soar.vercel.app/"
+          />
 
           <PrettifyMinervaFeaturedCaseStudy />
 
