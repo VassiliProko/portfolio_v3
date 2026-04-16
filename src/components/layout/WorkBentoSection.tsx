@@ -12,6 +12,7 @@ type WorkBentoItemProps = {
   hoverTitle?: string;
   hoverYear?: string;
   topRightContent?: React.ReactNode;
+  domId?: string;
 };
 
 
@@ -73,6 +74,7 @@ const WorkBentoItem: React.FC<WorkBentoItemProps> = ({
   hoverTitle = 'Project',
   hoverYear = '2026',
   topRightContent,
+  domId,
 }) => {
   const isPlayground = size === 'playground';
   const isLarge = size === 'large';
@@ -82,8 +84,10 @@ const WorkBentoItem: React.FC<WorkBentoItemProps> = ({
 
   return (
     <article
+      id={domId}
       className={[
         'group relative overflow-hidden rounded-lg border border-border-base bg-surface-dark-1',
+        domId === 'play' ? 'scroll-mt-16 md:scroll-mt-20' : '',
         isApplicableSmallCaseCard ? 'px-sm pt-sm pb-0' : 'p-sm',
         isApplicableSmallCaseCard ? 'flex flex-col' : 'flex items-end',
         spanClass,
@@ -169,12 +173,13 @@ const WorkBentoItem: React.FC<WorkBentoItemProps> = ({
               columnsClassName="columns-3 gap-x-xs"
               previewContentClassName="pt-3"
               maxHeight="600px"
+              topRightContent={topRightContent}
             />
           </div>
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[96px] z-[2] bg-gradient-to-t from-surface-dark-1 to-transparent" />
         </>
       ) : null}
-      {topRightContent ? <HoverTopRightChip compact>{topRightContent}</HoverTopRightChip> : null}
+      {!isPlayground && topRightContent ? <HoverTopRightChip compact>{topRightContent}</HoverTopRightChip> : null}
       <HoverMetaPills title={hoverTitle} year={hoverYear} />
     </article>
   );
@@ -215,19 +220,50 @@ const McssFeaturedCaseStudy: React.FC = () => {
   );
 };
 
+const PrettifyMinervaFeaturedCaseStudy: React.FC = () => {
+  return (
+    <Link
+      href="/prettify-minerva"
+      className={[
+        'group relative overflow-hidden md:col-span-2 lg:col-span-2 min-h-[280px] sm:min-h-[340px] md:min-h-[400px] lg:min-h-[450px] rounded-lg border border-border-base p-sm',
+        'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
+      ].join(' ')}
+      aria-label="Open Prettify Minerva case study"
+    >
+      <div className="absolute inset-0">
+        <Image
+          src="/images/optimized/prettify-minerva/prettify-minerva-mock.webp"
+          alt=""
+          fill
+          className="pointer-events-none select-none object-cover scale-105 sm:scale-110"
+          sizes="(max-width: 1024px) 100vw, 66vw"
+          priority={false}
+        />
+      </div>
+      <HoverTopRightChip>
+        <span className="inline-flex items-center gap-1">
+          View Case Study
+          <ArrowRight size={14} strokeWidth={2} aria-hidden />
+        </span>
+      </HoverTopRightChip>
+      <HoverMetaPills title="Prettify Minerva" year="Browser Extension" />
+    </Link>
+  );
+};
+
 export const WorkBentoSection: React.FC = () => {
   return (
     <section
       className="w-full py-12 md:py-20 bg-background animate-fade-in-up-fast"
-      aria-labelledby="work-bento-heading"
-      id="work"
+      aria-labelledby="work"
+      id="work-section"
     >
       <div className="max-w-[1200px] mx-auto px-5">
         <h2
-          id="work-bento-heading"
+          id="work"
           className="text-text font-sans font-medium text-2xl md:text-3xl mb-8 md:mb-10"
         >
-          juicy work
+          Work
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -241,11 +277,12 @@ export const WorkBentoSection: React.FC = () => {
           />
           <WorkBentoItem title="Case Study Small 01" size="small" hoverTitle="Applicable" hoverYear="Web App" />
 
-          <WorkBentoItem title="Case Study Large 02" size="large" />
+          <PrettifyMinervaFeaturedCaseStudy />
 
           <WorkBentoItem
             title="Playground"
             size="playground"
+            domId="play"
             hoverTitle="Visual Playground"
             hoverYear="2023 - Present"
             topRightContent={

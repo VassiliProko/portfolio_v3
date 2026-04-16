@@ -8,7 +8,7 @@ import { RevisionDojoExpandableBadge } from '@/src/components/layout/RevisionDoj
 import { WorkBentoSection } from '@/src/components/layout/WorkBentoSection';
 import { AboutSection } from '@/src/components/layout/AboutSection';
 
-const LightRays = dynamic(() => import('@/components/LightRays'), { ssr: false });
+const LightRays = dynamic(() => import('@/src/components/ui/LightRays'), { ssr: false });
 
 // const PlaygroundSection = dynamic(
 //   () =>

@@ -181,6 +181,7 @@ type PlaygroundPreviewExperienceProps = {
   showBottomFade?: boolean;
   showCursorTooltip?: boolean;
   enterLabel?: string;
+  topRightContent?: React.ReactNode;
 };
 
 export const PlaygroundPreviewExperience: React.FC<PlaygroundPreviewExperienceProps> = ({
@@ -193,6 +194,7 @@ export const PlaygroundPreviewExperience: React.FC<PlaygroundPreviewExperiencePr
   showCursorTooltip = true,
   enterLabel = 'Enter Playground',
   previewContentClassName = '',
+  topRightContent,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [expandedVisible, setExpandedVisible] = useState(false);
@@ -357,7 +359,7 @@ export const PlaygroundPreviewExperience: React.FC<PlaygroundPreviewExperiencePr
       <div className={className}>
         <div
           ref={cardRef}
-          className={`${cardClassName ?? 'bg-surface-dark-1 rounded-lg overflow-hidden cursor-pointer'} ${isExpanded ? 'invisible' : ''}`}
+          className={`${cardClassName ?? 'bg-surface-dark-1 rounded-lg overflow-hidden cursor-pointer'} group relative ${isExpanded ? 'invisible' : ''}`}
           onClick={openExpanded}
           onMouseEnter={() => showCursorTooltip && setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
@@ -372,6 +374,29 @@ export const PlaygroundPreviewExperience: React.FC<PlaygroundPreviewExperiencePr
           }}
           aria-label={enterLabel}
         >
+          {topRightContent ? (
+            <div className="absolute right-3 top-3 z-20">
+              <div
+                className={[
+                  '-translate-y-2 opacity-0 transition-all duration-[260ms] ease-move',
+                  'group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100',
+                  'motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none',
+                ].join(' ')}
+              >
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openExpanded();
+                  }}
+                  className="cursor-pointer rounded-sm bg-surface-dark-1 px-2 py-2 font-sans text-sm leading-none text-text-inverted-1 transition-colors duration-[60ms] ease-snap hover:bg-surface-dark-2 focus-visible:bg-surface-dark-2 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2"
+                  aria-label={enterLabel}
+                >
+                  {topRightContent}
+                </button>
+              </div>
+            </div>
+          ) : null}
           {showHeader ? <HeaderBar /> : null}
           <div className={`px-3 overflow-hidden ${previewContentClassName}`.trim()} style={{ maxHeight }}>
             <div className={columnsClassName}>
