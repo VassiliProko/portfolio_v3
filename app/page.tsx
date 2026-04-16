@@ -5,24 +5,24 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { Hero_stat } from '@/src/components/layout/Hero-stats';
 import { RevisionDojoExpandableBadge } from '@/src/components/layout/RevisionDojoExpandableBadge';
-import { SelectedWorkSection } from '@/src/components/layout/SelectedWorkSection';
+import { WorkBentoSection } from '@/src/components/layout/WorkBentoSection';
 import { AboutSection } from '@/src/components/layout/AboutSection';
 
-const LightRays = dynamic(() => import('@/components/LightRays'), { ssr: false });
+const LightRays = dynamic(() => import('@/src/components/ui/LightRays'), { ssr: false });
 
-const PlaygroundSection = dynamic(
-  () =>
-    import('@/src/components/layout/PlaygroundSection').then((mod) => mod.PlaygroundSection),
-  {
-    loading: () => (
-      <section
-        className="w-full py-12 md:py-20 bg-background min-h-[480px] border-b border-border-divider"
-        aria-busy="true"
-        aria-label="Loading playground"
-      />
-    ),
-  }
-);
+// const PlaygroundSection = dynamic(
+//   () =>
+//     import('@/src/components/layout/PlaygroundSection').then((mod) => mod.PlaygroundSection),
+//   {
+//     loading: () => (
+//       <section
+//         className="w-full py-12 md:py-20 bg-background min-h-[480px] border-b border-border-divider"
+//         aria-busy="true"
+//         aria-label="Loading playground"
+//       />
+//     ),
+//   }
+// );
 
 export default function HomePage() {
   return (
@@ -49,7 +49,7 @@ export default function HomePage() {
             </div>
             <div className="p-8 md:p-12 lg:p-16 min-h-[360px] animate-fade-in-up">
               <h2 className="text-text-inverted-1 text-3xl lg:text-4xl font-medium leading-tight mb-12">
-                just a young lad busy munching & cooking delightful ideas
+                hi, im a young lad busy munching & cooking delightful creations
               </h2>
               <div className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center">
                 <div className="inline-flex flex-col bg-surface-1 rounded-lg overflow-hidden shrink-0">
@@ -84,10 +84,11 @@ export default function HomePage() {
       </section>
 
       {/* Selected Work / Case Studies */}
-      <SelectedWorkSection />
+      {/* <SelectedWorkSection /> */}
+      <WorkBentoSection />
 
       {/* Playground */}
-      <PlaygroundSection />
+      {/* <PlaygroundSection /> */}
 
       {/* About Me */}
       <AboutSection />

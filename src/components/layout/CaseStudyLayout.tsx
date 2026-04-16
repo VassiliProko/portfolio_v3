@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { CaseStudyHeader } from '@/src/components/layout/CaseStudyHeader';
 import { cn } from '@/src/utils/cn';
 
@@ -12,6 +11,12 @@ export interface CaseStudyLayoutProps {
   heroImageSrc?: string;
   /** Hero image alt text */
   heroImageAlt?: string;
+  /** Optional YouTube/Vimeo embed URL for hero video */
+  heroVideoEmbedUrl?: string;
+  /** Hero video iframe title */
+  heroVideoTitle?: string;
+  /** Optional style override for hero media wrapper */
+  heroMediaStyle?: React.CSSProperties;
   /** Overview content (text or custom React node) */
   overview: React.ReactNode;
   /** Optional meta: time, role, tools, skills (displayed in right column) */
@@ -50,6 +55,9 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
   title,
   heroImageSrc,
   heroImageAlt = '',
+  heroVideoEmbedUrl,
+  heroVideoTitle = 'Case study hero video',
+  heroMediaStyle,
   overview,
   meta,
   websiteUrl,
@@ -67,9 +75,31 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
     >
       <CaseStudyHeader title={title} backHref={backHref} />
 
-      {heroImageSrc && (
+      {heroVideoEmbedUrl ? (
         <div className="w-full max-w-[1200px] mx-auto px-5 pt-6 animate-fade-in-up-fast">
-          <div className="relative w-full aspect-[4/3] md:aspect-video rounded-[8px] overflow-hidden bg-surface-2">
+          <div
+            className="relative w-full aspect-[4/3] md:aspect-video rounded-[8px] overflow-hidden bg-surface-2 p-3 md:p-5"
+            style={heroMediaStyle}
+          >
+            <div className="h-full w-full rounded-lg overflow-hidden">
+              <iframe
+                className="h-full w-full pointer-events-none"
+                src={heroVideoEmbedUrl}
+                title={heroVideoTitle}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      ) : heroImageSrc ? (
+        <div className="w-full max-w-[1200px] mx-auto px-5 pt-6 animate-fade-in-up-fast">
+          <div
+            className="relative w-full aspect-[4/3] md:aspect-video rounded-[8px] overflow-hidden bg-surface-2"
+            style={heroMediaStyle}
+          >
           <img
             src={heroImageSrc}
             alt={heroImageAlt}
@@ -78,7 +108,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
           />
           </div>
         </div>
-      )}
+      ) : null}
 
       <div className="max-w-[1200px] mx-auto px-5 py-8 md:py-10">
         <section

@@ -13,16 +13,15 @@ interface ExperienceEducationEntry {
 }
 
 const EXPERIENCES: ExperienceEducationEntry[] = [
+  { title: 'DFSG', subtitle: 'Design Fellow', date: '2026', href: 'https://www.studio-school.com/', imageSrc: '/images/optimized/home/DFSG.webp' },
   { title: 'USThing', subtitle: 'Product Designer', date: '2025 - Present', href: 'https://usthing.xyz', imageSrc: '/images/optimized/home/usthing.webp' },
   { title: 'MCSS', subtitle: 'Designer', date: '2024 - Present', href: 'https://www.mcss.ca/', imageSrc: '/images/optimized/home/mcss.webp' },
-  { title: 'MUS', subtitle: 'Web Designer', date: '2026', href: 'https://www.musmcgill.com/', imageSrc: '/images/optimized/home/mus.webp' },
   { title: 'Lyft', subtitle: 'UX Research Intern • MicroEXP', date: '2025', href: 'https://lyfturbansolutions.com/', imageSrc: '/images/optimized/home/lyft.webp' }
 ];
 
 const EDUCATION: ExperienceEducationEntry[] = [
   { title: 'McGill', subtitle: 'BCom', date: '2024 - 2027', href: 'https://www.mcgill.ca/', imageSrc: '/images/optimized/home/mcgill.webp' },
   { title: 'HKUST', subtitle: 'Exchange', date: '2025 - 2026', href: 'https://hkust.edu.hk/', imageSrc: '/images/optimized/home/hkust.webp' },
-  { title: 'DFSG', subtitle: 'HCD x AI Program', date: '2026', href: 'https://www.studio-school.com/', imageSrc: '/images/optimized/home/DFSG.webp' },
 ];
 
 export const AboutSection: React.FC = () => {
@@ -72,11 +71,10 @@ export const AboutSection: React.FC = () => {
           </div>
           <div className="flex flex-col rounded-lg bg-surface-1 px-sm py-md flex-1 bg-[url('/images/optimized/home/about-sky.webp')] bg-cover bg-center bg-no-repeat bg-blend-soft-light">
             <p className="text-text-subtle font-sans text-base leading-relaxed mb-4">
-              I&apos;m a multidisciplinary designer and business analytics student at McGill,
-              currently on exchange at HKUST. 
+            Hey, I’m Vassili — meaning “king” in Greek. I’m a multidisciplinary designer and business analytics student at McGill, currently on exchange at HKUST. I'm somewhere experimenting between design, code, and data-driven thinking, blending different mediums to bring anew to the world. I believe the future belongs to designers who build, and I’m always down to team up on cool ideas.
             </p>
             <p className="text-text-subtle font-sans text-base leading-relaxed">
-              I believe the future belongs to designers who build. hehehe
+              I'm also a big fan of good food.
             </p>
           </div>
         </div>

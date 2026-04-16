@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
-import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
+import { McssMobileCarousel } from '@/src/components/ui/McssMobileCarousel';
 
 export const metadata: Metadata = {
   title: "McGill Chinese Students' Society",
@@ -11,44 +12,57 @@ export const metadata: Metadata = {
 const MCSS_OVERVIEW = (
   <>
     <p>
-    I revamped the MCSS website with a cleaner layout and improved mobile navigation, making it easier for students to discover events, sponsors, and society events.
+    I revamped the MCSS website with a cleaner layout and improved mobile navigation, making it easier for students to discover events, sponsors, and society events. I also brought in a more vibrant visual language that better reflects the society’s cultural energy.
     </p>
     {/* Add more overview content as needed */}
   </>
 );
 
+const MCSS_BACKGROUND =
+  "While Instagram handles most event announcements and daily traction for the society, the mcss.ca website serves as a more lasting space for showcasing past events, highlighting sponsors, and giving students a better sense of the community and society. A website redesign was warranted to make MCSS’s online presence clearer, more accessible, and more reflective of the society’s identity + aura.";
+
 export default function MCSSCaseStudyPage() {
   return (
     <CaseStudyLayout
       title="McGill Chinese Students' Society"
-      heroImageSrc="/images/optimized/mcss/mcss-head.webp"
-      heroImageAlt="MCSS website preview"
+      heroVideoEmbedUrl="https://www.youtube.com/embed/WBKNriQ3Jew?autoplay=1&mute=1&playsinline=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=WBKNriQ3Jew"
+      heroVideoTitle="MCSS website preview video"
+      heroMediaStyle={{ background: 'var(--gradient-mcss)' }}
       overview={MCSS_OVERVIEW}
       meta={{
-        time: 'Jun – July 2025',
+        time: 'Mar – Apr 2026',
         role: 'Web Developer',
-        tools: 'Figma, Vue.js, Cloudinary, Netlify',
+        tools: 'Figma, Next.JS, Cloudinary, Vercel',
         skills: 'Web design, Frontend development',
       }}
       websiteUrl="https://mcss.ca/"
-      githubUrl="https://github.com/Dev-MCSS/mcss-website"
+      githubUrl="https://github.com/Dev-MCSS/websitev2"
       backHref="/#work"
     >
-
-      <CaseStudyImage
-        src="/images/optimized/mcss/mcss-case-3d.webp"
-        alt="MCSS case study — overview 3d"
-      />
-      <CaseStudyImage
-        src="/images/optimized/mcss/mcss-case-events.webp"
-        alt="MCSS case study — events section"
-      />
-      <CaseStudyImage
-        src="/images/optimized/mcss/mcss-case-sponsors.webp"
-        alt="MCSS case study — sponsors section"
-      />
+      <section className="w-full rounded-[8px] bg-gradient-to-b from-background to-surface-2 p-3 md:p-5">
+        <div className="overflow-hidden rounded-[8px]">
+          <Image
+            src="/images/optimized/mcss/mcss_home_page_desktop.png"
+            alt="MCSS homepage desktop preview"
+            width={1920}
+            height={1080}
+            className="h-auto w-full object-cover"
+            priority={false}
+          />
+        </div>
+      </section>
+      <McssMobileCarousel />
+      <section
+        className="w-full font-sans text-md md:text-lg leading-relaxed"
+        aria-labelledby="background-heading"
+      >
+        <div className="md:max-w-[52%]">
+          <h2 id="background-heading" className="mb-4 text-xl md:text-2xl font-bold text-text">
+            Background
+          </h2>
+          <p className="text-text-subtle">{MCSS_BACKGROUND}</p>
+        </div>
+      </section>
     </CaseStudyLayout>
-
-    
   );
 }
