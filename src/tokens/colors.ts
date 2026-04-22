@@ -25,6 +25,7 @@ export const colors = {
     'surface-3': '#d4d4d8', // zinc-300
     'surface-dark-1': '#18181b', // zinc-900
     'surface-dark-2': '#27272a', // zinc-800
+    'surface-dark-4': '#111114', // deep charcoal
     'surface-dark-3': '#0c0c0e', // near-black
     text: '#18181b', // zinc-900
     'text-subtle': '#3F3F47', // zinc-700

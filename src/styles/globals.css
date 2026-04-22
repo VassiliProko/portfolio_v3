@@ -20,6 +20,7 @@
   --color-surface-3: #d4d4d8;
   --color-surface-dark-1: #18181b;
   --color-surface-dark-2: #27272a;
+  --color-surface-dark-4: #111114;
   --color-surface-dark-3: #0c0c0e;
   --color-card-bg: #1a1a19;
   --color-text: #18181b;
@@ -74,6 +75,7 @@
 
   /* Compare image divider */
   --shadow-compare-divider: -6px 0 14px rgba(0, 0, 0, 0.18);
+  --shadow-mcss-phase-image-glow: 0 0 28px rgba(39, 229, 239, 0.24);
 
   /* Spacing */
   --spacing-4xs: 3px;
@@ -278,6 +280,10 @@ body {
 .brand-gradient {
   background: linear-gradient(180deg, #00BCFF 0%, #FFFFFF 186.83%), linear-gradient(180deg, #000000 0%, #5490C4 49.52%, #E1E1E1 100%);
   background-blend-mode: soft-light, normal;
+}
+
+.mcss-phase-image-glow {
+  box-shadow: var(--shadow-mcss-phase-image-glow);
 }
 
 /* Hero stat: pulsing back dot (1s repeat) */

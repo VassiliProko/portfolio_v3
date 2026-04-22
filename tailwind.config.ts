@@ -18,6 +18,7 @@ const config: Config = {
   				'3': 'var(--color-surface-3)',
   				'dark-1': 'var(--color-surface-dark-1)',
   				'dark-2': 'var(--color-surface-dark-2)',
+  				'dark-4': 'var(--color-surface-dark-4)',
 				'dark-3': 'var(--color-surface-dark-3)'
   			},
   			primary: {

@@ -98,6 +98,14 @@ const PLAYGROUND_ITEMS: PlaygroundItem[] = [
     imageAlt: 'Wet Reef',
   },
   {
+    title: 'Jojo x3',
+    year: '2026',
+    description: 'RevisionDojo',
+    tools: ['Figma'],
+    imageSrc: '/images/optimized/art/jojo_x3.png',
+    imageAlt: 'Jojo',
+  },
+  {
     title: 'MUS Website',
     year: '2026',
     description: 'a landing page concept for MUS',
