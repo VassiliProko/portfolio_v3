@@ -71,10 +71,10 @@ export const AboutSection: React.FC = () => {
           </div>
           <div className="flex flex-col rounded-lg bg-surface-1 px-sm py-md flex-1 bg-[url('/images/optimized/home/about-sky.webp')] bg-cover bg-center bg-no-repeat bg-blend-soft-light">
             <p className="text-text-subtle font-sans text-base leading-relaxed mb-4">
-            Hey, I’m Vassili — meaning “king” in Greek. I’m a multidisciplinary designer and business analytics student at McGill, currently on exchange at HKUST. I'm somewhere experimenting between design, code, and data-driven thinking, blending different mediums to bring anew to the world. I believe the future belongs to designers who build, and I’m always down to team up on cool ideas.
+            Hey, I’m Vassili — meaning “king” in Greek. I’m a multidisciplinary designer and business analytics student at McGill, currently on exchange at HKUST. I'm somewhere experimenting between design, code, and data-driven thinking, blending different mediums to bring anew to the world. I also believe the future belongs to designers who build and understand technological craftsmanship.
             </p>
             <p className="text-text-subtle font-sans text-base leading-relaxed">
-              I'm also a big fan of good food.
+              It’s a wonderful time to be alive.
             </p>
           </div>
         </div>

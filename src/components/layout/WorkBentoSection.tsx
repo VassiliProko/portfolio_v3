@@ -329,7 +329,8 @@ export const WorkBentoSection: React.FC = () => {
             size="small"
             hoverTitle="Applicable"
             hoverYear="Web App"
-            externalHref="https://applicable-soar.vercel.app/"
+            topRightContent={<Maximize2 size={14} strokeWidth={2} aria-hidden />}
+            href="/applicable"
           />
 
           <PrettifyMinervaFeaturedCaseStudy />

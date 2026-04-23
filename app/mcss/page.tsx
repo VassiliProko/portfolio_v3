@@ -72,6 +72,7 @@ export default function MCSSCaseStudyPage() {
         skills: 'Web design, Frontend development',
       }}
       websiteUrl="https://mcss.ca/"
+      websiteLabel="view website"
       githubUrl="https://github.com/Dev-MCSS/websitev2"
       backHref="/#work"
     >
