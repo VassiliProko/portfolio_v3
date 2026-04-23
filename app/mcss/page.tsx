@@ -34,7 +34,7 @@ const MCSS_IMPLEMENTATION_SECONDARY =
   "Together, these tools allowed me to build a site that was fast, maintainable, and easy to update for future MCSS content.";
 
 const MCSS_RESULTS =
-  "The redesign improved the site’s overall usability by simplifying page structure, strengthening visual hierarchy, and making the experience fully responsive across devices. With over 500 monthly visitors, the site now gives its audience a clearer and more performant experience, while also meeting Google PageSpeed best practices for speed and accessibility.";
+  "The redesign improved the site’s overall usability by simplifying page structure, strengthening visual hierarchy, and making the experience fully responsive across devices. With over 500 monthly visitors, the site now gives its audience a clearer and more performant experience, meeting Google PageSpeed best practices for speed and accessibility.";
 
 const MCSS_BACKGROUND_PHASES = [
   {

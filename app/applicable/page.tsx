@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 const APPLICABLE_OVERVIEW = (
   <>
     <p>
-      I led the visual brand direction for Applicable, a platform that connects mentors and
+      Applicable is a platform that connects mentors and
       learners through real, project-based creative challenges. The product was developed as part
-      of a human-centered design and AI program at Studio School.
+      of Studio School, a human-centered design x AI program, in collaboration with 3 other design researchers.
     </p>
     <p className="mt-4">
       The final MVP was presented to senior designers and early-stage investors, where it received
@@ -40,10 +40,6 @@ export default function ApplicableCaseStudyPage() {
       <CaseStudyImage
         src="/images/optimized/applicable/mockup_bus.webp"
         alt="Applicable case study mockup"
-      />
-      <CaseStudyImage
-        src="/images/optimized/applicable/applicable_team.webp"
-        alt="Applicable team collaboration"
       />
     </CaseStudyLayout>
   );
