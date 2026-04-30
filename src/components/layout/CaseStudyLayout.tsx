@@ -83,7 +83,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
           >
             <div className="h-full w-full rounded-lg overflow-hidden">
               <iframe
-                className="h-full w-full pointer-events-none"
+                className="case-study-yt-frame h-full w-full pointer-events-none"
                 src={heroVideoEmbedUrl}
                 title={heroVideoTitle}
                 frameBorder="0"

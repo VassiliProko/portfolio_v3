@@ -28,8 +28,8 @@ export default function USThingCaseStudyPage() {
           <div className="relative w-[clamp(266px,95vw,302px)]">
             <div className="absolute left-[6.3%] right-[6.3%] top-[5.9%] bottom-[6.1%] overflow-hidden rounded-[36px]">
               <iframe
-                className="pointer-events-none absolute -left-[47%] top-0 h-full w-[194%]"
-                src="https://www.youtube.com/embed/kAJ7SuiSfWk?autoplay=1&mute=1&playsinline=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=kAJ7SuiSfWk"
+                className="case-study-yt-frame pointer-events-none absolute -left-[47%] top-0 h-full w-[194%]"
+                src="https://www.youtube.com/embed/kAJ7SuiSfWk?autoplay=1&mute=1&playsinline=1&loop=1&playlist=kAJ7SuiSfWk&controls=0&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&cc_load_policy=0&disablekb=1&fs=0&autohide=1"
                 title="USThing grade distribution mobile app preview"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

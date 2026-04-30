@@ -364,6 +364,28 @@ body {
   opacity: 0;
 }
 
+/* Case-study YouTube embeds: hide initial YouTube overlay flash */
+@keyframes case-study-yt-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.case-study-yt-frame {
+  opacity: 0;
+  animation: case-study-yt-reveal 180ms var(--motion-easing-enter) forwards;
+  animation-delay: 3200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-study-yt-frame {
+    animation-delay: 0ms;
+  }
+}
+
 /* Hide scrollbar while keeping scroll functional */
 .scrollbar-hide {
   -ms-overflow-style: none;

@@ -24,17 +24,17 @@ const oxygenMono = Oxygen_Mono({
 
 export const metadata: Metadata = {
   title: 'Vassili Prokopenko',
-  description: 'A designer crafting delightful experiences for social good.',
+  description: 'a young lad busy munching & cooking delightful creations',
   openGraph: {
     title: 'Vassili Prokopenko',
-    description: 'A designer crafting delightful experiences for social good.',
+    description: 'a young lad busy munching & cooking delightful creations',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Vassili Prokopenko',
-    description: 'A designer crafting delightful experiences for social good.',
+    description: 'a young lad busy munching & cooking delightful creations',
   },
 };
 

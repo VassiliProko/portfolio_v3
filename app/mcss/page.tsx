@@ -61,7 +61,7 @@ export default function MCSSCaseStudyPage() {
   return (
     <CaseStudyLayout
       title="McGill Chinese Students' Society"
-      heroVideoEmbedUrl="https://www.youtube.com/embed/WBKNriQ3Jew?autoplay=1&mute=1&playsinline=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=WBKNriQ3Jew"
+      heroVideoEmbedUrl="https://www.youtube.com/embed/WBKNriQ3Jew?autoplay=1&mute=1&playsinline=1&loop=1&playlist=WBKNriQ3Jew&controls=0&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&cc_load_policy=0&disablekb=1&fs=0&autohide=1"
       heroVideoTitle="MCSS website preview video"
       heroMediaStyle={{ background: 'var(--gradient-mcss)' }}
       overview={MCSS_OVERVIEW}
