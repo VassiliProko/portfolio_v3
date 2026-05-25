@@ -13,9 +13,9 @@ interface ExperienceEducationEntry {
 }
 
 const EXPERIENCES: ExperienceEducationEntry[] = [
-  { title: 'DFSG', subtitle: 'Design Fellow', date: '2026', href: 'https://www.studio-school.com/', imageSrc: '/images/optimized/home/DFSG.webp' },
-  { title: 'USThing', subtitle: 'Product Designer', date: '2025 - Present', href: 'https://usthing.xyz', imageSrc: '/images/optimized/home/usthing.webp' },
   { title: 'MCSS', subtitle: 'Designer', date: '2024 - Present', href: 'https://www.mcss.ca/', imageSrc: '/images/optimized/home/mcss.webp' },
+  { title: 'USThing', subtitle: 'Product Designer', date: '2025 - 2026', href: 'https://usthing.xyz', imageSrc: '/images/optimized/home/usthing.webp' },
+  { title: 'DFSG', subtitle: 'Design Fellow', date: '2026', href: 'https://www.studio-school.com/', imageSrc: '/images/optimized/home/DFSG.webp' },
   { title: 'Lyft', subtitle: 'UX Research Intern • MicroEXP', date: '2025', href: 'https://lyfturbansolutions.com/', imageSrc: '/images/optimized/home/lyft.webp' }
 ];
 

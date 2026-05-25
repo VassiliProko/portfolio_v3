@@ -27,7 +27,7 @@ export default function PrettifyMinervaCaseStudyPage() {
       meta={{
         time: 'Q2 2025',
         role: 'Designer / Developer',
-        tools: 'Figma, Javascript',
+        tools: 'Figma, Javascript, GPT',
         skills: 'UI design, Browser Extension development',
       }}
       websiteUrl="https://chromewebstore.google.com/detail/gligldkmadhkgfbomifkomimankgljji?utm_source=item-share-cb"

@@ -106,14 +106,14 @@ const WorkBentoItem: React.FC<WorkBentoItemProps> = ({
         <div className="absolute inset-x-0 top-0 flex items-start justify-center overflow-hidden pt-3">
           <div className="relative w-[clamp(266px,95vw,302px)] aspect-[281/584]">
             <div className="absolute left-[7.1%] right-[7.1%] top-[6.6%] bottom-[6.7%] overflow-hidden rounded-[34px]">
-              <iframe
-                className="pointer-events-none absolute -left-[43%] top-0 h-full w-[186%]"
-                src="https://www.youtube.com/embed/kAJ7SuiSfWk?autoplay=1&mute=1&playsinline=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=kAJ7SuiSfWk"
-                title="Grade Distribution mobile app preview"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
+              <video
+                className="pointer-events-none absolute top-0 w-[186%] h-auto"
+                src="/other/grade_distribution_showcase_short.webm"
+                autoPlay
+                muted
+                loop
+                playsInline
+                aria-label="Grade Distribution mobile app preview"
               />
             </div>
             <Image
@@ -246,14 +246,14 @@ const McssFeaturedCaseStudy: React.FC = () => {
     >
       <div className="h-full w-full rounded-lg overflow-hidden p-3 md:p-5 flex items-center justify-center">
         <div className="w-full max-w-[780px] aspect-video rounded-lg overflow-hidden">
-          <iframe
-            className="h-full w-full pointer-events-none"
-            src="https://www.youtube.com/embed/WBKNriQ3Jew?autoplay=1&mute=1&playsinline=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=WBKNriQ3Jew"
-            title="MCSS featured case study video"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
+          <video
+            className="h-full w-full pointer-events-none object-cover"
+            src="/other/mcss_video.webm"
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-label="MCSS featured case study video"
           />
         </div>
       </div>

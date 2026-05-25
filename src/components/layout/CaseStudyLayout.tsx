@@ -11,9 +11,11 @@ export interface CaseStudyLayoutProps {
   heroImageSrc?: string;
   /** Hero image alt text */
   heroImageAlt?: string;
+  /** Optional local video src for hero (e.g. /other/mcss_video.webm) */
+  heroVideoSrc?: string;
   /** Optional YouTube/Vimeo embed URL for hero video */
   heroVideoEmbedUrl?: string;
-  /** Hero video iframe title */
+  /** Hero video accessible label */
   heroVideoTitle?: string;
   /** Optional style override for hero media wrapper */
   heroMediaStyle?: React.CSSProperties;
@@ -55,6 +57,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
   title,
   heroImageSrc,
   heroImageAlt = '',
+  heroVideoSrc,
   heroVideoEmbedUrl,
   heroVideoTitle = 'Case study hero video',
   heroMediaStyle,
@@ -75,22 +78,34 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
     >
       <CaseStudyHeader title={title} backHref={backHref} />
 
-      {heroVideoEmbedUrl ? (
+      {heroVideoSrc || heroVideoEmbedUrl ? (
         <div className="w-full max-w-[1200px] mx-auto px-5 pt-6 animate-fade-in-up-fast">
           <div
             className="relative w-full aspect-[4/3] md:aspect-video rounded-[8px] overflow-hidden bg-surface-2 p-3 md:p-5"
             style={heroMediaStyle}
           >
             <div className="h-full w-full rounded-lg overflow-hidden">
-              <iframe
-                className="case-study-yt-frame h-full w-full pointer-events-none"
-                src={heroVideoEmbedUrl}
-                title={heroVideoTitle}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
+              {heroVideoSrc ? (
+                <video
+                  className="h-full w-full pointer-events-none object-cover"
+                  src={heroVideoSrc}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  aria-label={heroVideoTitle}
+                />
+              ) : (
+                <iframe
+                  className="case-study-yt-frame h-full w-full pointer-events-none"
+                  src={heroVideoEmbedUrl}
+                  title={heroVideoTitle}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+              )}
             </div>
           </div>
         </div>

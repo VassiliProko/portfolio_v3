@@ -32,7 +32,7 @@ export default function ApplicableCaseStudyPage() {
       meta={{
         time: 'Feb 2026 - Apr 2026',
         role: 'Design Researcher',
-        tools: 'Figma, Next.Js, Supabase, Vercel',
+        tools: 'Figma, Next.Js, Supabase, Vercel, Claude Code',
         skills: 'Human Centered Research, Brand Design, AI-Assisted Web Application Development',
       }}
       backHref="/#work"
