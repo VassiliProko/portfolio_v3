@@ -63,10 +63,6 @@ export default function USThingCaseStudyPage() {
           </div>
           <div className="flex flex-1 flex-col gap-6 md:gap-8 mt-8 md:mt-0 min-w-0">
             <div className="flex flex-col gap-0">
-              <span className="font-bold text-text">Time</span>
-              <span className="text-text">Apr 2026</span>
-            </div>
-            <div className="flex flex-col gap-0">
               <span className="font-bold text-text">Tools</span>
               <span className="text-text">React Native, Cursor</span>
             </div>

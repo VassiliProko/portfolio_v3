@@ -30,7 +30,6 @@ export default function ApplicableCaseStudyPage() {
       heroImageAlt="Applicable case study preview"
       overview={APPLICABLE_OVERVIEW}
       meta={{
-        time: 'Feb 2026 - Apr 2026',
         role: 'Design Researcher',
         tools: 'Figma, Next.Js, Supabase, Vercel, Claude Code',
         skills: 'Human Centered Research, Brand Design, AI-Assisted Web Application Development',

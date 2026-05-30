@@ -66,7 +66,6 @@ export default function MCSSCaseStudyPage() {
       heroMediaStyle={{ background: 'var(--gradient-mcss)' }}
       overview={MCSS_OVERVIEW}
       meta={{
-        time: 'Mar – Apr 2026',
         role: 'Web Developer',
         tools: 'Figma, Next.JS, Cloudinary, Vercel, Cursor',
         skills: 'Web design, Frontend development',

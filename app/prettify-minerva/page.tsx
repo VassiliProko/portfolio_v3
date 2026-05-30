@@ -25,7 +25,6 @@ export default function PrettifyMinervaCaseStudyPage() {
       heroImageAlt="Prettify Minerva preview"
       overview={PRETTIFY_MINERVA_OVERVIEW}
       meta={{
-        time: 'Q2 2025',
         role: 'Designer / Developer',
         tools: 'Figma, Javascript, GPT',
         skills: 'UI design, Browser Extension development',
