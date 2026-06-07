@@ -2,7 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 
 const RD_HREF = 'https://revisiondojo.com'
-const LABEL = 'Incoming designer at RevisionDojo (YC24)'
+const LABEL = 'Design Intern at RevisionDojo (YC24)'
 
 export function RevisionDojoExpandableBadge() {
   return (

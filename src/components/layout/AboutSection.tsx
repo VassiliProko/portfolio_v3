@@ -13,6 +13,7 @@ interface ExperienceEducationEntry {
 }
 
 const EXPERIENCES: ExperienceEducationEntry[] = [
+  { title: 'RevisionDojo', subtitle: 'Product Design Intern', date: '2026 - Present', href: 'https://www.revisiondojo.com/', imageSrc: '/images/optimized/home/revisiondojo.webp' },
   { title: 'MCSS', subtitle: 'Designer', date: '2024 - Present', href: 'https://www.mcss.ca/', imageSrc: '/images/optimized/home/mcss.webp' },
   { title: 'USThing', subtitle: 'Product Designer', date: '2025 - 2026', href: 'https://usthing.xyz', imageSrc: '/images/optimized/home/usthing.webp' },
   { title: 'DFSG', subtitle: 'Design Fellow', date: '2026', href: 'https://www.studio-school.com/', imageSrc: '/images/optimized/home/DFSG.webp' },
