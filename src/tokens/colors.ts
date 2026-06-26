@@ -64,6 +64,15 @@ export const colors = {
     uniform: 'rgba(0, 0, 0, 0.35)',
   },
 
+  // Home intro highlights (Figma Portfolio v4)
+  intro: {
+    munching: '#ffa303',
+    cooking: '#ff03b8',
+    'munching-highlight': 'rgba(255, 163, 3, 0.15)',
+    'cooking-highlight': 'rgba(255, 3, 184, 0.15)',
+    subtitle: '#a4a4a4',
+  },
+
   // Border Colors (pre-computed)
   border: {
     base: 'rgba(0, 0, 0, 0.12)',

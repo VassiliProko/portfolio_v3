@@ -23,7 +23,7 @@ export const CaseStudyHeader: React.FC<CaseStudyHeaderProps> = ({
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 w-full max-w-[1200px] mx-auto overflow-hidden px-5 py-3',
+        'sticky top-0 z-50 w-full overflow-hidden py-3',
         className
       )}
       aria-label="Case study navigation"

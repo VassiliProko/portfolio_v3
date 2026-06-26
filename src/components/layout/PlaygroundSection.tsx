@@ -342,11 +342,11 @@ export const PlaygroundSection: React.FC = () => {
     <>
       {/* Preview section on home page */}
       <section
-        className="w-full py-12 md:py-20 bg-background animate-fade-in-up-fast"
+        className="w-full py-12 md:py-20 animate-fade-in-up-fast"
         aria-labelledby="playground-heading"
         id="play"
       >
-        <div className="max-w-[1200px] mx-auto px-5">
+        <div className="w-full">
           <div
             ref={cardRef}
             className={`bg-surface-dark-1 rounded-lg overflow-hidden cursor-pointer ${isExpanded ? 'invisible' : ''}`}

@@ -20,7 +20,7 @@ export default function USThingCaseStudyPage() {
     <article className="min-h-screen bg-background" aria-label="Case study: USThing">
       <CaseStudyHeader title="USThing" backHref="/#work" />
 
-      <div className="w-full max-w-[1200px] mx-auto px-5 pt-6 animate-fade-in-up-fast">
+      <div className="w-full pt-6 animate-fade-in-up-fast">
         <section
           className="w-full rounded-[8px] p-3 md:p-5 flex items-center justify-center"
           style={{ background: 'var(--gradient-usthing-app)' }}
@@ -50,7 +50,7 @@ export default function USThingCaseStudyPage() {
         </section>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-5 py-8 md:py-10">
+      <div className="py-8 md:py-10">
         <section
           className="flex flex-col md:flex-row md:gap-12 lg:gap-16 max-w-none font-sans text-md md:text-lg leading-relaxed"
           aria-labelledby="overview-heading"

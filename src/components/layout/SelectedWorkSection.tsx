@@ -34,8 +34,8 @@ const CASE_STUDIES: Array<{
 
 export const SelectedWorkSection: React.FC = () => {
   return (
-    <section className="w-full py-12 md:py-20 bg-background animate-fade-in-up-fast" aria-labelledby="selected-work-heading" id="work">
-      <div className="max-w-[1200px] mx-auto px-5">
+    <section className="w-full py-12 md:py-20 animate-fade-in-up-fast" aria-labelledby="selected-work-heading" id="work">
+      <div className="w-full">
         <h2
           id="selected-work-heading"
           className="text-text font-sans font-medium text-2xl md:text-3xl mb-8 md:mb-10"

@@ -162,8 +162,7 @@ export const Footer: React.FC = () => {
   }, [hasRevealed, prefersReducedMotion]);
 
   return (
-    <footer className="w-full bg-background">
-      <div className="max-w-[1200px] mx-auto px-5 py-8 md:py-10">
+    <footer className="w-full py-8 md:py-10">
         {/* Upper section: console-style card with background image — color on hover over this element only */}
         <div className="group relative overflow-hidden rounded-tl-md rounded-tr-md min-h-[280px] md:min-h-[320px] bg-surface-dark-1">
           {/* Background image: grayscale by default, color on hover over this card */}
@@ -173,7 +172,7 @@ export const Footer: React.FC = () => {
               alt=""
               fill
               className="object-cover grayscale group-hover:grayscale-0 transition-[filter] duration-1000 ease-[cubic-bezier(0,.9,.1,1)]"
-              sizes="(max-width: 1200px) 100vw, 1200px"
+              sizes="100vw"
               priority={false}
             />
             {/* Dark overlay for console text readability */}
@@ -278,7 +277,6 @@ export const Footer: React.FC = () => {
             <span className="text-text-muted text-sm font-sans">Designed with intention</span>
           </div>
         </div>
-      </div>
     </footer>
   );
 };

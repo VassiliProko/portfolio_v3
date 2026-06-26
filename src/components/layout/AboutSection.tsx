@@ -28,20 +28,18 @@ const EDUCATION: ExperienceEducationEntry[] = [
 export const AboutSection: React.FC = () => {
   return (
     <section
-      className="w-full py-12 md:py-20 bg-background animate-fade-in-up-fast"
+      className="w-full py-12 md:py-20 animate-fade-in-up-fast"
       aria-labelledby="about-heading"
       id="about"
     >
-      <div className="max-w-[1200px] mx-auto px-5">
-        <h2
-          id="about-heading"
-          className="text-text font-sans font-medium text-2xl md:text-3xl mb-8 md:mb-10"
-        >
-          About
-        </h2>
+      <h2
+        id="about-heading"
+        className="text-text font-sans font-medium text-2xl md:text-3xl mb-8 md:mb-10"
+      >
+        About
+      </h2>
 
-        {/* Main profile block: image */}
-        <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
         
         <div className="flex flex-col lg:flex-row gap-4 overflow-hidden">
           <div className="relative w-full lg:w-[40%] lg:max-w-[360px] shrink-0 aspect-[1/1] lg:min-h-[320px] rounded-lg overflow-hidden">
@@ -122,7 +120,6 @@ export const AboutSection: React.FC = () => {
           </div>
         </div>
 
-        </div>
       </div>
     </section>
   );

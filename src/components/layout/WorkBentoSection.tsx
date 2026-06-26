@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
 import { ArrowRight, Maximize2 } from 'lucide-react';
-import { PlaygroundPreviewExperience } from './PlaygroundPreviewExperience';
+import { PlaygroundPreviewExperience } from '@/src/components/ui/PlaygroundPreviewExperience';
 
 type WorkBentoItemProps = {
   title: string;
@@ -302,19 +302,18 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC = () => {
 export const WorkBentoSection: React.FC = () => {
   return (
     <section
-      className="w-full py-12 md:py-20 bg-background animate-fade-in-up-fast"
+      className="w-full py-12 md:py-20 animate-fade-in-up-fast"
       aria-labelledby="work"
       id="work-section"
     >
-      <div className="max-w-[1200px] mx-auto px-5">
-        <h2
-          id="work"
-          className="text-text font-sans font-medium text-2xl md:text-3xl mb-8 md:mb-10"
-        >
-          Work
-        </h2>
+      <h2
+        id="work"
+        className="text-text font-sans font-medium text-2xl md:text-3xl mb-8 md:mb-10"
+      >
+        Work
+      </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <McssFeaturedCaseStudy />
           <WorkBentoItem
             title="Case Study Small 02"
@@ -349,7 +348,6 @@ export const WorkBentoSection: React.FC = () => {
             }
           />
         </div>
-      </div>
     </section>
   );
 };

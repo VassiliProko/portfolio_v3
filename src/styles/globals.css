@@ -67,6 +67,14 @@
   --gradient-prettify-minerva: linear-gradient(180deg, #464646 0%, #232323 48.56%, #1A1A1A 100%),
     linear-gradient(180deg, #4C133C 0%, #291307 18.27%, #4B1614 46.15%, #AB2039 77.4%, #BB191B 100%);
 
+  /* Home navbar name + intro highlights */
+  --gradient-name-text: linear-gradient(90deg, var(--color-primary-base) 0%, var(--color-accent-base) 100%);
+  --color-intro-munching: #ffa303;
+  --color-intro-cooking: #ff03b8;
+  --color-intro-munching-highlight: rgba(255, 163, 3, 0.15);
+  --color-intro-cooking-highlight: rgba(255, 3, 184, 0.15);
+  --color-intro-subtitle: #a4a4a4;
+
   /* Borders */
   --color-border-base: rgba(0, 0, 0, 0.12);
   --color-border-divider: rgba(0, 0, 0, 0.06);
@@ -116,10 +124,15 @@
   --rd-badge-icon-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Layout */
-  --container-max-width: 1200px;
-  --container-padding: 20px;
+  --page-margin: var(--spacing-md);
   --grid-gutter: 15px;
-  --grid-margin: 20px;
+  --grid-margin: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-margin: 32px;
+  }
 }
 
 /* ::selection {
@@ -135,7 +148,7 @@
 
 html {
   scroll-behavior: auto;
-  background-color: #fff;
+  background-color: var(--color-background);
 }
 
 html,
@@ -156,8 +169,25 @@ body {
   font-family: var(--font-sans);
   color: var(--color-text);
   background-color: var(--color-background);
+  padding-inline: var(--page-margin);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+}
+
+nav {
+  background-color: var(--color-background);
+}
+
+main:has([data-not-found]) footer {
+  display: none;
 }
 
 /* Reduced Motion */
@@ -282,6 +312,13 @@ body {
   background-blend-mode: soft-light, normal;
 }
 
+.text-name-gradient {
+  background-image: var(--gradient-name-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .mcss-phase-image-glow {
   box-shadow: var(--shadow-mcss-phase-image-glow);
 }
@@ -401,7 +438,8 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    /* Shadcn HSL vars — --background matches --color-background (#fafafa) */
+    --background: 0 0% 98%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
