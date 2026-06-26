@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
-import { motion, useAnimationControls } from 'motion/react';
+import { motion, useAnimationControls, useReducedMotion } from 'motion/react';
 import { ThemeToggle } from '@/src/components/ui/ThemeToggle';
 import { useHomeEnterAnimation } from '@/src/contexts/HomeEnterAnimationContext';
 import {
@@ -12,6 +12,13 @@ import {
   HOME_NAV_LOGO_OUTBOUND_S,
   HOME_NAV_LOGO_PEAK_FALLBACK_PX,
   HOME_NAV_LOGO_PEAK_WIDTH_MULTIPLIER,
+  HOME_NAV_LOGO_PECK_EASE,
+  HOME_NAV_LOGO_PECK_PEAK_AT,
+  HOME_NAV_LOGO_PECK_REPEAT_DELAY_MS,
+  HOME_NAV_LOGO_PECK_ROTATE,
+  HOME_NAV_LOGO_PECK_S,
+  HOME_NAV_LOGO_PECK_X,
+  HOME_NAV_LOGO_PECK_Y,
   HOME_NAV_LOGO_RETURN_S,
   HOME_NAV_RIGHT_ENTER_EASE,
   HOME_NAV_RIGHT_ENTER_OFFSET_PX,
@@ -32,9 +39,15 @@ function measureLogoPeakOffset(logoEl: HTMLElement) {
 
 export const HomeNavbar: React.FC = () => {
   const { enableNavbarEnter, notifyNavbarPeak } = useHomeEnterAnimation();
+  const prefersReducedMotion = useReducedMotion();
   const logoRef = useRef<HTMLSpanElement>(null);
+  const isHomeHoveringRef = useRef(false);
+  const peckLoopRunningRef = useRef(false);
+  const peckRepeatTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [peakOffsetPx, setPeakOffsetPx] = useState<number | null>(null);
+  const [enterComplete, setEnterComplete] = useState(!enableNavbarEnter);
   const logoControls = useAnimationControls();
+  const peckControls = useAnimationControls();
   const textControls = useAnimationControls();
   const rightControls = useAnimationControls();
 
@@ -56,8 +69,11 @@ export const HomeNavbar: React.FC = () => {
       logoControls.set({ x: 0 });
       textControls.set({ opacity: 1, x: 0 });
       rightControls.set({ opacity: 1, y: 0 });
+      setEnterComplete(true);
       return;
     }
+
+    setEnterComplete(false);
 
     if (peakOffsetPx === null) {
       return;
@@ -110,6 +126,10 @@ export const HomeNavbar: React.FC = () => {
           },
         }),
       ]);
+
+      if (!cancelled) {
+        setEnterComplete(true);
+      }
     };
 
     void runSequence();
@@ -126,28 +146,100 @@ export const HomeNavbar: React.FC = () => {
     textControls,
   ]);
 
+  const runPeckOnce = useCallback(async () => {
+    await peckControls.start({
+      x: [0, HOME_NAV_LOGO_PECK_X, 0],
+      y: [0, HOME_NAV_LOGO_PECK_Y, 0],
+      rotate: [0, HOME_NAV_LOGO_PECK_ROTATE, 0],
+      transition: {
+        duration: HOME_NAV_LOGO_PECK_S,
+        times: [0, HOME_NAV_LOGO_PECK_PEAK_AT, 1],
+        ease: HOME_NAV_LOGO_PECK_EASE,
+      },
+    });
+  }, [peckControls]);
+
+  const clearPeckRepeat = useCallback(() => {
+    if (peckRepeatTimeoutRef.current) {
+      clearTimeout(peckRepeatTimeoutRef.current);
+      peckRepeatTimeoutRef.current = null;
+    }
+  }, []);
+
+  const schedulePeckCycle = useCallback(() => {
+    if (!isHomeHoveringRef.current || prefersReducedMotion || !enterComplete) {
+      peckLoopRunningRef.current = false;
+      return;
+    }
+
+    void runPeckOnce().then(() => {
+      if (!isHomeHoveringRef.current) {
+        peckLoopRunningRef.current = false;
+        return;
+      }
+
+      peckRepeatTimeoutRef.current = setTimeout(() => {
+        peckRepeatTimeoutRef.current = null;
+        schedulePeckCycle();
+      }, HOME_NAV_LOGO_PECK_REPEAT_DELAY_MS);
+    });
+  }, [enterComplete, prefersReducedMotion, runPeckOnce]);
+
+  const handleHomeMouseEnter = useCallback(() => {
+    if (prefersReducedMotion || !enterComplete) {
+      return;
+    }
+
+    isHomeHoveringRef.current = true;
+
+    if (peckLoopRunningRef.current) {
+      return;
+    }
+
+    peckLoopRunningRef.current = true;
+    schedulePeckCycle();
+  }, [enterComplete, prefersReducedMotion, schedulePeckCycle]);
+
+  const handleHomeMouseLeave = useCallback(() => {
+    isHomeHoveringRef.current = false;
+    peckLoopRunningRef.current = false;
+    clearPeckRepeat();
+  }, [clearPeckRepeat]);
+
+  useEffect(() => () => clearPeckRepeat(), [clearPeckRepeat]);
+
   return (
     <div className="flex w-full items-center justify-between">
       <Link
         href="/"
+        onMouseEnter={handleHomeMouseEnter}
+        onMouseLeave={handleHomeMouseLeave}
         className="flex items-center gap-3 py-3 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
         aria-label="Home"
       >
-        <motion.span
-          ref={logoRef}
-          className="relative block h-9 w-9 shrink-0"
-          animate={logoControls}
-          initial={false}
-        >
-          <Image
-            src="/logo.svg"
-            alt=""
-            fill
-            className="object-contain"
-            priority
-            aria-hidden
-          />
-        </motion.span>
+        <span className="relative block h-9 w-9 shrink-0" aria-hidden>
+          <motion.span
+            ref={logoRef}
+            className="absolute inset-0"
+            animate={logoControls}
+            initial={false}
+          >
+            <motion.span
+              className="relative block h-full w-full origin-[35%_78%]"
+              animate={peckControls}
+              initial={{ x: 0, y: 0, rotate: 0 }}
+            >
+              <Image
+                src="/logo.svg"
+                alt=""
+                fill
+                className="object-contain"
+                priority
+                aria-hidden
+              />
+            </motion.span>
+          </motion.span>
+        </span>
         <motion.span
           className="font-sans text-base font-bold uppercase tracking-[0.15em] text-name-gradient"
           animate={textControls}

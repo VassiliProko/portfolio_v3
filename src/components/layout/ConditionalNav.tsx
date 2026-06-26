@@ -3,16 +3,13 @@
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { HomeNavbar } from '@/src/components/layout/HomeNavbar';
-
-const CASE_STUDY_PATHS = ['/mcss', '/prettify-minerva', '/usthing', '/applicable'];
+import { isCaseStudyPath } from '@/src/constants/caseStudyPaths';
 
 // hides the navbar on case study pages
 
 export const ConditionalNav: React.FC = () => {
   const pathname = usePathname();
-  const isCaseStudy = CASE_STUDY_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(path + '/')
-  );
+  const isCaseStudy = isCaseStudyPath(pathname);
 
   if (isCaseStudy) {
     return null;
