@@ -71,6 +71,7 @@
   --gradient-name-text: linear-gradient(90deg, var(--color-primary-base) 0%, var(--color-accent-base) 100%);
   --color-intro-munching: #ffa303;
   --color-intro-cooking: #ff03b8;
+  --color-intro-highlight-rest: #ededee;
   --color-intro-munching-highlight: rgba(255, 163, 3, 0.15);
   --color-intro-cooking-highlight: rgba(255, 3, 184, 0.15);
   --color-intro-subtitle: #a4a4a4;
@@ -131,6 +132,39 @@
   --grid-margin: var(--spacing-md);
 }
 
+/*
+ * Dark theme — overrides semantic page tokens only.
+ * Toggle by adding class="dark" on <html> (matches tailwind darkMode: ['class']).
+ * Brand, intro accent, and surface-dark-* card tokens stay fixed unless listed here.
+ */
+.dark {
+  color-scheme: dark;
+
+  --color-background: #18181b;
+  --color-surface-1: #27272a;
+  --color-surface-2: #3f3f46;
+  --color-surface-3: #52525b;
+  --color-text: #fafafa;
+  --color-text-subtle: #d4d4d8;
+  --color-text-muted: #a1a1aa;
+  --color-text-inverted-1: #18181b;
+  --color-text-inverted-2: #52525b;
+
+  --color-ghost-hover-bg: rgba(39, 229, 239, 0.12);
+  --color-navbar-dropdown-bg: rgba(24, 24, 27, 0.88);
+
+  --color-intro-highlight-rest: #232326;
+  --color-intro-subtitle: #71717a;
+
+  --color-border-base: rgba(255, 255, 255, 0.12);
+  --color-border-divider: rgba(255, 255, 255, 0.06);
+  --color-border-hover: rgba(255, 255, 255, 0.18);
+  --color-border-focus: rgba(255, 255, 255, 0.24);
+
+  --shadow-highlight-reel-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --shadow-highlight-reel-video-outer: 0 0 0 4px rgba(255, 255, 255, 0.12);
+}
+
 @media (min-width: 768px) {
   :root {
     --page-margin: 32px;
@@ -155,16 +189,7 @@ html {
 
 html,
 body {
-  max-width: 100vw;
-}
-
-/* Hide scrollbars on overlay containers while keeping scroll behavior */
-.scrollbar-overlay {
-  scrollbar-width: none; /* Firefox */
-}
-
-.scrollbar-overlay::-webkit-scrollbar {
-  display: none; /* WebKit */
+  overflow-x: clip;
 }
 
 body {
@@ -186,6 +211,32 @@ main {
 
 nav {
   background-color: var(--color-background);
+  /* Full-bleed bar: cover body padding so content cannot show through at the edges */
+  margin-inline: calc(-1 * var(--page-margin));
+  padding-inline: var(--page-margin);
+  width: calc(100% + 2 * var(--page-margin));
+  box-sizing: border-box;
+}
+
+/* Smooth color fade when toggling light/dark theme */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition-property: background-color, color, border-color, outline-color, fill, stroke, box-shadow !important;
+    transition-duration: var(--motion-large) !important;
+    transition-timing-function: var(--motion-easing-move) !important;
+  }
+}
+
+/* Hide scrollbars on overlay containers while keeping scroll behavior */
+.scrollbar-overlay {
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-overlay::-webkit-scrollbar {
+  display: none; /* WebKit */
 }
 
 main:has([data-not-found]) footer {
@@ -306,7 +357,7 @@ main:has([data-not-found]) footer {
 }
 
 .text-text-subtle {
-  color: #3F3F47 !important;
+  color: var(--color-text-subtle) !important;
 }
 
 .brand-gradient {

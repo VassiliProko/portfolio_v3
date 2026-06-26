@@ -20,7 +20,7 @@ export const ConditionalNav: React.FC = () => {
 
   return (
     <nav
-      className="sticky top-0 z-50 flex w-full items-center justify-between"
+      className="sticky top-0 z-50"
       aria-label="Primary"
     >
       <HomeNavbar />

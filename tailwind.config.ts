@@ -63,6 +63,7 @@ const config: Config = {
   				munching: 'var(--color-intro-munching)',
   				cooking: 'var(--color-intro-cooking)',
   				subtitle: 'var(--color-intro-subtitle)',
+  				'highlight-rest': 'var(--color-intro-highlight-rest)',
   				'munching-highlight': 'var(--color-intro-munching-highlight)',
   				'cooking-highlight': 'var(--color-intro-cooking-highlight)',
   			},

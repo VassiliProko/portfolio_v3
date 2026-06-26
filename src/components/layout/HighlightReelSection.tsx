@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Pause, Play } from 'lucide-react';
 import { cn } from '@/src/utils/cn';
 import {
+  HOME_INTRO_HIGHLIGHT_REEL_ENTER_BLUR_PX,
   HOME_INTRO_HIGHLIGHT_REEL_ENTER_DURATION_S,
   HOME_INTRO_HIGHLIGHT_REEL_ENTER_EASE,
   HOME_INTRO_HIGHLIGHT_REEL_ENTER_OFFSET_PX,
@@ -45,12 +46,18 @@ export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
           opacity: 0,
           y: HOME_INTRO_HIGHLIGHT_REEL_ENTER_OFFSET_PX,
           scaleX: HOME_INTRO_HIGHLIGHT_REEL_ENTER_SCALE_X,
+          filter: `blur(${HOME_INTRO_HIGHLIGHT_REEL_ENTER_BLUR_PX}px)`,
         }}
         animate={{
           opacity: visible ? 1 : 0,
           y: visible || prefersReducedMotion ? 0 : HOME_INTRO_HIGHLIGHT_REEL_ENTER_OFFSET_PX,
           scaleX: visible || prefersReducedMotion ? 1 : HOME_INTRO_HIGHLIGHT_REEL_ENTER_SCALE_X,
+          filter:
+            visible || prefersReducedMotion
+              ? 'blur(0px)'
+              : `blur(${HOME_INTRO_HIGHLIGHT_REEL_ENTER_BLUR_PX}px)`,
         }}
+        style={{ willChange: 'transform, opacity, filter' }}
         transition={{
           duration: prefersReducedMotion ? 0 : HOME_INTRO_HIGHLIGHT_REEL_ENTER_DURATION_S,
           ease: HOME_INTRO_HIGHLIGHT_REEL_ENTER_EASE,

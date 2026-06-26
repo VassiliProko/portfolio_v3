@@ -68,6 +68,7 @@ export const colors = {
   intro: {
     munching: '#ffa303',
     cooking: '#ff03b8',
+    'highlight-rest': '#ededee',
     'munching-highlight': 'rgba(255, 163, 3, 0.15)',
     'cooking-highlight': 'rgba(255, 3, 184, 0.15)',
     subtitle: '#a4a4a4',

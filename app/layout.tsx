@@ -4,6 +4,8 @@ import { Oxygen_Mono, Satisfy } from 'next/font/google';
 import '@/src/styles/globals.css';
 import { ConditionalNav } from '@/src/components/layout/ConditionalNav';
 import { Footer } from '@/src/components/layout/Footer';
+import { ThemeScript } from '@/src/components/ThemeScript';
+import { HomeEnterAnimationProvider } from '@/src/contexts/HomeEnterAnimationContext';
 import { Analytics } from "@vercel/analytics/next"
 
 
@@ -51,13 +53,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${satoshiVariable.variable} ${oxygenMono.variable} ${satisfy.variable}`}>
+    <html lang="en" className={`${satoshiVariable.variable} ${oxygenMono.variable} ${satisfy.variable}`} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body>
-        <ConditionalNav />
-        <main>
-          {children}
-          <Footer />
-        </main>
+        <HomeEnterAnimationProvider>
+          <ConditionalNav />
+          <main>
+            {children}
+            <Footer />
+          </main>
+        </HomeEnterAnimationProvider>
         <Analytics />
       </body>
     </html>
