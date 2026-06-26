@@ -5,6 +5,13 @@ import { motion, useReducedMotion } from 'motion/react';
 import { cn } from '@/src/utils/cn';
 import BlurText from '@/src/components/ui/BlurText';
 
+import {
+  HOME_INTRO_SECONDARY_ENTER_DURATION_S,
+  HOME_INTRO_SECONDARY_ENTER_EARLY_MS,
+  HOME_INTRO_SECONDARY_ENTER_EASE,
+  HOME_INTRO_SUBTITLE_ENTER_OFFSET_PX,
+} from '@/src/components/ui/homeIntroMotion';
+
 type HighlightedWordProps = {
   children: React.ReactNode;
   tone: 'munching' | 'cooking';
@@ -47,12 +54,11 @@ const HEADLINE_SEGMENTS = [
 const WAVE_DELAY_MS = 55;
 const WAVE_DURATION_S = 0.65;
 
-/** Gentle subtitle reveal — opacity + drop from above, design-system enter easing */
-const SUBTITLE_FADE_DURATION_S = 2.4;
-const SUBTITLE_FADE_OFFSET_PX = 28;
-const SUBTITLE_ENTER_EASE = [0, 0.9, 0.1, 1] as const;
+type HomeIntroSectionProps = {
+  onHeadlineComplete?: () => void;
+};
 
-export const HomeIntroSection: React.FC = () => {
+export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({ onHeadlineComplete }) => {
   const [subtitleVisible, setSubtitleVisible] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
@@ -67,8 +73,12 @@ export const HomeIntroSection: React.FC = () => {
         delay={WAVE_DELAY_MS}
         direction="top"
         stepDuration={WAVE_DURATION_S}
+        completeEarlyByMs={HOME_INTRO_SECONDARY_ENTER_EARLY_MS}
         className="relative max-w-full text-left font-sans text-[32px] font-medium leading-normal text-text"
-        onAnimationComplete={() => setSubtitleVisible(true)}
+        onAnimationComplete={() => {
+          setSubtitleVisible(true);
+          onHeadlineComplete?.();
+        }}
       />
 
       <motion.p
@@ -76,12 +86,12 @@ export const HomeIntroSection: React.FC = () => {
         initial={false}
         animate={{
           opacity: subtitleVisible ? 1 : 0,
-          y: subtitleVisible || prefersReducedMotion ? 0 : -SUBTITLE_FADE_OFFSET_PX,
+          y: subtitleVisible || prefersReducedMotion ? 0 : -HOME_INTRO_SUBTITLE_ENTER_OFFSET_PX,
         }}
         transition={{
-          duration: prefersReducedMotion ? 0 : SUBTITLE_FADE_DURATION_S,
+          duration: prefersReducedMotion ? 0 : HOME_INTRO_SECONDARY_ENTER_DURATION_S,
           delay: 0,
-          ease: SUBTITLE_ENTER_EASE,
+          ease: HOME_INTRO_SECONDARY_ENTER_EASE,
         }}
       >
         currently product @ revisiondojo (yc24)

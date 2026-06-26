@@ -36,6 +36,8 @@ export type BlurTextProps = {
   animationTo?: AnimationSnapshot[];
   easing?: (t: number) => number;
   onAnimationComplete?: () => void;
+  /** Fire onAnimationComplete this many ms before the wave naturally ends */
+  completeEarlyByMs?: number;
   stepDuration?: number;
   /** Smooth single-step drop with staggered left-to-right wave motion */
   wave?: boolean;
@@ -56,6 +58,7 @@ const BlurText: React.FC<BlurTextProps> = ({
   animationTo,
   easing = (t) => t,
   onAnimationComplete,
+  completeEarlyByMs,
   stepDuration = 0.35,
   wave = false,
   trigger,
@@ -70,6 +73,12 @@ const BlurText: React.FC<BlurTextProps> = ({
   const [inView, setInView] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const ref = useRef<HTMLParagraphElement>(null);
+  const onCompleteRef = useRef(onAnimationComplete);
+  const completeFiredRef = useRef(false);
+
+  useEffect(() => {
+    onCompleteRef.current = onAnimationComplete;
+  }, [onAnimationComplete]);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -110,11 +119,41 @@ const BlurText: React.FC<BlurTextProps> = ({
 
   const shouldAnimate = trigger !== undefined ? trigger : inView;
 
-  useEffect(() => {
-    if (prefersReducedMotion && shouldAnimate) {
-      onAnimationComplete?.();
+  const fireComplete = () => {
+    if (completeFiredRef.current) {
+      return;
     }
-  }, [prefersReducedMotion, shouldAnimate, onAnimationComplete]);
+    completeFiredRef.current = true;
+    onCompleteRef.current?.();
+  };
+
+  useEffect(() => {
+    if (!shouldAnimate) {
+      completeFiredRef.current = false;
+      return;
+    }
+
+    if (prefersReducedMotion) {
+      fireComplete();
+      return;
+    }
+
+    if (completeEarlyByMs != null && completeEarlyByMs > 0) {
+      const totalMs = (elements.length - 1) * delay + stepDuration * 1000;
+      const fireAt = Math.max(0, totalMs - completeEarlyByMs);
+      const id = window.setTimeout(fireComplete, fireAt);
+      return () => window.clearTimeout(id);
+    }
+  }, [
+    shouldAnimate,
+    prefersReducedMotion,
+    completeEarlyByMs,
+    elements.length,
+    delay,
+    stepDuration,
+  ]);
+
+  const useEarlyComplete = completeEarlyByMs != null && completeEarlyByMs > 0;
 
   const defaultFrom = useMemo(
     () =>
@@ -189,7 +228,7 @@ const BlurText: React.FC<BlurTextProps> = ({
               initial={prefersReducedMotion ? visibleSnapshot : fromSnapshot}
               animate={shouldAnimate ? animateKeyframes : fromSnapshot}
               transition={spanTransition}
-              onAnimationComplete={isLast ? onAnimationComplete : undefined}
+              onAnimationComplete={isLast && !useEarlyComplete ? fireComplete : undefined}
               style={{ display: 'inline-block', willChange: 'transform, filter, opacity' }}
             >
               {segmentContent}

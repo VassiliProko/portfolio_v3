@@ -131,6 +131,10 @@ const config: Config = {
   			snap: 'cubic-bezier(0,.9,.1,1)',
   			exit: 'cubic-bezier(.4,0,1,1)',
   			move: 'cubic-bezier(.4,0,.2,1)'
+  		},
+  		boxShadow: {
+  			'highlight-reel-inset': 'var(--shadow-highlight-reel-inset)',
+  			'highlight-reel-video-outer': 'var(--shadow-highlight-reel-video-outer)',
   		}
   	}
   },
