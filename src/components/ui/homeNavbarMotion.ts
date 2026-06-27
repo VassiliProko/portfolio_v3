@@ -17,3 +17,18 @@ export const HOME_NAV_LOGO_PECK_ROTATE = 18;
 export const HOME_NAV_LOGO_PECK_EASE = [0.22, 1, 0.36, 1] as const;
 export const HOME_NAV_LOGO_PECK_PEAK_AT = 0.42;
 export const HOME_NAV_LOGO_PECK_REPEAT_DELAY_MS = 2500;
+
+/** About link hover reveal */
+export const HOME_NAV_ABOUT_HOVER_S = 0.2;
+export const HOME_NAV_ABOUT_ARROW_DELAY_S = 0.08;
+export const HOME_NAV_ABOUT_ARROW_START_X = -8;
+export const HOME_NAV_ABOUT_CLOSED_WIDTH_PX = 50;
+export const HOME_NAV_ABOUT_OPEN_WIDTH_PX = 80;
+export const HOME_NAV_ABOUT_PROFILE_SRC = '/images/optimized/home/profile-picture';
+export const HOME_NAV_ABOUT_PROFILE_SIZE_PX = 240;
+export const HOME_NAV_ABOUT_PROFILE_ENTER_S = 0.45;
+export const HOME_NAV_ABOUT_PROFILE_OFFSET_X = 24;
+export const HOME_NAV_ABOUT_PROFILE_TOP_GAP_PX = 30;
+export const HOME_NAV_ABOUT_PROFILE_ROTATE = -16;
+export const HOME_NAV_ABOUT_PROFILE_ENTER_FROM_X = 180;
+export const HOME_NAV_ABOUT_PROFILE_ENTER_FROM_ROTATE = 14;

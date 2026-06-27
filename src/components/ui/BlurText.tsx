@@ -19,6 +19,8 @@ export type BlurTextSegment = {
   key: string;
   content: React.ReactNode;
   className?: string;
+  /** When true, BlurText will not insert a leading space before this segment. */
+  skipLeadingSpace?: boolean;
 };
 
 const WAVE_EASE = [0.22, 1, 0.36, 1] as const;
@@ -208,6 +210,7 @@ const BlurText: React.FC<BlurTextProps> = ({
         const segmentKey = 'key' in segment ? segment.key : `${index}`;
         const segmentContent = 'content' in segment ? segment.content : segment;
         const segmentClassName = 'className' in segment ? segment.className : undefined;
+        const skipLeadingSpace = 'skipLeadingSpace' in segment && segment.skipLeadingSpace;
         const animateKeyframes = wave ? waveTo : buildKeyframes(fromSnapshot, toSnapshots);
 
         const spanTransition: Transition = {
@@ -222,7 +225,7 @@ const BlurText: React.FC<BlurTextProps> = ({
 
         return (
           <React.Fragment key={segmentKey}>
-            {useSegments && index > 0 ? ' ' : null}
+            {useSegments && index > 0 && !skipLeadingSpace ? ' ' : null}
             <motion.span
               className={segmentClassName}
               initial={prefersReducedMotion ? visibleSnapshot : fromSnapshot}

@@ -136,6 +136,7 @@ const config: Config = {
   		boxShadow: {
   			'highlight-reel-inset': 'var(--shadow-highlight-reel-inset)',
   			'highlight-reel-video-outer': 'var(--shadow-highlight-reel-video-outer)',
+  			'about-profile-stamp': 'var(--shadow-about-profile-stamp)',
   		}
   	}
   },

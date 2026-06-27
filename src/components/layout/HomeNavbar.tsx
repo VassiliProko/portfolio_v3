@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
@@ -8,6 +8,19 @@ import { motion, useAnimationControls, useReducedMotion } from 'motion/react';
 import { ThemeToggle } from '@/src/components/ui/ThemeToggle';
 import { useHomeEnterAnimation } from '@/src/contexts/HomeEnterAnimationContext';
 import {
+  HOME_NAV_ABOUT_ARROW_DELAY_S,
+  HOME_NAV_ABOUT_ARROW_START_X,
+  HOME_NAV_ABOUT_CLOSED_WIDTH_PX,
+  HOME_NAV_ABOUT_HOVER_S,
+  HOME_NAV_ABOUT_OPEN_WIDTH_PX,
+  HOME_NAV_ABOUT_PROFILE_ENTER_FROM_ROTATE,
+  HOME_NAV_ABOUT_PROFILE_ENTER_FROM_X,
+  HOME_NAV_ABOUT_PROFILE_ENTER_S,
+  HOME_NAV_ABOUT_PROFILE_OFFSET_X,
+  HOME_NAV_ABOUT_PROFILE_ROTATE,
+  HOME_NAV_ABOUT_PROFILE_SIZE_PX,
+  HOME_NAV_ABOUT_PROFILE_SRC,
+  HOME_NAV_ABOUT_PROFILE_TOP_GAP_PX,
   HOME_NAV_ENTER_EASE,
   HOME_NAV_LOGO_OUTBOUND_S,
   HOME_NAV_LOGO_PEAK_FALLBACK_PX,
@@ -41,45 +54,49 @@ export const HomeNavbar: React.FC = () => {
   const { enableNavbarEnter, notifyNavbarPeak } = useHomeEnterAnimation();
   const prefersReducedMotion = useReducedMotion();
   const logoRef = useRef<HTMLSpanElement>(null);
+  const enterCompleteRef = useRef(!enableNavbarEnter);
   const isHomeHoveringRef = useRef(false);
   const peckLoopRunningRef = useRef(false);
+  const schedulePeckCycleRef = useRef<(() => void) | null>(null);
   const peckRepeatTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [peakOffsetPx, setPeakOffsetPx] = useState<number | null>(null);
-  const [enterComplete, setEnterComplete] = useState(!enableNavbarEnter);
+  const [isAboutHovering, setIsAboutHovering] = useState(false);
   const logoControls = useAnimationControls();
   const peckControls = useAnimationControls();
   const textControls = useAnimationControls();
   const rightControls = useAnimationControls();
-
-  useLayoutEffect(() => {
-    if (!enableNavbarEnter) {
-      return;
-    }
-
-    if (!logoRef.current) {
-      setPeakOffsetPx(HOME_NAV_LOGO_PEAK_FALLBACK_PX);
-      return;
-    }
-
-    setPeakOffsetPx(measureLogoPeakOffset(logoRef.current));
-  }, [enableNavbarEnter]);
+  const aboutHoverTransition = prefersReducedMotion
+    ? { duration: 0 }
+    : { duration: HOME_NAV_ABOUT_HOVER_S, ease: HOME_NAV_RIGHT_ENTER_EASE };
+  const aboutArrowTransition = prefersReducedMotion
+    ? { duration: 0 }
+    : {
+        duration: HOME_NAV_ABOUT_HOVER_S,
+        ease: HOME_NAV_RIGHT_ENTER_EASE,
+        delay: isAboutHovering ? HOME_NAV_ABOUT_ARROW_DELAY_S : 0,
+      };
+  const aboutProfileTransition = prefersReducedMotion
+    ? { duration: 0 }
+    : {
+        duration: HOME_NAV_ABOUT_PROFILE_ENTER_S,
+        ease: HOME_NAV_RIGHT_ENTER_EASE,
+        delay: isAboutHovering ? HOME_NAV_ABOUT_ARROW_DELAY_S : 0,
+      };
 
   useEffect(() => {
     if (!enableNavbarEnter) {
       logoControls.set({ x: 0 });
       textControls.set({ opacity: 1, x: 0 });
       rightControls.set({ opacity: 1, y: 0 });
-      setEnterComplete(true);
+      enterCompleteRef.current = true;
       return;
     }
 
-    setEnterComplete(false);
-
-    if (peakOffsetPx === null) {
-      return;
-    }
+    enterCompleteRef.current = false;
 
     let cancelled = false;
+    const peakOffsetPx = logoRef.current
+      ? measureLogoPeakOffset(logoRef.current)
+      : HOME_NAV_LOGO_PEAK_FALLBACK_PX;
 
     const runSequence = async () => {
       logoControls.set({ x: 0 });
@@ -128,7 +145,7 @@ export const HomeNavbar: React.FC = () => {
       ]);
 
       if (!cancelled) {
-        setEnterComplete(true);
+        enterCompleteRef.current = true;
       }
     };
 
@@ -141,7 +158,6 @@ export const HomeNavbar: React.FC = () => {
     enableNavbarEnter,
     logoControls,
     notifyNavbarPeak,
-    peakOffsetPx,
     rightControls,
     textControls,
   ]);
@@ -167,7 +183,7 @@ export const HomeNavbar: React.FC = () => {
   }, []);
 
   const schedulePeckCycle = useCallback(() => {
-    if (!isHomeHoveringRef.current || prefersReducedMotion || !enterComplete) {
+    if (!isHomeHoveringRef.current || prefersReducedMotion || !enterCompleteRef.current) {
       peckLoopRunningRef.current = false;
       return;
     }
@@ -180,13 +196,17 @@ export const HomeNavbar: React.FC = () => {
 
       peckRepeatTimeoutRef.current = setTimeout(() => {
         peckRepeatTimeoutRef.current = null;
-        schedulePeckCycle();
+        schedulePeckCycleRef.current?.();
       }, HOME_NAV_LOGO_PECK_REPEAT_DELAY_MS);
     });
-  }, [enterComplete, prefersReducedMotion, runPeckOnce]);
+  }, [prefersReducedMotion, runPeckOnce]);
+
+  useEffect(() => {
+    schedulePeckCycleRef.current = schedulePeckCycle;
+  }, [schedulePeckCycle]);
 
   const handleHomeMouseEnter = useCallback(() => {
-    if (prefersReducedMotion || !enterComplete) {
+    if (prefersReducedMotion || !enterCompleteRef.current) {
       return;
     }
 
@@ -198,7 +218,7 @@ export const HomeNavbar: React.FC = () => {
 
     peckLoopRunningRef.current = true;
     schedulePeckCycle();
-  }, [enterComplete, prefersReducedMotion, schedulePeckCycle]);
+  }, [prefersReducedMotion, schedulePeckCycle]);
 
   const handleHomeMouseLeave = useCallback(() => {
     isHomeHoveringRef.current = false;
@@ -243,7 +263,7 @@ export const HomeNavbar: React.FC = () => {
         <motion.span
           className="font-sans text-base font-bold uppercase tracking-[0.15em] text-name-gradient"
           animate={textControls}
-          initial={enableNavbarEnter ? { opacity: 0, x: peakOffsetPx ?? HOME_NAV_LOGO_PEAK_FALLBACK_PX } : false}
+          initial={enableNavbarEnter ? { opacity: 0, x: HOME_NAV_LOGO_PEAK_FALLBACK_PX } : false}
         >
           Vassili Prokopenko
         </motion.span>
@@ -255,14 +275,65 @@ export const HomeNavbar: React.FC = () => {
         initial={enableNavbarEnter ? { opacity: 0, y: -HOME_NAV_RIGHT_ENTER_OFFSET_PX } : false}
       >
         <ThemeToggle />
-        <Link
-          href="/#about"
-          onClick={scrollToAbout}
-          className="flex items-center gap-[6px] py-3 font-mono text-base uppercase text-text transition-all duration-[60ms] ease-snap hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
+        <div
+          className="relative"
+          onMouseEnter={() => setIsAboutHovering(true)}
+          onMouseLeave={() => setIsAboutHovering(false)}
         >
-          About
-          <ArrowRight size={24} strokeWidth={2} aria-hidden />
-        </Link>
+          <motion.div
+            animate={{
+              width: isAboutHovering ? HOME_NAV_ABOUT_OPEN_WIDTH_PX : HOME_NAV_ABOUT_CLOSED_WIDTH_PX,
+            }}
+            transition={aboutHoverTransition}
+          >
+            <Link
+              href="/#about"
+              onClick={scrollToAbout}
+              className="relative flex w-full items-center overflow-hidden py-3 font-mono text-base uppercase text-text transition-colors duration-[60ms] ease-snap focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
+            >
+              <span>About</span>
+              <motion.span
+                className="pointer-events-none absolute right-0 top-1/2"
+                animate={{
+                  opacity: isAboutHovering ? 1 : 0,
+                  x: isAboutHovering ? 0 : HOME_NAV_ABOUT_ARROW_START_X,
+                }}
+                transition={aboutArrowTransition}
+                aria-hidden
+              >
+                <span className="block -translate-y-1/2">
+                  <ArrowRight size={24} strokeWidth={2} />
+                </span>
+              </motion.span>
+            </Link>
+          </motion.div>
+
+          <motion.div
+            className="pointer-events-none absolute left-0 top-full z-50"
+            style={{ paddingTop: HOME_NAV_ABOUT_PROFILE_TOP_GAP_PX }}
+            initial={false}
+            animate={{
+              opacity: isAboutHovering ? 1 : 0,
+              x: isAboutHovering
+                ? HOME_NAV_ABOUT_PROFILE_OFFSET_X
+                : HOME_NAV_ABOUT_PROFILE_ENTER_FROM_X,
+              rotate: isAboutHovering
+                ? HOME_NAV_ABOUT_PROFILE_ROTATE
+                : HOME_NAV_ABOUT_PROFILE_ENTER_FROM_ROTATE,
+            }}
+            transition={aboutProfileTransition}
+            aria-hidden={!isAboutHovering}
+          >
+            <Image
+              src={HOME_NAV_ABOUT_PROFILE_SRC}
+              alt=""
+              width={HOME_NAV_ABOUT_PROFILE_SIZE_PX}
+              height={HOME_NAV_ABOUT_PROFILE_SIZE_PX}
+              className="block rounded-lg object-cover shadow-about-profile-stamp"
+              sizes={`${HOME_NAV_ABOUT_PROFILE_SIZE_PX}px`}
+            />
+          </motion.div>
+        </div>
       </motion.div>
     </div>
   );

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import BlurText from '@/src/components/ui/BlurText';
+import { HOME_INTRO_HEADLINE_SEGMENTS } from '@/src/components/ui/HomeIntroHeadlineWords';
 import { useHomeEnterAnimation } from '@/src/contexts/HomeEnterAnimationContext';
 
 import {
@@ -12,14 +13,19 @@ import {
   HOME_INTRO_SUBTITLE_ENTER_OFFSET_PX,
 } from '@/src/components/ui/homeIntroMotion';
 
-const HEADLINE =
-  'hi, im a young lad busy munching & cooking delightful creations';
-
 const WAVE_DELAY_MS = 55;
 const WAVE_DURATION_S = 0.65;
 
 const INTRO_TEXT_CLASS =
-  'relative max-w-full text-left font-sans text-[32px] font-medium leading-normal text-text';
+  'relative max-w-full cursor-default text-left font-sans text-[32px] font-medium leading-normal text-text';
+
+const REVISION_DOJO_HREF = 'https://revisiondojo.com';
+
+const SUBTITLE_PILL_CLASS =
+  'inline-flex rounded-full bg-intro-highlight-rest px-xs py-4xs transition-colors duration-[180ms] ease-move hover:bg-surface-2 hover:text-text motion-reduce:transition-none';
+
+const SUBTITLE_LINK_FOCUS_CLASS =
+  'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline';
 
 type HomeIntroSectionProps = {
   onHeadlineComplete?: () => void;
@@ -37,7 +43,7 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({ onHeadlineCo
     >
       <BlurText
         wave
-        text={HEADLINE}
+        segments={[...HOME_INTRO_HEADLINE_SEGMENTS]}
         trigger={introBlurReady}
         delay={WAVE_DELAY_MS}
         direction="top"
@@ -50,8 +56,8 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({ onHeadlineCo
         }}
       />
 
-      <motion.p
-        className="max-w-full text-left font-sans text-xl font-medium leading-normal text-text-muted"
+      <motion.div
+        className="flex max-w-full flex-wrap items-center gap-2xs text-left font-sans text-xl font-medium leading-normal text-text-muted"
         initial={false}
         animate={{
           opacity: subtitleVisible ? 1 : 0,
@@ -63,8 +69,19 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({ onHeadlineCo
           ease: HOME_INTRO_SECONDARY_ENTER_EASE,
         }}
       >
-        currently designing at RevisionDojo
-      </motion.p>
+        <span>// currently designing at</span>
+        <motion.a
+          href={REVISION_DOJO_HREF}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="RevisionDojo. Opens in a new tab."
+          className={`${SUBTITLE_PILL_CLASS} ${SUBTITLE_LINK_FOCUS_CLASS}`}
+          whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+          transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+        >
+          RevisionDojo
+        </motion.a>
+      </motion.div>
     </div>
   );
 };
