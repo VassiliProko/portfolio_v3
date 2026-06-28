@@ -2,19 +2,15 @@
 
 import React, { useState } from 'react';
 import { HomeIntroSection } from '@/src/components/ui/HomeIntroSection';
-import { HighlightReelSection } from '@/src/components/layout/HighlightReelSection';
-import { WorkBentoSection } from '@/src/components/layout/WorkBentoSection';
-import { AboutSection } from '@/src/components/layout/AboutSection';
+import { WorkShowcaseSection } from '@/src/components/layout/WorkShowcaseSection';
 
 export default function HomePage() {
-  const [introSecondaryVisible, setIntroSecondaryVisible] = useState(false);
+  const [showcaseVisible, setShowcaseVisible] = useState(false);
 
   return (
     <>
-      <HomeIntroSection onHeadlineComplete={() => setIntroSecondaryVisible(true)} />
-      <HighlightReelSection visible={introSecondaryVisible} />
-      <WorkBentoSection />
-      <AboutSection />
+      <HomeIntroSection onHeadlineComplete={() => setShowcaseVisible(true)} />
+      <WorkShowcaseSection visible={showcaseVisible} />
     </>
   );
 }

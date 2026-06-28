@@ -29,12 +29,17 @@ const SUBTITLE_LINK_FOCUS_CLASS =
 
 type HomeIntroSectionProps = {
   onHeadlineComplete?: () => void;
+  onSubtitleRevealComplete?: () => void;
 };
 
-export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({ onHeadlineComplete }) => {
+export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({
+  onHeadlineComplete,
+  onSubtitleRevealComplete,
+}) => {
   const [subtitleVisible, setSubtitleVisible] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const { introBlurReady } = useHomeEnterAnimation();
+  const subtitleEnterOffset = HOME_INTRO_SUBTITLE_ENTER_OFFSET_PX * 0.6;
 
   return (
     <div
@@ -61,15 +66,20 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({ onHeadlineCo
         initial={false}
         animate={{
           opacity: subtitleVisible ? 1 : 0,
-          y: subtitleVisible || prefersReducedMotion ? 0 : -HOME_INTRO_SUBTITLE_ENTER_OFFSET_PX,
+          y: subtitleVisible || prefersReducedMotion ? 0 : -subtitleEnterOffset,
         }}
         transition={{
           duration: prefersReducedMotion ? 0 : HOME_INTRO_SECONDARY_ENTER_DURATION_S,
           delay: 0,
           ease: HOME_INTRO_SECONDARY_ENTER_EASE,
         }}
+        onAnimationComplete={() => {
+          if (subtitleVisible) {
+            onSubtitleRevealComplete?.();
+          }
+        }}
       >
-        <span>// currently designing at</span>
+        <span>{'// currently designing at'}</span>
         <motion.a
           href={REVISION_DOJO_HREF}
           target="_blank"
