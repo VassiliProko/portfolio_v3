@@ -18,9 +18,7 @@ const CONSOLE_LINES: ConsoleLineConfig[] = [
   { id: 1, type: 'text', text: 'footer.log("you have the capacity to create beauty in this world")' },
   { id: 2, type: 'text', text: 'display.pages()' },
   { id: 3, type: 'link', linkText: 'home', href: '/' },
-  { id: 4, type: 'link', linkText: 'work', href: '/#work' },
-  { id: 5, type: 'link', linkText: 'play', href: '/#play' },
-  { id: 6, type: 'link', linkText: 'about', href: '/#about' },
+  { id: 4, type: 'link', linkText: 'about', href: '/about' },
 ];
 
 function getLineLength(line: ConsoleLineConfig): number {
@@ -68,6 +66,7 @@ function renderConsoleLine(
       {linkShow > 0 && (
         <Link
           href={line.href}
+          prefetch={false}
           className={linkClass}
           onClick={
             isHomeLink && isOnHome
@@ -91,9 +90,11 @@ const CHAR_DELAY_MS = 35;
 export const Footer: React.FC = () => {
   const pathname = usePathname();
   const consoleRef = useRef<HTMLDivElement>(null);
+  const imageCardRef = useRef<HTMLDivElement>(null);
   const [hasRevealed, setHasRevealed] = useState(false);
   const [visibleCounts, setVisibleCounts] = useState<number[]>(() => CONSOLE_LINES.map(() => 0));
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [parallaxProgress, setParallaxProgress] = useState(0);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -116,6 +117,30 @@ export const Footer: React.FC = () => {
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const updateParallax = () => {
+      const card = imageCardRef.current;
+      if (!card) return;
+
+      const rect = card.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const totalTravelDistance = viewportHeight + rect.height;
+      const traveledDistance = viewportHeight - rect.top;
+      const nextProgress = Math.min(Math.max(traveledDistance / totalTravelDistance, 0), 1);
+      setParallaxProgress(nextProgress);
+    };
+
+    updateParallax();
+    window.addEventListener('scroll', updateParallax, { passive: true });
+    window.addEventListener('resize', updateParallax);
+    return () => {
+      window.removeEventListener('scroll', updateParallax);
+      window.removeEventListener('resize', updateParallax);
+    };
+  }, [prefersReducedMotion]);
 
   // When in view, run typewriter: each line starts after LINE_START_DELAY, then types one char every CHAR_DELAY
   useEffect(() => {
@@ -164,9 +189,19 @@ export const Footer: React.FC = () => {
   return (
     <footer className="w-full py-8 md:py-10">
         {/* Upper section: console-style card with background image — color on hover over this element only */}
-        <div className="group relative overflow-hidden rounded-tl-md rounded-tr-md min-h-[280px] md:min-h-[320px] bg-surface-dark-1">
+        <div
+          ref={imageCardRef}
+          className="group relative overflow-hidden rounded-tl-md rounded-tr-md min-h-[360px] md:min-h-[440px] bg-surface-dark-1"
+        >
           {/* Background image: grayscale by default, color on hover over this card */}
-          <div className="absolute inset-0">
+          <div
+            className="absolute inset-x-0 -inset-y-[16%]"
+            style={{
+              transform: prefersReducedMotion
+                ? 'translateY(0%)'
+                : `translateY(${(-12 + parallaxProgress * 24).toFixed(3)}%)`,
+            }}
+          >
             <Image
               src="/images/optimized/home/footer-image.webp"
               alt=""
@@ -190,7 +225,7 @@ export const Footer: React.FC = () => {
           {/* Console text content — scroll-triggered line-by-line reveal */}
           <div
             ref={consoleRef}
-            className="relative z-10 flex flex-col justify-between h-full min-h-[280px] md:min-h-[320px] p-5 md:p-6"
+            className="relative z-10 flex flex-col justify-between h-full min-h-[360px] md:min-h-[440px] p-5 md:p-6"
           >
             <pre className="font-mono text-sm md:text-base text-text-inverted-1 leading-relaxed flex flex-col gap-0 min-w-0 whitespace-pre-wrap break-words">
               {CONSOLE_LINES.map((line, index) => (
@@ -244,33 +279,6 @@ export const Footer: React.FC = () => {
             </a>
           </div>
 
-          {/* Logo + quack: hover = quack slides in from left */}
-              <div className="group/duck flex items-center gap-2 overflow-visible">
-                <div className="relative w-[44px] h-[44px] shrink-0 overflow-hidden rounded-lg">
-                  <Image
-                    src="/logo.svg"
-                    alt="Vassili Prokopenko Logo"
-                    fill
-                    className="object-contain"
-                    priority
-                  />
-                </div>
-                <span
-                  className={cn(
-                    'text-text-muted text-sm font-sans whitespace-nowrap',
-                    'transition-all duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)]',
-                    '-translate-x-full opacity-0',
-                    'group-hover/duck:translate-x-0 group-hover/duck:opacity-100'
-                  )}
-                  style={
-                    prefersReducedMotion
-                      ? { transition: 'none' }
-                      : undefined
-                  }
-                >
-                  Quack
-                </span>
-              </div>
             </div>
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-1 border border-border-base">
             <Heart className="w-5 h-5 text-primary-base shrink-0" strokeWidth={2} aria-hidden />
