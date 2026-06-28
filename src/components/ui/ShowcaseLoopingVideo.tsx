@@ -1,5 +1,7 @@
 'use client';
 
+import { useLayoutEffect, useRef } from 'react';
+
 type ShowcaseLoopingVideoProps = {
   src: string;
   className?: string;
@@ -11,12 +13,23 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
   className,
   ariaLabel,
 }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useLayoutEffect(() => {
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+
+    video.loop = true;
+  }, [src]);
+
   return (
     <video
+      ref={videoRef}
       src={src}
       className={className}
       muted
-      loop
       playsInline
       autoPlay
       preload="auto"

@@ -26,7 +26,13 @@ type WorkShowcaseSectionProps = {
   visible?: boolean;
 };
 type ShowcaseColumnCount = 2 | 3;
-type ShowcaseCardKey = 'prettify-minerva' | 'dojo-icons' | 'usthing' | 'applicable' | 'mcss';
+type ShowcaseCardKey =
+  | 'prettify-minerva'
+  | 'dojo-icons'
+  | 'usthing'
+  | 'applicable'
+  | 'mcss'
+  | 'oneprep-pro-trial';
 type ShowcaseCardProps = { reveal?: boolean; delayMs?: number };
 type ShowcaseCardConfig = {
   key: ShowcaseCardKey;
@@ -205,7 +211,7 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
   return (
     <WorkCardShell
       href="/mcss"
-      className="aspect-[16/10] p-sm"
+      className="p-sm"
       ariaLabel="Open MCSS case study"
       style={{ background: 'var(--gradient-mcss)' }}
       reveal={reveal}
@@ -221,7 +227,7 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
     >
       <ShowcaseLoopingVideo
         src="/other/mcss_video.webm"
-        className="pointer-events-none h-full w-full rounded-md object-cover"
+        className="block w-full rounded-md aspect-[1908/1080] object-contain"
         ariaLabel="MCSS featured case study video"
       />
     </WorkCardShell>
@@ -287,15 +293,32 @@ const DojoIconsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       hoverTitle="Dojo Icons"
       hoverYear="Icon Set"
     >
-      <video
-        className="pointer-events-none h-full w-full object-cover"
+      <ShowcaseLoopingVideo
         src="/other/dojo-icons-preview.webm"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        aria-label="Dojo Icons preview animation"
+        className="h-full w-full object-cover"
+        ariaLabel="Dojo Icons preview animation"
+      />
+    </WorkCardShell>
+  );
+};
+
+const OnePrepProTrialCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  return (
+    <WorkCardShell
+      className="aspect-[3456/2160]"
+      ariaLabel="OnePrep Pro Trial animation preview"
+      reveal={reveal}
+      delayMs={delayMs}
+      hoverTitle="OnePrep Pro Trial"
+      hoverYear="Animation"
+    >
+      <ShowcaseLoopingVideo
+        src="/other/oneprep-trial-unlock.mp4"
+        className="h-full w-full object-cover"
+        ariaLabel="OnePrep Pro Trial unlock animation"
       />
     </WorkCardShell>
   );
@@ -322,7 +345,7 @@ const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
           <div className="absolute left-[7.1%] right-[7.1%] top-[6.6%] bottom-[6.7%] overflow-hidden rounded-[34px]">
             <ShowcaseLoopingVideo
               src="/other/grade_distribution_showcase_short.webm"
-              className="pointer-events-none absolute top-0 w-[186%] h-auto"
+              className="absolute top-0 w-[186%] h-auto"
               ariaLabel="Grade Distribution mobile app preview"
             />
           </div>
@@ -401,6 +424,12 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
   );
 };
 
+/**
+ * Showcase card order and reveal timing.
+ * - `priority`: lower = earlier in column stack and higher in the grid (0 is first).
+ * - `delayMs`: entrance animation stagger; usually priority * 100.
+ * - Column placement: edit `SHOWCASE_COLUMN_KEYS` below.
+ */
 const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
   {
     key: 'prettify-minerva',
@@ -432,17 +461,24 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     delayMs: 400,
     render: (props) => <McssFeaturedCaseStudy {...props} />,
   },
+  {
+    key: 'oneprep-pro-trial',
+    priority: 5,
+    delayMs: 500,
+    render: (props) => <OnePrepProTrialCaseStudy {...props} />,
+  },
 ];
 
+/** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
-    ['prettify-minerva', 'applicable'],
-    ['dojo-icons', 'usthing', 'mcss'],
+    ['prettify-minerva', 'usthing', 'applicable'],
+    ['dojo-icons', 'mcss', 'oneprep-pro-trial'],
   ],
   3: [
     ['prettify-minerva', 'usthing'],
-    ['dojo-icons'],
-    ['applicable', 'mcss'],
+    ['dojo-icons', 'mcss'],
+    ['applicable', 'oneprep-pro-trial'],
   ],
 };
 
@@ -459,7 +495,7 @@ const getShowcaseColumnGroups = (columnCount: ShowcaseColumnCount) => {
 
 export const WorkShowcaseSection: React.FC<WorkShowcaseSectionProps> = ({ visible = false }) => {
   return (
-    <section className="w-full pt-2 pb-12 md:pt-4 md:pb-20" aria-label="WorkShowcase" id="work-section">
+    <section className="w-full pt-2 pb-12 md:pt-4 md:pb-20" aria-label="WorkShowcase">
       <WorkColumns visible={visible} />
     </section>
   );
