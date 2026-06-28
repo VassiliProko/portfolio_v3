@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React from 'react';
 import { useReducedMotion } from 'motion/react';
 import { ArrowRight, Maximize2 } from 'lucide-react';
+import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
 
 type WorkCardShellProps = {
   className: string;
@@ -23,6 +24,47 @@ type WorkCardShellProps = {
 type HoverMetaPillsProps = { title?: string; year?: string };
 type WorkShowcaseSectionProps = {
   visible?: boolean;
+};
+type ShowcaseColumnCount = 2 | 3;
+type ShowcaseCardKey = 'prettify-minerva' | 'dojo-icons' | 'usthing' | 'applicable' | 'mcss';
+type ShowcaseCardProps = { reveal?: boolean; delayMs?: number };
+type ShowcaseCardConfig = {
+  key: ShowcaseCardKey;
+  priority: number;
+  delayMs: number;
+  render: (props: ShowcaseCardProps) => React.ReactNode;
+};
+
+const SHOWCASE_THREE_COLUMN_QUERY = '(min-width: 1280px)';
+
+const subscribeToShowcaseColumnChanges = (onStoreChange: () => void) => {
+  if (typeof window === 'undefined') return () => {};
+
+  const mediaQueryList = window.matchMedia(SHOWCASE_THREE_COLUMN_QUERY);
+
+  if (typeof mediaQueryList.addEventListener === 'function') {
+    mediaQueryList.addEventListener('change', onStoreChange);
+    return () => mediaQueryList.removeEventListener('change', onStoreChange);
+  }
+
+  mediaQueryList.addListener(onStoreChange);
+  return () => mediaQueryList.removeListener(onStoreChange);
+};
+
+const getShowcaseColumnSnapshot = () => {
+  return typeof window !== 'undefined' && window.matchMedia(SHOWCASE_THREE_COLUMN_QUERY).matches;
+};
+
+const getShowcaseServerSnapshot = () => false;
+
+const useShowcaseColumnCount = (): ShowcaseColumnCount => {
+  const hasThreeColumns = React.useSyncExternalStore(
+    subscribeToShowcaseColumnChanges,
+    getShowcaseColumnSnapshot,
+    getShowcaseServerSnapshot,
+  );
+
+  return hasThreeColumns ? 3 : 2;
 };
 
 const HoverMetaPills: React.FC<HoverMetaPillsProps> = ({ title = 'Project', year = '2026' }) => {
@@ -177,15 +219,10 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
         </span>
       }
     >
-      <video
-        className="pointer-events-none h-full w-full rounded-md object-cover"
+      <ShowcaseLoopingVideo
         src="/other/mcss_video.webm"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        aria-label="MCSS featured case study video"
+        className="pointer-events-none h-full w-full rounded-md object-cover"
+        ariaLabel="MCSS featured case study video"
       />
     </WorkCardShell>
   );
@@ -237,6 +274,33 @@ const ApplicableCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   );
 };
 
+const DojoIconsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  return (
+    <WorkCardShell
+      className="aspect-[1280/780]"
+      ariaLabel="Dojo Icons project preview"
+      reveal={reveal}
+      delayMs={delayMs}
+      hoverTitle="Dojo Icons"
+      hoverYear="Icon Set"
+    >
+      <video
+        className="pointer-events-none h-full w-full object-cover"
+        src="/other/dojo-icons-preview.webm"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-label="Dojo Icons preview animation"
+      />
+    </WorkCardShell>
+  );
+};
+
 const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   reveal = true,
   delayMs = 0,
@@ -256,15 +320,10 @@ const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       <div className="absolute inset-x-0 top-0 flex items-start justify-center overflow-hidden pt-3">
         <div className="relative w-[clamp(266px,95vw,302px)] aspect-[281/584]">
           <div className="absolute left-[7.1%] right-[7.1%] top-[6.6%] bottom-[6.7%] overflow-hidden rounded-[34px]">
-            <video
-              className="pointer-events-none absolute top-0 w-[186%] h-auto"
+            <ShowcaseLoopingVideo
               src="/other/grade_distribution_showcase_short.webm"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              aria-label="Grade Distribution mobile app preview"
+              className="pointer-events-none absolute top-0 w-[186%] h-auto"
+              ariaLabel="Grade Distribution mobile app preview"
             />
           </div>
           <Image
@@ -282,22 +341,20 @@ const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
 };
 
 const WorkColumns: React.FC<{ visible: boolean }> = ({ visible }) => {
+  const columnCount = useShowcaseColumnCount();
+  const columnGroups = getShowcaseColumnGroups(columnCount);
+
   return (
-    <div className="flex flex-row items-start gap-3">
-      <div className="flex w-1/2 flex-col gap-3 xl:w-1/3">
-        <PrettifyMinervaFeaturedCaseStudy reveal={visible} delayMs={0} />
-        <UsthingCaseStudy reveal={visible} delayMs={100} />
-      </div>
-      <div className="flex w-1/2 flex-col gap-3 xl:w-2/3">
-        <div className="flex flex-col gap-3 xl:flex-row xl:items-start">
-          <div className="flex flex-col gap-3 xl:w-1/2">
-            <ApplicableCaseStudy reveal={visible} delayMs={200} />
-          </div>
-          <div className="flex flex-col gap-3 xl:w-1/2">
-            <McssFeaturedCaseStudy reveal={visible} delayMs={300} />
-          </div>
+    <div className={['grid gap-3', columnCount === 3 ? 'grid-cols-3' : 'grid-cols-2'].join(' ')}>
+      {columnGroups.map((column, columnIndex) => (
+        <div key={`${columnCount}-${columnIndex}`} className="flex flex-col gap-3">
+          {column.map((card) => (
+            <React.Fragment key={card.key}>
+              {card.render({ reveal: visible, delayMs: card.delayMs })}
+            </React.Fragment>
+          ))}
         </div>
-      </div>
+      ))}
     </div>
   );
 };
@@ -309,8 +366,9 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
   return (
     <WorkCardShell
       href="/prettify-minerva"
-      className="aspect-[16/10] p-sm"
+      className="aspect-[50/39] relative"
       ariaLabel="Open Prettify Minerva case study"
+      style={{ background: 'var(--gradient-prettify-minerva-showcase)' }}
       reveal={reveal}
       delayMs={delayMs}
       hoverTitle="Prettify Minerva"
@@ -322,15 +380,80 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
         </span>
       }
     >
-      <Image
-        src="/images/optimized/prettify-minerva/prettify-minerva-mock.webp"
-        alt=""
-        fill
-        className="pointer-events-none select-none object-cover scale-105 sm:scale-110"
-        sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
-        priority={false}
-      />
+      <div
+        className="absolute left-[var(--spacing-prettify-minerva-showcase-offset)] top-[var(--spacing-prettify-minerva-showcase-offset)] w-full rounded-tl-[6px] shadow-prettify-minerva-showcase-frame"
+        aria-hidden
+      >
+        <div className="overflow-hidden rounded-tl-[6px]">
+          <Image
+            src="/images/optimized/prettify-minerva/minerva-preview.png"
+            alt=""
+            width={1054}
+            height={908}
+            className="pointer-events-none block h-auto w-full max-w-none select-none"
+            sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
+            priority={false}
+            unoptimized
+          />
+        </div>
+      </div>
     </WorkCardShell>
+  );
+};
+
+const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
+  {
+    key: 'prettify-minerva',
+    priority: 0,
+    delayMs: 0,
+    render: (props) => <PrettifyMinervaFeaturedCaseStudy {...props} />,
+  },
+  {
+    key: 'dojo-icons',
+    priority: 1,
+    delayMs: 100,
+    render: (props) => <DojoIconsCaseStudy {...props} />,
+  },
+  {
+    key: 'usthing',
+    priority: 2,
+    delayMs: 200,
+    render: (props) => <UsthingCaseStudy {...props} />,
+  },
+  {
+    key: 'applicable',
+    priority: 3,
+    delayMs: 300,
+    render: (props) => <ApplicableCaseStudy {...props} />,
+  },
+  {
+    key: 'mcss',
+    priority: 4,
+    delayMs: 400,
+    render: (props) => <McssFeaturedCaseStudy {...props} />,
+  },
+];
+
+const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
+  2: [
+    ['prettify-minerva', 'applicable'],
+    ['dojo-icons', 'usthing', 'mcss'],
+  ],
+  3: [
+    ['prettify-minerva', 'usthing'],
+    ['dojo-icons'],
+    ['applicable', 'mcss'],
+  ],
+};
+
+const getShowcaseColumnGroups = (columnCount: ShowcaseColumnCount) => {
+  const cardsByKey = new Map(SHOWCASE_CARD_CONFIGS.map((card) => [card.key, card]));
+
+  return SHOWCASE_COLUMN_KEYS[columnCount].map((columnKeys) =>
+    columnKeys
+      .map((key) => cardsByKey.get(key))
+      .filter((card): card is ShowcaseCardConfig => Boolean(card))
+      .sort((a, b) => a.priority - b.priority),
   );
 };
 

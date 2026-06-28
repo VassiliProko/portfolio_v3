@@ -137,6 +137,7 @@ const config: Config = {
   			'highlight-reel-inset': 'var(--shadow-highlight-reel-inset)',
   			'highlight-reel-video-outer': 'var(--shadow-highlight-reel-video-outer)',
   			'about-profile-stamp': 'var(--shadow-about-profile-stamp)',
+  			'prettify-minerva-showcase-frame': 'var(--shadow-prettify-minerva-showcase-frame)',
   		}
   	}
   },

@@ -67,6 +67,11 @@
   --gradient-prettify-minerva: linear-gradient(180deg, #464646 0%, #232323 48.56%, #1A1A1A 100%),
     linear-gradient(180deg, #4C133C 0%, #291307 18.27%, #4B1614 46.15%, #AB2039 77.4%, #BB191B 100%);
 
+  /* Work showcase: Prettify Minerva (Figma node 212:1464) */
+  --gradient-prettify-minerva-showcase: linear-gradient(161.69deg, #F6D3FD 11.95%, #F74D50 93.56%);
+  --shadow-prettify-minerva-showcase-frame: 0 0 0 8px rgba(255, 255, 255, 0.4);
+  --spacing-prettify-minerva-showcase-offset: clamp(24px, 5vw, 48px);
+
   /* Home navbar name + intro highlights */
   --gradient-name-text: linear-gradient(90deg, var(--color-primary-base) 0%, var(--color-accent-base) 100%);
   --color-intro-munching: #ffa303;
