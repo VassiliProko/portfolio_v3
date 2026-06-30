@@ -62,7 +62,7 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({
       />
 
       <motion.div
-        className="flex max-w-full flex-wrap items-center gap-2xs text-left font-sans text-xl font-medium leading-normal text-text-muted"
+        className="relative z-20 flex max-w-full flex-wrap items-center gap-2xs text-left font-sans text-xl font-medium leading-normal text-text-muted"
         initial={false}
         animate={{
           opacity: subtitleVisible ? 1 : 0,
@@ -89,7 +89,7 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({
           whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
           transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
         >
-          RevisionDojo
+          RevisionDojo (YC F24)
         </motion.a>
       </motion.div>
     </div>

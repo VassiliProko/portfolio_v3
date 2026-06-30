@@ -9,7 +9,8 @@ const DELIGHTFUL_MAX_LIFT_PX = 12;
 const DELIGHTFUL_INFLUENCE_PX = 120;
 const DELIGHTFUL_HIT_EXTEND_HORIZONTAL_PX = 120;
 const DELIGHTFUL_HIT_EXTEND_TOP_PX = 72;
-const DELIGHTFUL_HIT_EXTEND_BOTTOM_PX = 48;
+/** Kept modest so the hit area does not swallow the subtitle link when lines wrap tight. */
+const DELIGHTFUL_HIT_EXTEND_BOTTOM_PX = 16;
 const DELIGHTFUL_HORIZONTAL_DISTANCE_WEIGHT = 1.5;
 const DELIGHTFUL_LIFT_TRANSITION_MS = 30;
 const DELIGHTFUL_FALL_TRANSITION_MS = 320;
@@ -61,9 +62,9 @@ function hitBoxEdgeFalloff(
 const YOUNG_SKEW_DEG = -10;
 const YOUNG_SCALE_Y = 0.98;
 const YOUNG_TRANSITION_MS = 180;
-const YOUNG_HIT_EXTEND_HORIZONTAL_PX = 56;
-const YOUNG_HIT_EXTEND_TOP_PX = 20;
-const YOUNG_HIT_EXTEND_BOTTOM_PX = 16;
+const YOUNG_HIT_EXTEND_HORIZONTAL_PX = 24;
+const YOUNG_HIT_EXTEND_TOP_PX = 14;
+const YOUNG_HIT_EXTEND_BOTTOM_PX = 12;
 
 export const IntroYoungWord: React.FC = () => {
   const [hovered, setHovered] = useState(false);

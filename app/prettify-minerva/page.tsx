@@ -32,7 +32,7 @@ export default function PrettifyMinervaCaseStudyPage() {
       websiteUrl="https://chromewebstore.google.com/detail/gligldkmadhkgfbomifkomimankgljji?utm_source=item-share-cb"
       websiteLabel="view chrome web store"
       githubUrl="https://github.com/VassiliProko/prettify_minerva"
-      backHref="/#work"
+      backHref="/"
       
     >
 

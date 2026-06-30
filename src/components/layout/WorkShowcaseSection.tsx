@@ -120,7 +120,6 @@ type ShowcaseCardKey =
   | 'prettify-minerva'
   | 'dojo-icons'
   | 'usthing'
-  | 'applicable'
   | 'mcss'
   | 'oneprep-pro-trial';
 type ShowcaseCardProps = { reveal?: boolean; delayMs?: number };
@@ -307,51 +306,6 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
         className="block w-full rounded-md aspect-[1908/1080] object-contain"
         ariaLabel="MCSS featured case study video"
       />
-    </WorkCardShell>
-  );
-};
-
-const ApplicableCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
-  reveal = true,
-  delayMs = 0,
-}) => {
-  return (
-    <WorkCardShell
-      href="/applicable"
-      className="aspect-[4/5] px-sm pt-sm pb-0"
-      ariaLabel="Open Applicable case study"
-      reveal={reveal}
-      delayMs={delayMs}
-      hoverTitle="Applicable"
-      hoverYear="Web App"
-    >
-      <Image
-        src="/images/optimized/applicable/applicable-home-bg.webp"
-        alt=""
-        fill
-        className="pointer-events-none select-none object-cover"
-        sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
-        priority={false}
-      />
-      <div className="relative z-[1] flex h-full flex-col justify-end gap-4 px-1 pt-3 sm:px-2 md:px-4">
-        <Image
-          src="/images/optimized/applicable/logo_motto.svg"
-          alt=""
-          width={244}
-          height={74}
-          className="pointer-events-none mx-auto h-auto w-[72%] max-w-[244px] select-none"
-          priority={false}
-        />
-        <Image
-          src="/images/optimized/applicable/applicable_ss_home.webp"
-          alt=""
-          width={1580}
-          height={1000}
-          className="pointer-events-none h-auto w-full rounded-t-sm bg-surface-1 object-cover object-top select-none"
-          sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
-          priority={false}
-        />
-      </div>
     </WorkCardShell>
   );
 };
@@ -554,21 +508,15 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     render: (props) => <UsthingCaseStudy {...props} />,
   },
   {
-    key: 'applicable',
+    key: 'mcss',
     priority: 3,
     delayMs: 300,
-    render: (props) => <ApplicableCaseStudy {...props} />,
-  },
-  {
-    key: 'mcss',
-    priority: 4,
-    delayMs: 400,
     render: (props) => <McssFeaturedCaseStudy {...props} />,
   },
   {
     key: 'oneprep-pro-trial',
-    priority: 5,
-    delayMs: 500,
+    priority: 4,
+    delayMs: 400,
     render: (props) => <OnePrepProTrialCaseStudy {...props} />,
   },
 ];
@@ -576,13 +524,13 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 /** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
-    ['prettify-minerva', 'usthing', 'applicable'],
+    ['prettify-minerva', 'usthing'],
     ['dojo-icons', 'mcss', 'oneprep-pro-trial'],
   ],
   3: [
     ['prettify-minerva', 'usthing'],
     ['dojo-icons', 'mcss'],
-    ['applicable', 'oneprep-pro-trial'],
+    ['oneprep-pro-trial'],
   ],
 };
 

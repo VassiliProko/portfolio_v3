@@ -18,7 +18,7 @@ const USTHING_OVERVIEW = (
 export default function USThingCaseStudyPage() {
   return (
     <article className="min-h-screen bg-background" aria-label="Case study: USThing">
-      <CaseStudyHeader title="USThing" backHref="/#work" />
+      <CaseStudyHeader title="USThing" backHref="/" />
 
       <div className="w-full pt-6 animate-fade-in-up-fast">
         <section

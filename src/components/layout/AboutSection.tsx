@@ -44,10 +44,10 @@ export const AboutSection: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-4 overflow-hidden">
           <div className="relative w-full lg:w-[40%] lg:max-w-[360px] shrink-0 aspect-[1/1] lg:min-h-[320px] rounded-lg overflow-hidden">
             
-          <div className="rounded-lg border-none bg-surface-dark-1 text-text-inverted-1 absolute bottom-0 left-0 right-0 mx-xs my-xs">
+          <div className="rounded-lg border border-border-base bg-surface-2 text-text absolute bottom-0 left-0 right-0 mx-xs my-xs">
             <div className="mx-auto px-3 py-3">
               <div className="flex flex-row justify-between gap-4">
-                <div className="px-2 py-1 rounded-sm bg-primary-darker text-sm font-mono text-text-primary">
+                <div className="px-2 py-1 rounded-sm bg-surface-3 text-sm font-mono text-text-muted">
                   Name:
                 </div>
                 <div className="px-2 py-1 rounded-sm text-sm font-mono">
@@ -70,10 +70,10 @@ export const AboutSection: React.FC = () => {
           </div>
           <div className="flex flex-col rounded-lg bg-surface-1 px-sm py-md flex-1 bg-[url('/images/optimized/home/about-sky.webp')] bg-cover bg-center bg-no-repeat bg-blend-soft-light">
             <p className="text-text-subtle font-sans text-base leading-relaxed mb-4">
-            Hey, I’m Vassili — meaning “king” in Greek. I’m a multidisciplinary designer and business analytics student at McGill, currently on exchange at HKUST. I'm somewhere experimenting between design, code, and data-driven thinking, blending different mediums to bring anew to the world. I believe the future belongs to designers who build and understand technological craftsmanship.
+            Hey, I&apos;m Vassili — meaning &quot;king&quot; in Greek. I&apos;m a multidisciplinary designer and business analytics student at McGill, currently on exchange at HKUST. I&apos;m somewhere experimenting between design, code, and data-driven thinking, blending different mediums to bring anew to the world. I believe the future belongs to designers who build and understand technological craftsmanship.
             </p>
             <p className="text-text-subtle font-sans text-base leading-relaxed">
-              It’s a wonderful time to be alive.
+              It&apos;s a wonderful time to be alive.
             </p>
           </div>
         </div>

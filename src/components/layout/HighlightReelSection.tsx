@@ -77,7 +77,6 @@ export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
           <div className="group relative aspect-video w-full overflow-hidden rounded-md bg-background shadow-highlight-reel-video-outer">
             <video
               ref={videoRef}
-              src="/other/dojo-icons-animated.mov"
               autoPlay={!prefersReducedMotion}
               muted
               loop
@@ -86,7 +85,10 @@ export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
               onPause={() => setIsPaused(true)}
               onLoadedData={(event) => setIsPaused(event.currentTarget.paused)}
               className="h-full w-full object-contain"
-            />
+            >
+              <source src="/other/dojo-icons-preview.webm" type="video/webm" />
+              <source src="/other/dojo-icons-preview-720.mp4" type="video/mp4" />
+            </video>
 
             <button
               type="button"
