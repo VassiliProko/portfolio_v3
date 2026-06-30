@@ -363,7 +363,7 @@ const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   return (
     <WorkCardShell
       href="/usthing"
-      className="aspect-[4/5] p-sm flex items-end"
+      className="p-sm flex flex-col items-center"
       ariaLabel="Open USThing case study"
       hoverTitle="USThing"
       hoverYear="App Feature"
@@ -371,24 +371,23 @@ const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       reveal={reveal}
       delayMs={delayMs}
     >
-      <div className="absolute inset-x-0 top-0 flex items-start justify-center overflow-hidden pt-3">
-        <div className="relative w-[clamp(266px,95vw,302px)] aspect-[281/584]">
-          <div className="absolute left-[7.1%] right-[7.1%] top-[6.6%] bottom-[6.7%] overflow-hidden rounded-[34px]">
-            <ShowcaseLoopingVideo
-              src="/other/grade_distribution_showcase_short.webm"
-              className="absolute top-0 w-[186%] h-auto"
-              ariaLabel="Grade Distribution mobile app preview"
-            />
-          </div>
-          <Image
-            src="/images/optimized/Other/iphone_case.webp"
-            alt=""
-            fill
-            className="pointer-events-none select-none object-contain scale-[0.92] origin-top translate-y-[29px]"
-            sizes="(max-width: 768px) 95vw, 302px"
-            priority={false}
+      <div className="relative w-full max-w-[340px]">
+        <div className="absolute left-[7.1%] right-[7.1%] top-[6%] bottom-[5.7%] overflow-hidden rounded-[clamp(22px,12%,34px)]">
+          <ShowcaseLoopingVideo
+            src="/other/grade_distribution_showcase_short.webm"
+            className="pointer-events-none absolute top-0 w-[186%] h-auto"
+            ariaLabel="Grade Distribution mobile app preview"
           />
         </div>
+        <Image
+          src="/images/optimized/Other/iphone_case.webp"
+          alt=""
+          width={281}
+          height={584}
+          className="pointer-events-none select-none h-auto w-full object-contain scale-[.92]"
+          sizes="(max-width: 768px) 45vw, (max-width: 1279px) 50vw, 340px"
+          priority={false}
+        />
       </div>
     </WorkCardShell>
   );
@@ -530,9 +529,9 @@ const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
     ['dojo-icons', 'mcss', 'oneprep-pro-trial'],
   ],
   3: [
-    ['prettify-minerva', 'usthing'],
+    ['prettify-minerva'],
     ['dojo-icons', 'mcss'],
-    ['oneprep-pro-trial'],
+    ['usthing', 'oneprep-pro-trial'],
   ],
 };
 

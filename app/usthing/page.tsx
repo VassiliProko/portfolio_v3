@@ -26,7 +26,7 @@ export default function USThingCaseStudyPage() {
           style={{ background: 'var(--gradient-usthing-app)' }}
         >
           <div className="relative w-[clamp(266px,95vw,302px)]">
-            <div className="absolute left-[7.1%] right-[7.1%] top-[6%] bottom-[5.7%] overflow-hidden rounded-[34px]">
+            <div className="absolute left-[7.1%] right-[7.1%] top-[6%] bottom-[5.7%] overflow-hidden rounded-[clamp(22px,12%,34px)]">
               <video
                 className="pointer-events-none absolute top-0 w-[186%] h-auto"
                 src="/other/grade_distribution_showcase_short.webm"

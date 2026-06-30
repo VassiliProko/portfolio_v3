@@ -61,7 +61,7 @@
   --gradient-mcss: linear-gradient(180deg, #4C133C 0%, #291307 18.27%, #4B1614 46.15%, #AB2039 77.4%, #BB191B 100%);
 
   /* Case study card: USThing app feature (Figma node 545:623) */
-  --gradient-usthing-app: linear-gradient(-43.4788deg, #186CC7 0%, #D5F6FA 100%);
+  --gradient-usthing-app: linear-gradient(323deg, #186CC7 -0.07%, #7BDAF0 50.45%, #D5F6FA 100%);
 
   /* Case study card: Prettify Minerva (gray base + red overlay) */
   --gradient-prettify-minerva: linear-gradient(180deg, #464646 0%, #232323 48.56%, #1A1A1A 100%),
