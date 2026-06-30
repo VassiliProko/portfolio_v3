@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React from 'react';
 import { useReducedMotion } from 'motion/react';
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
+import { ShowcaseRivePreview } from '@/src/components/ui/ShowcaseRivePreview';
 
 type WorkCardHoverContextValue = {
   isPointerWithin: boolean;
@@ -339,15 +340,16 @@ const OnePrepProTrialCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }>
   return (
     <WorkCardShell
       className="aspect-[3456/2160]"
+      style={{ background: 'transparent' }}
       ariaLabel="OnePrep Pro Trial animation preview"
       reveal={reveal}
       delayMs={delayMs}
       hoverTitle="OnePrep Pro Trial"
       hoverYear="Animation"
     >
-      <ShowcaseLoopingVideo
-        src="/other/oneprep-trial-unlock.mp4"
-        className="h-full w-full object-cover"
+      <ShowcaseRivePreview
+        riveSrc="/other/pro_trial_unlock.riv"
+        backgroundSrc="/other/oneprep_trial_background.png"
         ariaLabel="OnePrep Pro Trial unlock animation"
       />
     </WorkCardShell>
