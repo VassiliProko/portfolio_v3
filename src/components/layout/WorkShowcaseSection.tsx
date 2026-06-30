@@ -4,15 +4,105 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
 import { useReducedMotion } from 'motion/react';
-import { ArrowRight, Maximize2 } from 'lucide-react';
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
+
+type WorkCardHoverContextValue = {
+  isPointerWithin: boolean;
+  localPointer: { x: number; y: number } | null;
+};
+
+const WorkCardHoverContext = React.createContext<WorkCardHoverContextValue>({
+  isPointerWithin: false,
+  localPointer: null,
+});
+
+const useWorkCardHover = () => React.useContext(WorkCardHoverContext);
+
+const usePointerWithinElement = <T extends HTMLElement>() => {
+  const ref = React.useRef<T>(null);
+  const pointerRef = React.useRef<{ clientX: number; clientY: number } | null>(null);
+  const rafRef = React.useRef<number | null>(null);
+  const [isPointerWithin, setIsPointerWithin] = React.useState(false);
+  const [localPointer, setLocalPointer] = React.useState<{ x: number; y: number } | null>(null);
+
+  const updatePointerState = React.useCallback(() => {
+    const element = ref.current;
+    const pointer = pointerRef.current;
+
+    if (!element || !pointer) {
+      setIsPointerWithin(false);
+      setLocalPointer(null);
+      return;
+    }
+
+    const rect = element.getBoundingClientRect();
+    const within =
+      pointer.clientX >= rect.left &&
+      pointer.clientX <= rect.right &&
+      pointer.clientY >= rect.top &&
+      pointer.clientY <= rect.bottom;
+
+    setIsPointerWithin(within);
+    setLocalPointer(
+      within
+        ? {
+            x: pointer.clientX - rect.left,
+            y: pointer.clientY - rect.top,
+          }
+        : null,
+    );
+  }, []);
+
+  const schedulePointerStateUpdate = React.useCallback(() => {
+    if (rafRef.current !== null) return;
+
+    rafRef.current = window.requestAnimationFrame(() => {
+      rafRef.current = null;
+      updatePointerState();
+    });
+  }, [updatePointerState]);
+
+  React.useEffect(() => {
+    const handlePointerMove = (event: PointerEvent) => {
+      pointerRef.current = { clientX: event.clientX, clientY: event.clientY };
+      schedulePointerStateUpdate();
+    };
+
+    const handlePointerLeaveWindow = () => {
+      pointerRef.current = null;
+      setIsPointerWithin(false);
+      setLocalPointer(null);
+    };
+
+    const handleLayoutChange = () => {
+      schedulePointerStateUpdate();
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    window.addEventListener('scroll', handleLayoutChange, true);
+    window.addEventListener('resize', handleLayoutChange);
+    document.documentElement.addEventListener('pointerleave', handlePointerLeaveWindow);
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('scroll', handleLayoutChange, true);
+      window.removeEventListener('resize', handleLayoutChange);
+      document.documentElement.removeEventListener('pointerleave', handlePointerLeaveWindow);
+
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [schedulePointerStateUpdate]);
+
+  return { ref, isPointerWithin, localPointer };
+};
 
 type WorkCardShellProps = {
   className: string;
   ariaLabel: string;
   hoverTitle?: string;
   hoverYear?: string;
-  topRightContent?: React.ReactNode;
   domId?: string;
   href?: string;
   externalHref?: string;
@@ -74,13 +164,19 @@ const useShowcaseColumnCount = (): ShowcaseColumnCount => {
 };
 
 const HoverMetaPills: React.FC<HoverMetaPillsProps> = ({ title = 'Project', year = '2026' }) => {
+  const { isPointerWithin } = useWorkCardHover();
+  const visibleClass = isPointerWithin
+    ? 'translate-y-0 opacity-100'
+    : 'translate-y-3 opacity-0';
+
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-3 z-10 flex items-center justify-between px-3">
       <div
         className={[
           'rounded-sm bg-surface-1 px-3 py-2 font-sans text-sm leading-none text-text',
-          'translate-y-3 opacity-0 transition-all duration-[260ms] ease-move',
-          'group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100',
+          'transition-all duration-[260ms] ease-move',
+          visibleClass,
+          'group-focus-visible:translate-y-0 group-focus-visible:opacity-100',
           'motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none',
         ].join(' ')}
       >
@@ -89,37 +185,13 @@ const HoverMetaPills: React.FC<HoverMetaPillsProps> = ({ title = 'Project', year
       <div
         className={[
           'rounded-sm bg-surface-1 px-3 py-2 font-sans text-sm leading-none text-text',
-          'translate-y-3 opacity-0 transition-all duration-[260ms] ease-move',
-          'group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100',
+          'transition-all duration-[260ms] ease-move',
+          visibleClass,
+          'group-focus-visible:translate-y-0 group-focus-visible:opacity-100',
           'motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none',
         ].join(' ')}
       >
         {year}
-      </div>
-    </div>
-  );
-};
-
-const HoverTopRightChip: React.FC<{ children: React.ReactNode; compact?: boolean }> = ({ children, compact = false }) => {
-  return (
-    <div className="absolute right-3 top-3 z-10">
-      <div
-        className={[
-          '-translate-y-2 opacity-0 transition-all duration-[260ms] ease-move',
-          'group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100',
-          'motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none',
-        ].join(' ')}
-      >
-        <div
-          className={[
-            'cursor-pointer rounded-sm bg-surface-1 font-sans text-sm leading-none text-text',
-            'transition-colors duration-[60ms] ease-snap',
-            'hover:bg-surface-2 focus-visible:bg-surface-2',
-            compact ? 'px-2 py-2' : 'px-3 py-2',
-          ].join(' ')}
-        >
-          {children}
-        </div>
       </div>
     </div>
   );
@@ -130,7 +202,6 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   ariaLabel,
   hoverTitle = 'Project',
   hoverYear = '2026',
-  topRightContent,
   domId,
   href,
   externalHref,
@@ -140,6 +211,11 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   delayMs = 0,
 }) => {
   const prefersReducedMotion = useReducedMotion();
+  const { ref: cardRef, isPointerWithin, localPointer } = usePointerWithinElement<HTMLElement>();
+  const hoverContextValue = React.useMemo(
+    () => ({ isPointerWithin, localPointer }),
+    [isPointerWithin, localPointer],
+  );
   const revealClass = reveal
     ? 'opacity-100 translate-y-0 blur-0'
     : 'opacity-0 -translate-y-3 blur-[2px]';
@@ -160,16 +236,16 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   };
 
   const innerContent = (
-    <>
+    <WorkCardHoverContext.Provider value={hoverContextValue}>
       {children}
-      {topRightContent ? <HoverTopRightChip compact>{topRightContent}</HoverTopRightChip> : null}
       <HoverMetaPills title={hoverTitle} year={hoverYear} />
-    </>
+    </WorkCardHoverContext.Provider>
   );
 
   if (href) {
     return (
       <Link
+        ref={cardRef as React.Ref<HTMLAnchorElement>}
         href={href}
         id={domId}
         aria-label={ariaLabel}
@@ -184,6 +260,7 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   if (externalHref) {
     return (
       <a
+        ref={cardRef as React.Ref<HTMLAnchorElement>}
         href={externalHref}
         target="_blank"
         rel="noopener noreferrer"
@@ -198,7 +275,13 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   }
 
   return (
-    <article id={domId} className={sharedClassName} style={mergedStyle} aria-label={ariaLabel}>
+    <article
+      ref={cardRef as React.Ref<HTMLElement>}
+      id={domId}
+      className={sharedClassName}
+      style={mergedStyle}
+      aria-label={ariaLabel}
+    >
       {innerContent}
     </article>
   );
@@ -218,12 +301,6 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
       delayMs={delayMs}
       hoverTitle="McGill Chinese Students' Society"
       hoverYear="Website"
-      topRightContent={
-        <span className="inline-flex items-center gap-1">
-          View Case Study
-          <ArrowRight size={14} strokeWidth={2} aria-hidden />
-        </span>
-      }
     >
       <ShowcaseLoopingVideo
         src="/other/mcss_video.webm"
@@ -247,7 +324,6 @@ const ApplicableCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       delayMs={delayMs}
       hoverTitle="Applicable"
       hoverYear="Web App"
-      topRightContent={<Maximize2 size={14} strokeWidth={2} aria-hidden />}
     >
       <Image
         src="/images/optimized/applicable/applicable-home-bg.webp"
@@ -335,7 +411,6 @@ const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       ariaLabel="Open USThing case study"
       hoverTitle="USThing"
       hoverYear="App Feature"
-      topRightContent={<Maximize2 size={14} strokeWidth={2} aria-hidden />}
       style={{ background: 'var(--gradient-usthing-app)' }}
       reveal={reveal}
       delayMs={delayMs}
@@ -382,29 +457,38 @@ const WorkColumns: React.FC<{ visible: boolean }> = ({ visible }) => {
   );
 };
 
-const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
-  reveal = true,
-  delayMs = 0,
-}) => {
+const PrettifyMinervaCardContent: React.FC = () => {
+  const prefersReducedMotion = useReducedMotion();
+  const { isPointerWithin, localPointer } = useWorkCardHover();
+  const showCursorGlow = isPointerWithin && localPointer !== null && !prefersReducedMotion;
+
   return (
-    <WorkCardShell
-      href="/prettify-minerva"
-      className="aspect-[50/39] relative"
-      ariaLabel="Open Prettify Minerva case study"
-      style={{ background: 'var(--gradient-prettify-minerva-showcase)' }}
-      reveal={reveal}
-      delayMs={delayMs}
-      hoverTitle="Prettify Minerva"
-      hoverYear="Browser Extension"
-      topRightContent={
-        <span className="inline-flex items-center gap-1">
-          View Case Study
-          <ArrowRight size={14} strokeWidth={2} aria-hidden />
-        </span>
-      }
-    >
+    <>
       <div
-        className="absolute left-[var(--spacing-prettify-minerva-showcase-offset)] top-[var(--spacing-prettify-minerva-showcase-offset)] w-full rounded-tl-[6px] shadow-prettify-minerva-showcase-frame"
+        aria-hidden
+        className={[
+          'pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-[390ms] ease-move',
+          isPointerWithin ? 'opacity-100' : 'opacity-0',
+          'group-focus-visible:opacity-100',
+          'motion-reduce:transition-none',
+        ].join(' ')}
+        style={{ background: 'var(--gradient-prettify-minerva-showcase-hover)' }}
+      />
+      <div
+        aria-hidden
+        className={[
+          'pointer-events-none absolute z-[1] aspect-square w-3/4 -translate-x-1/2 -translate-y-1/2 mix-blend-soft-light',
+          'transition-opacity duration-[390ms] ease-move motion-reduce:hidden',
+          showCursorGlow ? 'opacity-100' : 'opacity-0',
+        ].join(' ')}
+        style={{
+          left: localPointer?.x ?? 0,
+          top: localPointer?.y ?? 0,
+          background: 'var(--gradient-prettify-minerva-showcase-cursor-glow)',
+        }}
+      />
+      <div
+        className="absolute left-[var(--spacing-prettify-minerva-showcase-offset)] top-[var(--spacing-prettify-minerva-showcase-offset)] z-[2] w-full rounded-tl-[6px] shadow-prettify-minerva-showcase-frame"
         aria-hidden
       >
         <div className="overflow-hidden rounded-tl-[6px]">
@@ -420,6 +504,26 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
           />
         </div>
       </div>
+    </>
+  );
+};
+
+const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  return (
+    <WorkCardShell
+      href="/prettify-minerva"
+      className="aspect-[50/39] relative"
+      ariaLabel="Open Prettify Minerva case study"
+      style={{ background: 'var(--gradient-prettify-minerva-showcase)' }}
+      reveal={reveal}
+      delayMs={delayMs}
+      hoverTitle="Prettify Minerva"
+      hoverYear="Browser Extension"
+    >
+      <PrettifyMinervaCardContent />
     </WorkCardShell>
   );
 };
