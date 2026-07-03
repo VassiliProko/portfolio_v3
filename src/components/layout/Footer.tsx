@@ -4,11 +4,18 @@ import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Heart } from 'lucide-react';
 import { cn } from '@/src/utils/cn';
+import { formatLastUpdated, LAST_UPDATED_ISO } from '@/src/utils/last-updated';
 
 const linkClass =
-  'hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm';
+  'text-footer-console-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm';
+
+const contactLinkClass = cn(
+  'font-mono text-base inline-flex items-center justify-center h-12 px-4',
+  'bg-footer-contact-bg text-footer-console-text',
+  'hover:bg-footer-contact-bg-hover transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
+  'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline'
+);
 
 type ConsoleLineConfig =
   | { id: number; type: 'text'; text: string }
@@ -227,7 +234,7 @@ export const Footer: React.FC = () => {
             ref={consoleRef}
             className="relative z-10 flex flex-col justify-between h-full min-h-[360px] md:min-h-[440px] p-5 md:p-6"
           >
-            <pre className="font-mono text-sm md:text-base text-text-inverted-1 leading-relaxed flex flex-col gap-0 min-w-0 whitespace-pre-wrap break-words">
+            <pre className="font-mono text-sm md:text-base text-footer-console-text leading-relaxed flex flex-col gap-0 min-w-0 whitespace-pre-wrap break-words">
               {CONSOLE_LINES.map((line, index) => (
                 <span key={line.id} className="inline-block">
                   <span className="text-primary-base">&gt;</span>{' '}
@@ -246,44 +253,29 @@ export const Footer: React.FC = () => {
               <div className="flex-[2] bg-primary-base" />
               <div className="flex-[1.5] bg-primary-darker" />
               <div className="flex-[0.75] bg-accent-base" />
-              <div className="flex-[1] bg-text-inverted-1" />
+              <div className="flex-[1] bg-footer-console-text" />
             </div>
-        {/* Lower section: contact buttons + branding */}
-        <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mt-3">
-          <div className="flex items-center gap-2">
-          {/* Black container wrapping both buttons (Figma 249-348) */}
-          <div className="inline-flex rounded-lg overflow-hidden bg-surface-dark-1 px-2 py-2 gap-2">
+        {/* Lower section: contact buttons + last updated (Figma 212-1039) */}
+        <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mt-4 h-auto sm:h-12">
+          <div className="flex items-start h-12">
             <a
               href="https://www.linkedin.com/in/vassili-prokopenko"
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(
-                'font-mono text-sm inline-flex items-center justify-center py-1 px-2 rounded-md',
-                'bg-surface-dark-2 text-text-inverted-1',
-                'hover:bg-white/20 transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
-                'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline'
-              )}
+              className={cn(contactLinkClass, 'relative z-10 rounded-sm -mr-px')}
             >
               LinkedIn
             </a>
             <a
               href="mailto:vassiligb12@gmail.com"
-              className={cn(
-                'font-mono text-sm inline-flex items-center justify-center py-1 px-2 rounded-md',
-                'bg-surface-dark-2 text-text-inverted-1',
-                'hover:bg-white/20 transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
-                'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline'
-              )}
+              className={cn(contactLinkClass, 'relative z-0 rounded-[48px]')}
             >
               Email Me
             </a>
           </div>
-
-            </div>
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-1 border border-border-base">
-            <Heart className="w-5 h-5 text-primary-base shrink-0" strokeWidth={2} aria-hidden />
-            <span className="text-text-muted text-sm font-sans">Designed with intention</span>
-          </div>
+          <p className="font-mono text-base text-footer-last-updated shrink-0 self-start">
+            {formatLastUpdated(LAST_UPDATED_ISO)}
+          </p>
         </div>
     </footer>
   );

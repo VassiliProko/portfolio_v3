@@ -59,6 +59,12 @@ const config: Config = {
   			warning: 'var(--color-warning)',
   			error: 'var(--color-error)',
   			info: 'var(--color-info)',
+  			footer: {
+  				'console-text': 'var(--color-footer-console-text)',
+  				'last-updated': 'var(--color-footer-last-updated)',
+  				'contact-bg': 'var(--color-footer-contact-bg)',
+  				'contact-bg-hover': 'var(--color-footer-contact-bg-hover)',
+  			},
   			intro: {
   				munching: 'var(--color-intro-munching)',
   				cooking: 'var(--color-intro-cooking)',
