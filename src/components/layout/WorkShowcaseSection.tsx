@@ -317,7 +317,7 @@ const DojoIconsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
 }) => {
   return (
     <WorkCardShell
-      className="aspect-[1280/780]"
+      className="aspect-[2500/1536]"
       ariaLabel="Dojo Icons project preview"
       reveal={reveal}
       delayMs={delayMs}
@@ -325,7 +325,10 @@ const DojoIconsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       hoverYear="Icon Set"
     >
       <ShowcaseLoopingVideo
-        src="/other/dojo-icons-preview.webm"
+        sources={[
+          { src: '/other/dojo-icons-preview-new.webm', type: 'video/webm' },
+          { src: '/other/dojo-icons-preview-new.mp4', type: 'video/mp4' },
+        ]}
         className="h-full w-full object-cover"
         ariaLabel="Dojo Icons preview animation"
       />

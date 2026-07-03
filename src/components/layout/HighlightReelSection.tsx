@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import Image from 'next/image';
 import { Pause, Play } from 'lucide-react';
@@ -17,11 +17,14 @@ type HighlightReelSectionProps = {
   visible?: boolean;
 };
 
+const HIGHLIGHT_REEL_LOOP_DELAY_MS = 1000;
+
 export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
   visible = false,
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const loopTimeoutRef = useRef<number | undefined>(undefined);
   const [isPaused, setIsPaused] = useState(false);
 
   const togglePlayback = useCallback(() => {
@@ -30,12 +33,34 @@ export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
       return;
     }
 
+    window.clearTimeout(loopTimeoutRef.current);
+
     if (video.paused) {
+      if (video.ended) {
+        video.currentTime = 0;
+      }
       void video.play();
       return;
     }
 
     video.pause();
+  }, []);
+
+  const restartAfterLoopDelay = useCallback(() => {
+    setIsPaused(true);
+    loopTimeoutRef.current = window.setTimeout(() => {
+      const video = videoRef.current;
+      if (!video) {
+        return;
+      }
+
+      video.currentTime = 0;
+      void video.play();
+    }, HIGHLIGHT_REEL_LOOP_DELAY_MS);
+  }, []);
+
+  useEffect(() => {
+    return () => window.clearTimeout(loopTimeoutRef.current);
   }, []);
 
   return (
@@ -79,15 +104,15 @@ export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
               ref={videoRef}
               autoPlay={!prefersReducedMotion}
               muted
-              loop
               playsInline
               onPlay={() => setIsPaused(false)}
               onPause={() => setIsPaused(true)}
+              onEnded={restartAfterLoopDelay}
               onLoadedData={(event) => setIsPaused(event.currentTarget.paused)}
               className="h-full w-full object-contain"
             >
-              <source src="/other/dojo-icons-preview.webm" type="video/webm" />
-              <source src="/other/dojo-icons-preview-720.mp4" type="video/mp4" />
+              <source src="/other/dojo-icons-preview-new.webm" type="video/webm" />
+              <source src="/other/dojo-icons-preview-new.mp4" type="video/mp4" />
             </video>
 
             <button
