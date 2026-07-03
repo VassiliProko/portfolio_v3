@@ -73,7 +73,7 @@ export default function MCSSCaseStudyPage() {
       websiteUrl="https://mcss.ca/"
       websiteLabel="view website"
       githubUrl="https://github.com/Dev-MCSS/websitev2"
-      backHref="/#work"
+      backHref="/"
     >
       <section className="w-full rounded-[8px] bg-gradient-to-b from-background to-surface-2 p-3 md:p-5">
         <div className="overflow-hidden rounded-[8px]">

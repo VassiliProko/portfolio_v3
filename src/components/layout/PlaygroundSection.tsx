@@ -319,6 +319,9 @@ export const PlaygroundSection: React.FC = () => {
           <img
             src={item.imageSrc}
             alt={item.imageAlt ?? item.title}
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
             className="w-full h-auto block"
           />
         </div>
@@ -342,11 +345,11 @@ export const PlaygroundSection: React.FC = () => {
     <>
       {/* Preview section on home page */}
       <section
-        className="w-full py-12 md:py-20 bg-background animate-fade-in-up-fast"
+        className="w-full py-12 md:py-20 animate-fade-in-up-fast"
         aria-labelledby="playground-heading"
         id="play"
       >
-        <div className="max-w-[1200px] mx-auto px-5">
+        <div className="w-full">
           <div
             ref={cardRef}
             className={`bg-surface-dark-1 rounded-lg overflow-hidden cursor-pointer ${isExpanded ? 'invisible' : ''}`}
@@ -473,6 +476,9 @@ export const PlaygroundSection: React.FC = () => {
                 <img
                   src={lightboxItem.imageSrc}
                   alt={lightboxItem.imageAlt ?? lightboxItem.title}
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
                   className="max-w-full max-h-[80vh] w-auto h-auto object-contain rounded-lg"
                 />
               ) : null}

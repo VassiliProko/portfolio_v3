@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
-  			background: 'hsl(var(--background))',
+  			background: 'var(--color-background)',
   			surface: {
   				'1': 'var(--color-surface-1)',
   				'2': 'var(--color-surface-2)',
@@ -59,6 +59,20 @@ const config: Config = {
   			warning: 'var(--color-warning)',
   			error: 'var(--color-error)',
   			info: 'var(--color-info)',
+  			footer: {
+  				'console-text': 'var(--color-footer-console-text)',
+  				'last-updated': 'var(--color-footer-last-updated)',
+  				'contact-bg': 'var(--color-footer-contact-bg)',
+  				'contact-bg-hover': 'var(--color-footer-contact-bg-hover)',
+  			},
+  			intro: {
+  				munching: 'var(--color-intro-munching)',
+  				cooking: 'var(--color-intro-cooking)',
+  				subtitle: 'var(--color-intro-subtitle)',
+  				'highlight-rest': 'var(--color-intro-highlight-rest)',
+  				'munching-highlight': 'var(--color-intro-munching-highlight)',
+  				'cooking-highlight': 'var(--color-intro-cooking-highlight)',
+  			},
   			foreground: 'hsl(var(--foreground))',
   			popover: {
   				DEFAULT: 'hsl(var(--popover))',
@@ -96,6 +110,10 @@ const config: Config = {
   				'var(--font-oxygen-mono)',
   				'ui-monospace',
   				'monospace'
+  			],
+  			display: [
+  				'var(--font-satisfy)',
+  				'cursive'
   			]
   		},
   		spacing: {
@@ -120,6 +138,12 @@ const config: Config = {
   			snap: 'cubic-bezier(0,.9,.1,1)',
   			exit: 'cubic-bezier(.4,0,1,1)',
   			move: 'cubic-bezier(.4,0,.2,1)'
+  		},
+  		boxShadow: {
+  			'highlight-reel-inset': 'var(--shadow-highlight-reel-inset)',
+  			'highlight-reel-video-outer': 'var(--shadow-highlight-reel-video-outer)',
+  			'about-profile-stamp': 'var(--shadow-about-profile-stamp)',
+  			'prettify-minerva-showcase-frame': 'var(--shadow-prettify-minerva-showcase-frame)',
   		}
   	}
   },

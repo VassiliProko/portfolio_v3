@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import { Oxygen_Mono } from 'next/font/google';
+import { Oxygen_Mono, Satisfy } from 'next/font/google';
 import '@/src/styles/globals.css';
-import { ConditionalHeader } from '@/src/components/layout/ConditionalHeader';
+import { ConditionalNav } from '@/src/components/layout/ConditionalNav';
 import { Footer } from '@/src/components/layout/Footer';
+import { MainContentShell } from '@/src/components/layout/MainContentShell';
+import { ThemeScript } from '@/src/components/ThemeScript';
+import { HomeEnterAnimationProvider } from '@/src/contexts/HomeEnterAnimationContext';
 import { Analytics } from "@vercel/analytics/next"
 
 
@@ -19,6 +22,13 @@ const oxygenMono = Oxygen_Mono({
   weight: ['400'],
   subsets: ['latin'],
   variable: '--font-oxygen-mono',
+  display: 'swap',
+});
+
+const satisfy = Satisfy({
+  weight: ['400'],
+  subsets: ['latin'],
+  variable: '--font-satisfy',
   display: 'swap',
 });
 
@@ -44,11 +54,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${satoshiVariable.variable} ${oxygenMono.variable}`}>
+    <html lang="en" className={`${satoshiVariable.variable} ${oxygenMono.variable} ${satisfy.variable}`} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body>
-        <ConditionalHeader />
-        <main>{children}</main>
-        <Footer />
+        <HomeEnterAnimationProvider>
+          <ConditionalNav />
+          <MainContentShell>
+            {children}
+            <Footer />
+          </MainContentShell>
+        </HomeEnterAnimationProvider>
         <Analytics />
       </body>
     </html>

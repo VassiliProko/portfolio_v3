@@ -18,15 +18,15 @@ const USTHING_OVERVIEW = (
 export default function USThingCaseStudyPage() {
   return (
     <article className="min-h-screen bg-background" aria-label="Case study: USThing">
-      <CaseStudyHeader title="USThing" backHref="/#work" />
+      <CaseStudyHeader title="USThing" backHref="/" />
 
-      <div className="w-full max-w-[1200px] mx-auto px-5 pt-6 animate-fade-in-up-fast">
+      <div className="w-full pt-6 animate-fade-in-up-fast">
         <section
           className="w-full rounded-[8px] p-3 md:p-5 flex items-center justify-center"
           style={{ background: 'var(--gradient-usthing-app)' }}
         >
           <div className="relative w-[clamp(266px,95vw,302px)]">
-            <div className="absolute left-[7.1%] right-[7.1%] top-[6%] bottom-[5.7%] overflow-hidden rounded-[34px]">
+            <div className="absolute left-[7.1%] right-[7.1%] top-[6%] bottom-[5.7%] overflow-hidden rounded-[clamp(22px,12%,34px)]">
               <video
                 className="pointer-events-none absolute top-0 w-[186%] h-auto"
                 src="/other/grade_distribution_showcase_short.webm"
@@ -50,7 +50,7 @@ export default function USThingCaseStudyPage() {
         </section>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-5 py-8 md:py-10">
+      <div className="py-8 md:py-10">
         <section
           className="flex flex-col md:flex-row md:gap-12 lg:gap-16 max-w-none font-sans text-md md:text-lg leading-relaxed"
           aria-labelledby="overview-heading"

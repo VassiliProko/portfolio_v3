@@ -1,5 +1,29 @@
+const { execSync } = require('child_process');
+
+function getLastUpdatedFromMain() {
+  const refs = ['origin/main', 'main'];
+
+  for (const ref of refs) {
+    try {
+      const iso = execSync(`git log -1 --format=%cI ${ref}`, {
+        encoding: 'utf8',
+        stdio: ['pipe', 'pipe', 'ignore'],
+      }).trim();
+
+      if (iso) return iso;
+    } catch {
+      // Try the next ref.
+    }
+  }
+
+  return new Date().toISOString();
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_LAST_UPDATED: getLastUpdatedFromMain(),
+  },
   reactStrictMode: true,
   experimental: {
     optimizePackageImports: ['lucide-react'],

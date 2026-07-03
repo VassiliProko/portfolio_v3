@@ -79,7 +79,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
       <CaseStudyHeader title={title} backHref={backHref} />
 
       {heroVideoSrc || heroVideoEmbedUrl ? (
-        <div className="w-full max-w-[1200px] mx-auto px-5 pt-6 animate-fade-in-up-fast">
+        <div className="w-full pt-6 animate-fade-in-up-fast">
           <div
             className="relative w-full aspect-[4/3] md:aspect-video rounded-[8px] overflow-hidden bg-surface-2 p-3 md:p-5"
             style={heroMediaStyle}
@@ -110,7 +110,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
           </div>
         </div>
       ) : heroImageSrc ? (
-        <div className="w-full max-w-[1200px] mx-auto px-5 pt-6 animate-fade-in-up-fast">
+        <div className="w-full pt-6 animate-fade-in-up-fast">
           <div
             className="relative w-full aspect-[4/3] md:aspect-video rounded-[8px] overflow-hidden bg-surface-2"
             style={heroMediaStyle}
@@ -119,13 +119,13 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
             src={heroImageSrc}
             alt={heroImageAlt}
             className="object-cover w-full h-full"
-            sizes="(max-width: 768px) 100vw, 1200px"
+            sizes="100vw"
           />
           </div>
         </div>
       ) : null}
 
-      <div className="max-w-[1200px] mx-auto px-5 py-8 md:py-10">
+      <div className="py-8 md:py-10">
         <section
           className="flex flex-col md:flex-row md:gap-12 lg:gap-16 max-w-none font-sans text-md md:text-lg leading-relaxed"
           aria-labelledby="overview-heading"

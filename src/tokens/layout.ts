@@ -4,10 +4,9 @@
  */
 
 export const layout = {
-  container: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '0 20px',
+  pageMargin: {
+    mobile: '20px',
+    desktop: '32px',
   },
   grid: {
     columns: 12,
@@ -21,8 +20,5 @@ export const layout = {
     lg: '1024px',
     xl: '1280px',
     '2xl': '1536px',
-  },
-  contentArea: {
-    maxWidth: '1160px',
   },
 } as const;

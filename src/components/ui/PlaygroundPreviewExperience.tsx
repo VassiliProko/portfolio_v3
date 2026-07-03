@@ -347,7 +347,14 @@ export const PlaygroundPreviewExperience: React.FC<PlaygroundPreviewExperiencePr
       return (
         <div className="block w-full">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={item.imageSrc} alt={item.imageAlt ?? item.title} className="w-full h-auto block" />
+          <img
+            src={item.imageSrc}
+            alt={item.imageAlt ?? item.title}
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
+            className="w-full h-auto block"
+          />
         </div>
       );
     }
@@ -527,6 +534,9 @@ export const PlaygroundPreviewExperience: React.FC<PlaygroundPreviewExperiencePr
                 <img
                   src={lightboxItem.imageSrc}
                   alt={lightboxItem.imageAlt ?? lightboxItem.title}
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
                   className="max-w-full max-h-[80vh] w-auto h-auto object-contain rounded-lg"
                 />
               ) : null}

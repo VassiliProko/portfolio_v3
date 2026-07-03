@@ -61,11 +61,27 @@
   --gradient-mcss: linear-gradient(180deg, #4C133C 0%, #291307 18.27%, #4B1614 46.15%, #AB2039 77.4%, #BB191B 100%);
 
   /* Case study card: USThing app feature (Figma node 545:623) */
-  --gradient-usthing-app: linear-gradient(-43.4788deg, #186CC7 0%, #D5F6FA 100%);
+  --gradient-usthing-app: linear-gradient(323deg, #186CC7 -0.07%, #7BDAF0 50.45%, #D5F6FA 100%);
 
   /* Case study card: Prettify Minerva (gray base + red overlay) */
   --gradient-prettify-minerva: linear-gradient(180deg, #464646 0%, #232323 48.56%, #1A1A1A 100%),
     linear-gradient(180deg, #4C133C 0%, #291307 18.27%, #4B1614 46.15%, #AB2039 77.4%, #BB191B 100%);
+
+  /* Work showcase: Prettify Minerva (Figma node 212:1464) */
+  --gradient-prettify-minerva-showcase: linear-gradient(161.69deg, #F6D3FD 11.95%, #F74D50 93.56%);
+  --gradient-prettify-minerva-showcase-hover: linear-gradient(162deg, #FDA7FD 11.95%, #F7113B 93.56%);
+  --gradient-prettify-minerva-showcase-cursor-glow: radial-gradient(circle, rgba(255, 245, 190, 0.92) 0%, rgba(255, 235, 160, 0.5) 38%, transparent 72%);
+  --shadow-prettify-minerva-showcase-frame: 0 0 0 8px rgba(255, 255, 255, 0.4);
+  --spacing-prettify-minerva-showcase-offset: clamp(24px, 5vw, 48px);
+
+  /* Home navbar name + intro highlights */
+  --gradient-name-text: linear-gradient(90deg, var(--color-primary-base) 0%, var(--color-accent-base) 100%);
+  --color-intro-munching: #ffa303;
+  --color-intro-cooking: #ff03b8;
+  --color-intro-highlight-rest: #ededee;
+  --color-intro-munching-highlight: rgba(255, 163, 3, 0.15);
+  --color-intro-cooking-highlight: rgba(255, 3, 184, 0.15);
+  --color-intro-subtitle: #a4a4a4;
 
   /* Borders */
   --color-border-base: rgba(0, 0, 0, 0.12);
@@ -76,6 +92,9 @@
   /* Compare image divider */
   --shadow-compare-divider: -6px 0 14px rgba(0, 0, 0, 0.18);
   --shadow-mcss-phase-image-glow: 0 0 28px rgba(39, 229, 239, 0.24);
+  --shadow-highlight-reel-inset: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  --shadow-highlight-reel-video-outer: 0 0 0 4px rgba(255, 255, 255, 0.4);
+  --shadow-about-profile-stamp: 0 0 0 4px rgba(255, 255, 255, 0.4);
 
   /* Spacing */
   --spacing-4xs: 3px;
@@ -116,10 +135,54 @@
   --rd-badge-icon-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Layout */
-  --container-max-width: 1200px;
-  --container-padding: 20px;
+  --page-margin: var(--spacing-md);
   --grid-gutter: 15px;
-  --grid-margin: 20px;
+  --grid-margin: var(--spacing-md);
+
+  /* Footer — fixed in light and dark theme (not overridden in .dark) */
+  --color-footer-console-text: #fafafa;
+  --color-footer-last-updated: #71717a;
+  --color-footer-contact-bg: #27272a;
+  --color-footer-contact-bg-hover: #52525b;
+}
+
+/*
+ * Dark theme — overrides semantic page tokens only.
+ * Toggle by adding class="dark" on <html> (matches tailwind darkMode: ['class']).
+ * Brand, intro accent, and surface-dark-* card tokens stay fixed unless listed here.
+ */
+.dark {
+  color-scheme: dark;
+
+  --color-background: #18181b;
+  --color-surface-1: #27272a;
+  --color-surface-2: #3f3f46;
+  --color-surface-3: #52525b;
+  --color-text: #fafafa;
+  --color-text-subtle: #d4d4d8;
+  --color-text-muted: #a1a1aa;
+  --color-text-inverted-1: #18181b;
+  --color-text-inverted-2: #52525b;
+
+  --color-ghost-hover-bg: rgba(39, 229, 239, 0.12);
+  --color-navbar-dropdown-bg: rgba(24, 24, 27, 0.88);
+
+  --color-intro-highlight-rest: #232326;
+  --color-intro-subtitle: #71717a;
+
+  --color-border-base: rgba(255, 255, 255, 0.12);
+  --color-border-divider: rgba(255, 255, 255, 0.06);
+  --color-border-hover: rgba(255, 255, 255, 0.18);
+  --color-border-focus: rgba(255, 255, 255, 0.24);
+
+  --shadow-highlight-reel-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --shadow-highlight-reel-video-outer: 0 0 0 4px rgba(255, 255, 255, 0.12);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-margin: 32px;
+  }
 }
 
 /* ::selection {
@@ -135,12 +198,50 @@
 
 html {
   scroll-behavior: auto;
-  background-color: #fff;
+  background-color: var(--color-background);
 }
 
 html,
 body {
-  max-width: 100vw;
+  overflow-x: clip;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  padding-inline: var(--page-margin);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+}
+
+nav {
+  background-color: var(--color-background);
+  /* Full-bleed bar: cover body padding so content cannot show through at the edges */
+  margin-inline: calc(-1 * var(--page-margin));
+  padding-inline: var(--page-margin);
+  width: calc(100% + 2 * var(--page-margin));
+  box-sizing: border-box;
+}
+
+/* Smooth color fade when toggling light/dark theme */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition-property: background-color, color, border-color, outline-color, fill, stroke, box-shadow !important;
+    transition-duration: var(--motion-large) !important;
+    transition-timing-function: var(--motion-easing-move) !important;
+  }
 }
 
 /* Hide scrollbars on overlay containers while keeping scroll behavior */
@@ -152,12 +253,8 @@ body {
   display: none; /* WebKit */
 }
 
-body {
-  font-family: var(--font-sans);
-  color: var(--color-text);
-  background-color: var(--color-background);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+main:has([data-not-found]) footer {
+  display: none;
 }
 
 /* Reduced Motion */
@@ -274,12 +371,19 @@ body {
 }
 
 .text-text-subtle {
-  color: #3F3F47 !important;
+  color: var(--color-text-subtle) !important;
 }
 
 .brand-gradient {
   background: linear-gradient(180deg, #00BCFF 0%, #FFFFFF 186.83%), linear-gradient(180deg, #000000 0%, #5490C4 49.52%, #E1E1E1 100%);
   background-blend-mode: soft-light, normal;
+}
+
+.text-name-gradient {
+  background-image: var(--gradient-name-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .mcss-phase-image-glow {
@@ -401,7 +505,8 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    /* Shadcn HSL vars — --background matches --color-background (#fafafa) */
+    --background: 0 0% 98%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
