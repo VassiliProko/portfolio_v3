@@ -42,12 +42,12 @@ const resumeButtonIconClass = cn(
 );
 
 const SHOWCASE_IMAGES = [
-  { src: '/images/optimized/about/showcase-1.jpg', alt: 'Group photo at an outdoor event' },
-  { src: '/images/optimized/about/showcase-2.jpg', alt: 'City skyline at night' },
-  { src: '/images/optimized/about/showcase-3.jpg', alt: 'Dragon boat team on the water' },
-  { src: '/images/optimized/about/showcase-4.jpg', alt: 'Team portrait outdoors' },
-  { src: '/images/optimized/about/showcase-5.jpg', alt: 'Street scene with friends' },
-  { src: '/images/optimized/about/showcase-6.jpg', alt: 'Outdoor gathering in the city' },
+  { src: '/images/optimized/about/dojo.jpg', alt: 'Group photo at colorful outdoor stairs' },
+  { src: '/images/optimized/about/usthing.jpg', alt: 'USThing team group photo indoors' },
+  { src: '/images/optimized/about/hk.jpg', alt: 'Portrait with Hong Kong skyline' },
+  { src: '/images/optimized/about/mcss.jpg', alt: 'MCSS team in front of a stone building' },
+  { src: '/images/optimized/about/dragonboat.jpg', alt: 'Dragon boat team on the water' },
+  { src: '/images/optimized/about/mcgill.jpg', alt: 'McGill campus street in autumn' },
 ] as const;
 
 interface AboutRoleEntry {
@@ -213,21 +213,21 @@ export const AboutSection: React.FC = () => {
           </div>
         </ScrollPopdownReveal>
 
-        <ScrollRevealGroup className="grid grid-cols-1 gap-sm sm:grid-cols-2 lg:grid-cols-3">
+        <ScrollRevealGroup className="grid grid-cols-2 gap-2xs md:grid-cols-3">
           {(revealed) =>
             SHOWCASE_IMAGES.map((image, index) => (
               <PopdownReveal
                 key={image.src}
                 reveal={revealed}
                 delayMs={POPDOWN_REVEAL_STAGGER_MS * index}
-                className="relative aspect-[335/200] overflow-hidden rounded-lg bg-surface-2"
+                className="relative aspect-[335/200] overflow-hidden rounded-sm bg-surface-2"
               >
                 <Image
                   src={image.src}
                   alt={image.alt}
                   fill
-                  className="rounded-sm object-cover"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 245px"
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 245px"
                 />
               </PopdownReveal>
             ))

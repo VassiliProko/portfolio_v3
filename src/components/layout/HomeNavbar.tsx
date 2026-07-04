@@ -40,6 +40,7 @@ function measureLogoPeakOffset(logoEl: HTMLElement) {
 
 export const HomeNavbar: React.FC = () => {
   const pathname = usePathname();
+  const isAboutPage = pathname === '/about';
   const { enableNavbarEnter, readyForReveal, notifyNavbarPeak } = useHomeEnterAnimation();
   const prefersReducedMotion = useReducedMotion();
   const logoRef = useRef<HTMLSpanElement>(null);
@@ -86,8 +87,14 @@ export const HomeNavbar: React.FC = () => {
     : {
         duration: HOME_NAV_ABOUT_PROFILE_ENTER_S,
         ease: HOME_NAV_RIGHT_ENTER_EASE,
-        delay: isAboutHovering ? HOME_NAV_ABOUT_PROFILE_DELAY_S : 0,
+        delay: !isAboutPage && isAboutHovering ? HOME_NAV_ABOUT_PROFILE_DELAY_S : 0,
       };
+
+  useEffect(() => {
+    if (isAboutPage) {
+      setIsAboutHovering(false);
+    }
+  }, [isAboutPage]);
 
   useEffect(() => {
     readyForRevealRef.current = readyForReveal;
@@ -321,19 +328,24 @@ export const HomeNavbar: React.FC = () => {
         <ThemeToggle />
         <div
           className="relative overflow-visible"
-          onMouseEnter={() => setIsAboutHovering(true)}
+          onMouseEnter={() => {
+            if (!isAboutPage) {
+              setIsAboutHovering(true);
+            }
+          }}
           onMouseLeave={() => setIsAboutHovering(false)}
         >
           <Link
             ref={aboutLinkRef}
             href="/about"
             prefetch={false}
+            aria-current={isAboutPage ? 'page' : undefined}
             className="block py-3 font-mono text-base uppercase text-text transition-colors duration-[60ms] ease-snap focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
           >
             About
           </Link>
 
-          {aboutProfileSizePx > 0 ? (
+          {!isAboutPage && aboutProfileSizePx > 0 ? (
             <motion.div
               className="pointer-events-none absolute left-0 top-full z-50 w-max overflow-visible"
               style={{ paddingTop: HOME_NAV_ABOUT_PROFILE_TOP_GAP_PX }}

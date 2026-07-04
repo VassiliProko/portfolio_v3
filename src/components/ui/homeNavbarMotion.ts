@@ -20,7 +20,7 @@ export const HOME_NAV_LOGO_PECK_REPEAT_DELAY_MS = 2500;
 
 /** About link hover — profile picture popup */
 export const HOME_NAV_ABOUT_PROFILE_DELAY_S = 0.02;
-export const HOME_NAV_ABOUT_PROFILE_SRC = '/images/optimized/home/profile-picture';
+export const HOME_NAV_ABOUT_PROFILE_SRC = '/images/optimized/about/about.jpg';
 /** Profile popup size relative to measured About link width */
 export const HOME_NAV_ABOUT_PROFILE_SIZE_MULTIPLIER = 1.5;
 export const HOME_NAV_ABOUT_PROFILE_ENTER_S = 0.45;
