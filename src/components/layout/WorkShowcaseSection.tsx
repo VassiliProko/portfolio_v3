@@ -292,9 +292,7 @@ const WorkColumns: React.FC<{ visible: boolean }> = ({ visible }) => {
 };
 
 const PrettifyMinervaCardContent: React.FC = () => {
-  const prefersReducedMotion = useReducedMotion();
-  const { isPointerWithin, localPointer } = useHoverSurface();
-  const showCursorGlow = isPointerWithin && localPointer !== null && !prefersReducedMotion;
+  const { isPointerWithin } = useHoverSurface();
 
   return (
     <>
@@ -307,19 +305,6 @@ const PrettifyMinervaCardContent: React.FC = () => {
           'motion-reduce:transition-none',
         ].join(' ')}
         style={{ background: 'var(--gradient-prettify-minerva-showcase-hover)' }}
-      />
-      <div
-        aria-hidden
-        className={[
-          'pointer-events-none absolute z-[1] aspect-square w-3/4 -translate-x-1/2 -translate-y-1/2 mix-blend-soft-light',
-          'transition-opacity duration-[390ms] ease-move motion-reduce:hidden',
-          showCursorGlow ? 'opacity-100' : 'opacity-0',
-        ].join(' ')}
-        style={{
-          left: localPointer?.x ?? 0,
-          top: localPointer?.y ?? 0,
-          background: 'var(--gradient-prettify-minerva-showcase-cursor-glow)',
-        }}
       />
       <div
         className="absolute left-[var(--spacing-prettify-minerva-showcase-offset)] top-[var(--spacing-prettify-minerva-showcase-offset)] z-[2] w-full rounded-tl-[6px] shadow-prettify-minerva-showcase-frame"
@@ -401,9 +386,9 @@ const CoolIdeaCard: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
 
 /**
  * Showcase card order and reveal timing.
- * - `priority`: lower = earlier in column stack and higher in the grid (0 is first).
- * - `delayMs`: entrance animation stagger; usually priority * 100.
- * - Column placement: edit `SHOWCASE_COLUMN_KEYS` below.
+ * - `priority`: reveal stagger ordering reference (see `delayMs`).
+ * - `delayMs`: entrance animation stagger.
+ * - Column stack order: card order in `SHOWCASE_COLUMN_KEYS` (top → bottom).
  */
 const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
   {
@@ -463,8 +448,7 @@ const getShowcaseColumnGroups = (columnCount: ShowcaseColumnCount) => {
   return SHOWCASE_COLUMN_KEYS[columnCount].map((columnKeys) =>
     columnKeys
       .map((key) => cardsByKey.get(key))
-      .filter((card): card is ShowcaseCardConfig => Boolean(card))
-      .sort((a, b) => a.priority - b.priority),
+      .filter((card): card is ShowcaseCardConfig => Boolean(card)),
   );
 };
 

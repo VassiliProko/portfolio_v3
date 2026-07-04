@@ -76,7 +76,6 @@
   /* Work showcase: Prettify Minerva (Figma node 212:1464) */
   --gradient-prettify-minerva-showcase: linear-gradient(161.69deg, #F6D3FD 11.95%, #F74D50 93.56%);
   --gradient-prettify-minerva-showcase-hover: linear-gradient(162deg, #FDA7FD 11.95%, #F7113B 93.56%);
-  --gradient-prettify-minerva-showcase-cursor-glow: radial-gradient(circle, rgba(255, 245, 190, 0.92) 0%, rgba(255, 235, 160, 0.5) 38%, transparent 72%);
   --shadow-prettify-minerva-showcase-frame: 0 0 0 8px rgba(255, 255, 255, 0.4);
   --spacing-prettify-minerva-showcase-offset: clamp(24px, 5vw, 48px);
 
