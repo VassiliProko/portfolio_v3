@@ -58,7 +58,7 @@ export default function RootLayout({
       <head>
         <ThemeScript />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <HomeEnterAnimationProvider>
           <ConditionalNav />
           <MainContentShell>

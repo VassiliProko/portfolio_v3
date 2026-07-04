@@ -26,7 +26,7 @@ export default function USThingCaseStudyPage() {
           style={{ background: 'var(--gradient-usthing-app)' }}
         >
           <div className="relative w-[clamp(266px,95vw,302px)]">
-            <div className="absolute left-[7.1%] right-[7.1%] top-[6%] bottom-[5.7%] overflow-hidden rounded-[clamp(22px,12%,34px)]">
+            <div className="absolute left-[7.1%] right-[7.1%] top-[6%] bottom-[5.7%] overflow-hidden rounded-[clamp(10px,9%,26px)]">
               <video
                 className="pointer-events-none absolute top-0 w-[186%] h-auto"
                 src="/other/grade_distribution_showcase_short.webm"
@@ -64,7 +64,7 @@ export default function USThingCaseStudyPage() {
           <div className="flex flex-1 flex-col gap-6 md:gap-8 mt-8 md:mt-0 min-w-0">
             <div className="flex flex-col gap-0">
               <span className="font-bold text-text">Tools</span>
-              <span className="text-text">React Native, Cursor</span>
+              <span className="text-text">Cursor</span>
             </div>
             <div className="flex flex-col gap-0">
               <span className="font-bold text-text">Skills</span>

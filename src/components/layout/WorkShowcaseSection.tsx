@@ -12,6 +12,8 @@ type WorkCardHoverContextValue = {
   localPointer: { x: number; y: number } | null;
 };
 
+const FROST_UNDERLAY_OPACITY = 0.68;
+
 const WorkCardHoverContext = React.createContext<WorkCardHoverContextValue>({
   isPointerWithin: false,
   localPointer: null,
@@ -103,7 +105,6 @@ type WorkCardShellProps = {
   className: string;
   ariaLabel: string;
   hoverTitle?: string;
-  hoverVariant?: HoverMetaPillVariant;
   domId?: string;
   href?: string;
   externalHref?: string;
@@ -112,36 +113,14 @@ type WorkCardShellProps = {
   reveal?: boolean;
   delayMs?: number;
 };
-type HoverMetaPillVariant =
-  | 'figma-glass'
-  | 'split-lift'
-  | 'soft-pop'
-  | 'cursor-drift'
-  | 'clip-slide'
-  | 'deep-frost'
-  | 'aurora-glass'
-  | 'stacked-blur'
-  | 'prism-sheen'
-  | 'lens-pop';
 type HoverMetaPillsProps = {
   title?: string;
-  variant?: HoverMetaPillVariant;
 };
 type WorkShowcaseSectionProps = {
   visible?: boolean;
 };
 type ShowcaseColumnCount = 2 | 3;
 type ShowcaseCardKey =
-  | 'dojo-icons-figma-glass'
-  | 'dojo-icons-split-lift'
-  | 'dojo-icons-soft-pop'
-  | 'dojo-icons-cursor-drift'
-  | 'dojo-icons-clip-slide'
-  | 'dojo-icons-deep-frost'
-  | 'dojo-icons-aurora-glass'
-  | 'dojo-icons-stacked-blur'
-  | 'dojo-icons-prism-sheen'
-  | 'dojo-icons-lens-pop'
   | 'prettify-minerva'
   | 'dojo-icons'
   | 'usthing'
@@ -187,198 +166,43 @@ const useShowcaseColumnCount = (): ShowcaseColumnCount => {
   return hasThreeColumns ? 3 : 2;
 };
 
-const HoverMetaPills: React.FC<HoverMetaPillsProps> = ({
-  title = 'Project',
-  variant = 'figma-glass',
-}) => {
-  const { isPointerWithin, localPointer } = useWorkCardHover();
+const HoverMetaPills: React.FC<HoverMetaPillsProps> = ({ title = 'Project' }) => {
+  const { isPointerWithin } = useWorkCardHover();
   const visible = isPointerWithin;
-  const driftX = localPointer ? Math.max(-10, Math.min(10, localPointer.x * 0.04 - 10)) : 0;
-  const driftY = localPointer ? Math.max(-4, Math.min(4, localPointer.y * 0.02 - 4)) : 0;
-  const basePillClass =
-    'box-border overflow-hidden rounded-sm px-3 py-2 font-sans text-sm leading-none transition-all ease-move will-change-[transform,opacity,filter,clip-path]';
-
-  const variantClasses: Record<
-    HoverMetaPillVariant,
-    {
-      container: string;
-      pill: string;
-      titleHidden: string;
-      titleVisible: string;
-      yearHidden: string;
-      yearVisible: string;
-      style?: React.CSSProperties;
-      pillStyle?: React.CSSProperties;
-      haloClass?: string;
-      haloStyle?: React.CSSProperties;
-    }
-  > = {
-    'figma-glass': {
-      container: 'bottom-3 justify-start gap-2 px-3',
-      pill: 'border border-border-base bg-surface-1/80 text-text backdrop-blur-md duration-[260ms]',
-      titleHidden: 'translate-y-3 opacity-0 blur-[2px]',
-      titleVisible: 'translate-y-0 opacity-100 blur-0',
-      yearHidden: 'translate-y-3 opacity-0 blur-[2px]',
-      yearVisible: 'translate-y-0 opacity-100 blur-0',
-    },
-    'split-lift': {
-      container: 'bottom-3 justify-start px-3',
-      pill: 'border border-border-base bg-surface-1 text-text duration-[320ms]',
-      titleHidden: '-translate-x-4 translate-y-4 -rotate-2 opacity-0 blur-[2px]',
-      titleVisible: 'translate-x-0 translate-y-0 rotate-0 opacity-100 blur-0',
-      yearHidden: 'translate-x-4 translate-y-4 rotate-2 opacity-0 blur-[2px]',
-      yearVisible: 'translate-x-0 translate-y-0 rotate-0 opacity-100 blur-0',
-    },
-    'soft-pop': {
-      container: 'bottom-3 justify-start px-3',
-      pill: 'border border-border-divider bg-surface-2 text-text duration-[300ms]',
-      titleHidden: 'translate-y-2 scale-95 opacity-0 blur-[3px]',
-      titleVisible: 'translate-y-0 scale-100 opacity-100 blur-0',
-      yearHidden: 'translate-y-2 scale-95 opacity-0 blur-[3px]',
-      yearVisible: 'translate-y-0 scale-100 opacity-100 blur-0',
-    },
-    'cursor-drift': {
-      container: 'bottom-3 justify-start px-3',
-      pill: 'border border-border-base bg-surface-1/90 text-text backdrop-blur-md duration-[220ms]',
-      titleHidden: 'translate-y-3 opacity-0 blur-[2px]',
-      titleVisible: 'translate-y-0 opacity-100 blur-0',
-      yearHidden: 'translate-y-3 opacity-0 blur-[2px]',
-      yearVisible: 'translate-y-0 opacity-100 blur-0',
-      style:
-        visible && localPointer
-          ? {
-              transform: `translate3d(${driftX}px, ${driftY}px, 0)`,
-            }
-          : undefined,
-    },
-    'clip-slide': {
-      container: 'bottom-3 justify-start px-3',
-      pill: 'border border-border-base bg-surface-1 text-text duration-[340ms]',
-      titleHidden: 'translate-y-2 opacity-0 blur-[2px]',
-      titleVisible: 'translate-y-0 opacity-100 blur-0',
-      yearHidden: 'translate-y-2 opacity-0 blur-[2px]',
-      yearVisible: 'translate-y-0 opacity-100 blur-0',
-      style: {
-        clipPath: visible ? 'inset(0 0 0 0 round 4px)' : 'inset(0 100% 0 0 round 4px)',
-      },
-    },
-    'deep-frost': {
-      container: 'bottom-3 justify-start px-3',
-      pill: 'border border-transparent text-text backdrop-blur-xl duration-[360ms]',
-      titleHidden: 'translate-y-4 scale-95 opacity-0 blur-[4px]',
-      titleVisible: 'translate-y-0 scale-100 opacity-100 blur-0',
-      yearHidden: 'translate-y-4 scale-95 opacity-0 blur-[4px]',
-      yearVisible: 'translate-y-0 scale-100 opacity-100 blur-0',
-      pillStyle: {
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--color-surface-1) 68%, transparent), color-mix(in srgb, var(--color-background) 42%, transparent)) padding-box, linear-gradient(180deg, color-mix(in srgb, var(--color-background) 90%, transparent), color-mix(in srgb, var(--color-primary-base) 42%, transparent)) border-box',
-        boxShadow:
-          '0 18px 40px color-mix(in srgb, var(--color-text) 22%, transparent), 0 4px 12px color-mix(in srgb, var(--color-text) 16%, transparent), inset 0 1px 0 color-mix(in srgb, var(--color-background) 70%, transparent)',
-      },
-    },
-    'aurora-glass': {
-      container: 'bottom-3 justify-start px-3',
-      pill: 'border border-transparent text-text backdrop-blur-lg duration-[380ms]',
-      titleHidden: '-translate-x-3 translate-y-3 scale-95 opacity-0 blur-[3px]',
-      titleVisible: 'translate-x-0 translate-y-0 scale-100 opacity-100 blur-0',
-      yearHidden: 'translate-x-3 translate-y-3 scale-95 opacity-0 blur-[3px]',
-      yearVisible: 'translate-x-0 translate-y-0 scale-100 opacity-100 blur-0',
-      pillStyle: {
-        background:
-          'linear-gradient(135deg, color-mix(in srgb, var(--color-surface-1) 72%, transparent), color-mix(in srgb, var(--color-primary-base) 22%, transparent) 48%, color-mix(in srgb, var(--color-accent-base) 26%, transparent)) padding-box, linear-gradient(180deg, color-mix(in srgb, var(--color-background) 86%, transparent), color-mix(in srgb, var(--color-primary-base) 60%, transparent) 52%, color-mix(in srgb, var(--color-accent-base) 64%, transparent)) border-box',
-        boxShadow:
-          '0 18px 38px color-mix(in srgb, var(--color-primary-base) 28%, transparent), 0 4px 12px color-mix(in srgb, var(--color-accent-base) 18%, transparent), inset 0 1px 0 color-mix(in srgb, var(--color-background) 72%, transparent)',
-      },
-    },
-    'stacked-blur': {
-      container: 'bottom-3 justify-start px-3',
-      pill: 'border border-transparent text-text backdrop-blur-xl duration-[420ms]',
-      titleHidden: 'translate-y-5 opacity-0 blur-[5px]',
-      titleVisible: 'translate-y-0 opacity-100 blur-0',
-      yearHidden: 'translate-y-5 opacity-0 blur-[5px]',
-      yearVisible: 'translate-y-0 opacity-100 blur-0',
-      pillStyle: {
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--color-surface-1) 72%, transparent), color-mix(in srgb, var(--color-surface-2) 58%, transparent)) padding-box, linear-gradient(180deg, color-mix(in srgb, var(--color-background) 80%, transparent), color-mix(in srgb, var(--color-accent-base) 52%, transparent)) border-box',
-        boxShadow:
-          '0 24px 52px color-mix(in srgb, var(--color-text) 20%, transparent), 0 6px 18px color-mix(in srgb, var(--color-primary-base) 16%, transparent), inset 0 1px 0 color-mix(in srgb, var(--color-background) 72%, transparent)',
-      },
-      haloClass: visible ? 'opacity-100 blur-xl scale-100' : 'opacity-0 blur-lg scale-90',
-      haloStyle: {
-        background:
-          'linear-gradient(90deg, color-mix(in srgb, var(--color-primary-base) 34%, transparent), color-mix(in srgb, var(--color-accent-base) 30%, transparent))',
-      },
-    },
-    'prism-sheen': {
-      container: 'bottom-3 justify-start px-3',
-      pill: 'border border-transparent text-text backdrop-blur-lg duration-[360ms]',
-      titleHidden: 'translate-y-3 skew-x-3 opacity-0 blur-[3px]',
-      titleVisible: 'translate-y-0 skew-x-0 opacity-100 blur-0',
-      yearHidden: 'translate-y-3 -skew-x-3 opacity-0 blur-[3px]',
-      yearVisible: 'translate-y-0 skew-x-0 opacity-100 blur-0',
-      pillStyle: {
-        background:
-          'linear-gradient(110deg, color-mix(in srgb, var(--color-background) 68%, transparent) 0%, color-mix(in srgb, var(--color-surface-1) 72%, transparent) 42%, color-mix(in srgb, var(--color-primary-base) 20%, transparent) 58%, color-mix(in srgb, var(--color-background) 58%, transparent) 100%) padding-box, linear-gradient(180deg, color-mix(in srgb, var(--color-background) 90%, transparent), color-mix(in srgb, var(--color-primary-base) 52%, transparent) 48%, color-mix(in srgb, var(--color-accent-base) 58%, transparent)) border-box',
-        boxShadow:
-          '0 18px 40px color-mix(in srgb, var(--color-text) 20%, transparent), 0 4px 14px color-mix(in srgb, var(--color-primary-base) 18%, transparent), inset 0 1px 0 color-mix(in srgb, var(--color-background) 80%, transparent)',
-      },
-    },
-    'lens-pop': {
-      container: 'bottom-3 justify-start px-3',
-      pill: 'border border-transparent text-text backdrop-blur-2xl duration-[400ms]',
-      titleHidden: 'translate-y-4 scale-90 opacity-0 blur-[4px]',
-      titleVisible: '-translate-y-1 scale-105 opacity-100 blur-0',
-      yearHidden: 'translate-y-4 scale-90 opacity-0 blur-[4px]',
-      yearVisible: '-translate-y-1 scale-105 opacity-100 blur-0',
-      pillStyle: {
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--color-surface-1) 74%, transparent), color-mix(in srgb, var(--color-background) 50%, transparent)) padding-box, linear-gradient(180deg, color-mix(in srgb, var(--color-background) 92%, transparent), color-mix(in srgb, var(--color-primary-base) 56%, transparent) 46%, color-mix(in srgb, var(--color-text) 24%, transparent)) border-box',
-        boxShadow:
-          '0 24px 56px color-mix(in srgb, var(--color-text) 28%, transparent), 0 6px 18px color-mix(in srgb, var(--color-primary-base) 22%, transparent), inset 0 1px 0 color-mix(in srgb, var(--color-background) 76%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--color-primary-base) 24%, transparent)',
-      },
-      haloClass: visible ? 'opacity-100 blur-2xl scale-110' : 'opacity-0 blur-lg scale-95',
-      haloStyle: {
-        background:
-          'radial-gradient(circle, color-mix(in srgb, var(--color-background) 55%, transparent) 0%, color-mix(in srgb, var(--color-primary-base) 28%, transparent) 52%, transparent 76%)',
-      },
-    },
+  const visibleClass = visible
+    ? 'translate-y-0 scale-100 opacity-100 blur-0'
+    : 'translate-y-4 scale-95 opacity-0 blur-[4px]';
+  const pillStyle: React.CSSProperties = {
+    background:
+      'linear-gradient(180deg, color-mix(in srgb, var(--color-background) 24%, transparent), color-mix(in srgb, var(--color-surface-1) 8%, transparent)) padding-box, linear-gradient(180deg, color-mix(in srgb, var(--color-background) 38%, transparent), color-mix(in srgb, var(--color-text) 8%, transparent)) border-box',
   };
 
-  const selectedVariant = variantClasses[variant];
-
   return (
-    <div
-      className={[
-        'pointer-events-none absolute inset-x-0 z-10 flex items-center',
-        selectedVariant.haloClass ? 'overflow-visible' : '',
-        'transition-all duration-[260ms] ease-move',
-        selectedVariant.container,
-        'motion-reduce:!translate-x-0 motion-reduce:!translate-y-0 motion-reduce:transition-none',
-      ].join(' ')}
-      style={selectedVariant.style}
-    >
-      {selectedVariant.haloClass ? (
+    <div className="pointer-events-none absolute inset-x-0 bottom-3 z-10 flex items-center justify-start px-3">
+      <div
+        className={[
+          'relative inline-flex max-w-full transition-all duration-[360ms] ease-move will-change-[transform,opacity,filter]',
+          visibleClass,
+          'origin-bottom-left group-focus-visible:translate-y-0 group-focus-visible:scale-100 group-focus-visible:opacity-100 group-focus-visible:blur-0',
+          'motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:blur-0 motion-reduce:transition-none',
+        ].join(' ')}
+      >
         <div
           aria-hidden
           className={[
-            'absolute inset-x-3 bottom-0 h-full rounded-sm transition-all duration-[420ms] ease-move motion-reduce:hidden',
-            selectedVariant.haloClass,
+            'absolute inset-0 rounded-sm bg-background transition-opacity duration-[360ms] ease-move',
+            'motion-reduce:transition-none',
           ].join(' ')}
-          style={selectedVariant.haloStyle}
+          style={{ opacity: FROST_UNDERLAY_OPACITY }}
         />
-      ) : null}
-      <div
-        className={[
-          'relative z-[1]',
-          basePillClass,
-          selectedVariant.pill,
-          visible ? selectedVariant.titleVisible : selectedVariant.titleHidden,
-          'origin-bottom-left group-focus-visible:translate-x-0 group-focus-visible:translate-y-0 group-focus-visible:rotate-0 group-focus-visible:scale-100 group-focus-visible:opacity-100 group-focus-visible:blur-0',
-          'motion-reduce:translate-x-0 motion-reduce:translate-y-0 motion-reduce:rotate-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:blur-0 motion-reduce:transition-none',
-        ].join(' ')}
-        style={selectedVariant.pillStyle}
-      >
-        {title}
+        <div
+          className={[
+            'relative box-border overflow-hidden rounded-sm border border-transparent px-3 py-2 font-sans text-sm leading-none text-text backdrop-blur-2xl backdrop-saturate-150',
+          ].join(' ')}
+          style={pillStyle}
+        >
+          {title}
+        </div>
       </div>
     </div>
   );
@@ -388,7 +212,6 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   className,
   ariaLabel,
   hoverTitle = 'Project',
-  hoverVariant = 'figma-glass',
   domId,
   href,
   externalHref,
@@ -425,7 +248,7 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   const innerContent = (
     <WorkCardHoverContext.Provider value={hoverContextValue}>
       {children}
-      <HoverMetaPills title={hoverTitle} variant={hoverVariant} />
+      <HoverMetaPills title={hoverTitle} />
     </WorkCardHoverContext.Provider>
   );
 
@@ -486,7 +309,7 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
       style={{ background: 'var(--gradient-mcss)' }}
       reveal={reveal}
       delayMs={delayMs}
-      hoverTitle="McGill Chinese Students' Society"
+      hoverTitle="Cultural Website"
     >
       <ShowcaseLoopingVideo
         src="/other/mcss_video.webm"
@@ -497,14 +320,9 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
   );
 };
 
-const DojoIconsCaseStudy: React.FC<{
-  reveal?: boolean;
-  delayMs?: number;
-  hoverVariant?: HoverMetaPillVariant;
-}> = ({
+const DojoIconsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   reveal = true,
   delayMs = 0,
-  hoverVariant = 'figma-glass',
 }) => {
   return (
     <WorkCardShell
@@ -512,8 +330,7 @@ const DojoIconsCaseStudy: React.FC<{
       ariaLabel="Dojo Icons project preview"
       reveal={reveal}
       delayMs={delayMs}
-      hoverTitle="Dojo Icons"
-      hoverVariant={hoverVariant}
+      hoverTitle="Dojo / Icons"
     >
       <ShowcaseLoopingVideo
         sources={[
@@ -538,7 +355,7 @@ const OnePrepProTrialCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }>
       ariaLabel="OnePrep Pro Trial animation preview"
       reveal={reveal}
       delayMs={delayMs}
-      hoverTitle="OnePrep Pro Trial"
+      hoverTitle="OnePrep / Animation"
     >
       <ShowcaseRivePreview
         riveSrc="/other/pro_trial_unlock.riv"
@@ -558,13 +375,13 @@ const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       href="/usthing"
       className="p-sm flex flex-col items-center"
       ariaLabel="Open USThing case study"
-      hoverTitle="USThing"
+      hoverTitle="USThing / App Feature"
       style={{ background: 'var(--gradient-usthing-app)' }}
       reveal={reveal}
       delayMs={delayMs}
     >
       <div className="relative w-full max-w-[340px]">
-        <div className="absolute left-[7.1%] right-[7.1%] top-[6%] bottom-[5.7%] overflow-hidden rounded-[clamp(22px,12%,34px)]">
+        <div className="absolute left-[7.1%] right-[7.1%] top-[6%] bottom-[5.7%] overflow-hidden rounded-[clamp(10px,9%,26px)]">
           <ShowcaseLoopingVideo
             src="/other/grade_distribution_showcase_short.webm"
             className="pointer-events-none absolute top-0 w-[186%] h-auto"
@@ -667,7 +484,7 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
       style={{ background: 'var(--gradient-prettify-minerva-showcase)' }}
       reveal={reveal}
       delayMs={delayMs}
-      hoverTitle="Prettify Minerva"
+      hoverTitle="Prettify Minerva / Browser Extension"
     >
       <PrettifyMinervaCardContent />
     </WorkCardShell>
@@ -682,89 +499,47 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
  */
 const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
   {
-    key: 'dojo-icons-figma-glass',
+    key: 'prettify-minerva',
     priority: 0,
     delayMs: 0,
-    render: (props) => <DojoIconsCaseStudy {...props} hoverVariant="figma-glass" />,
+    render: (props) => <PrettifyMinervaFeaturedCaseStudy {...props} />,
   },
   {
-    key: 'dojo-icons-split-lift',
+    key: 'dojo-icons',
     priority: 1,
     delayMs: 100,
-    render: (props) => <DojoIconsCaseStudy {...props} hoverVariant="split-lift" />,
+    render: (props) => <DojoIconsCaseStudy {...props} />,
   },
   {
-    key: 'dojo-icons-soft-pop',
+    key: 'usthing',
     priority: 2,
     delayMs: 200,
-    render: (props) => <DojoIconsCaseStudy {...props} hoverVariant="soft-pop" />,
+    render: (props) => <UsthingCaseStudy {...props} />,
   },
   {
-    key: 'dojo-icons-cursor-drift',
+    key: 'mcss',
     priority: 3,
     delayMs: 300,
-    render: (props) => <DojoIconsCaseStudy {...props} hoverVariant="cursor-drift" />,
+    render: (props) => <McssFeaturedCaseStudy {...props} />,
   },
   {
-    key: 'dojo-icons-clip-slide',
+    key: 'oneprep-pro-trial',
     priority: 4,
     delayMs: 400,
-    render: (props) => <DojoIconsCaseStudy {...props} hoverVariant="clip-slide" />,
-  },
-  {
-    key: 'dojo-icons-deep-frost',
-    priority: 5,
-    delayMs: 500,
-    render: (props) => <DojoIconsCaseStudy {...props} hoverVariant="deep-frost" />,
-  },
-  {
-    key: 'dojo-icons-aurora-glass',
-    priority: 6,
-    delayMs: 600,
-    render: (props) => <DojoIconsCaseStudy {...props} hoverVariant="aurora-glass" />,
-  },
-  {
-    key: 'dojo-icons-stacked-blur',
-    priority: 7,
-    delayMs: 700,
-    render: (props) => <DojoIconsCaseStudy {...props} hoverVariant="stacked-blur" />,
-  },
-  {
-    key: 'dojo-icons-prism-sheen',
-    priority: 8,
-    delayMs: 800,
-    render: (props) => <DojoIconsCaseStudy {...props} hoverVariant="prism-sheen" />,
-  },
-  {
-    key: 'dojo-icons-lens-pop',
-    priority: 9,
-    delayMs: 900,
-    render: (props) => <DojoIconsCaseStudy {...props} hoverVariant="lens-pop" />,
+    render: (props) => <OnePrepProTrialCaseStudy {...props} />,
   },
 ];
 
 /** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
-    [
-      'dojo-icons-figma-glass',
-      'dojo-icons-soft-pop',
-      'dojo-icons-clip-slide',
-      'dojo-icons-aurora-glass',
-      'dojo-icons-prism-sheen',
-    ],
-    [
-      'dojo-icons-split-lift',
-      'dojo-icons-cursor-drift',
-      'dojo-icons-deep-frost',
-      'dojo-icons-stacked-blur',
-      'dojo-icons-lens-pop',
-    ],
+    ['prettify-minerva', 'usthing'],
+    ['dojo-icons', 'mcss', 'oneprep-pro-trial'],
   ],
   3: [
-    ['dojo-icons-figma-glass', 'dojo-icons-cursor-drift', 'dojo-icons-deep-frost', 'dojo-icons-lens-pop'],
-    ['dojo-icons-split-lift', 'dojo-icons-clip-slide', 'dojo-icons-stacked-blur'],
-    ['dojo-icons-soft-pop', 'dojo-icons-aurora-glass', 'dojo-icons-prism-sheen'],
+    ['prettify-minerva'],
+    ['dojo-icons', 'mcss'],
+    ['usthing', 'oneprep-pro-trial'],
   ],
 };
 
