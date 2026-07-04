@@ -36,7 +36,7 @@ const config: Config = {
   			},
   			text: {
   				DEFAULT: 'var(--color-text)',
-  				subtle: 'var(--color-text-subtle',
+  				subtle: 'var(--color-text-subtle)',
   				muted: 'var(--color-text-muted)',
   				primary: 'var(--color-text-primary)',
   				'inverted-1': 'var(--color-text-inverted-1)',

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { cn } from '@/src/utils/cn';
 
@@ -8,6 +8,11 @@ import { cn } from '@/src/utils/cn';
 export const POPDOWN_REVEAL_DURATION_MS = 600;
 export const POPDOWN_REVEAL_EASING = 'cubic-bezier(0.22, 1, 0.36, 1)';
 export const POPDOWN_REVEAL_STAGGER_MS = 100;
+
+const DEFAULT_SCROLL_REVEAL_OPTIONS: IntersectionObserverInit = {
+  threshold: 0.12,
+  rootMargin: '0px 0px -5% 0px',
+};
 
 type PopdownRevealProps = {
   children: React.ReactNode;
@@ -39,6 +44,36 @@ export function getPopdownRevealProps(
       willChange: 'transform, opacity, filter',
     } satisfies React.CSSProperties,
   };
+}
+
+/** Reveals when the element scrolls into the viewport (showcase-style pop-in). */
+export function useScrollPopdownReveal(options: IntersectionObserverInit = DEFAULT_SCROLL_REVEAL_OPTIONS) {
+  const ref = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const [revealed, setRevealed] = useState(Boolean(prefersReducedMotion));
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setRevealed(true);
+      return;
+    }
+
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) {
+        setRevealed(true);
+        observer.disconnect();
+      }
+    }, options);
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [prefersReducedMotion, options.root, options.rootMargin, options.threshold]);
+
+  return { ref, revealed };
 }
 
 export function useMountPopdownReveal() {
@@ -82,5 +117,44 @@ export const PopdownReveal: React.FC<PopdownRevealProps> = ({
     >
       {children}
     </Component>
+  );
+};
+
+type ScrollPopdownRevealProps = Omit<PopdownRevealProps, 'reveal'>;
+
+/** Self-contained scroll-triggered showcase pop-in. */
+export const ScrollPopdownReveal: React.FC<ScrollPopdownRevealProps> = ({
+  children,
+  delayMs = 0,
+  className,
+}) => {
+  const { ref, revealed } = useScrollPopdownReveal();
+  const prefersReducedMotion = useReducedMotion();
+  const revealProps = getPopdownRevealProps(revealed, delayMs, prefersReducedMotion);
+
+  return (
+    <div
+      ref={ref}
+      className={cn(revealProps.className, className)}
+      style={revealProps.style}
+    >
+      {children}
+    </div>
+  );
+};
+
+type ScrollRevealGroupProps = {
+  children: (revealed: boolean) => React.ReactNode;
+  className?: string;
+};
+
+/** Observes scroll once; children stagger via PopdownReveal + delayMs. */
+export const ScrollRevealGroup: React.FC<ScrollRevealGroupProps> = ({ children, className }) => {
+  const { ref, revealed } = useScrollPopdownReveal();
+
+  return (
+    <div ref={ref} className={className}>
+      {children(revealed)}
+    </div>
   );
 };

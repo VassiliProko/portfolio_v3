@@ -1,141 +1,281 @@
 'use client';
 
 import React from 'react';
-import { ExperienceEducationItem } from '@/src/components/ui/ExperienceEducationItem';
-import { HoverSurface } from '@/src/components/ui/HoverMetaPill';
+import Image from 'next/image';
+import { ArrowUpRight } from 'lucide-react';
+import { cn } from '@/src/utils/cn';
 import {
   POPDOWN_REVEAL_STAGGER_MS,
   PopdownReveal,
-  useMountPopdownReveal,
+  ScrollPopdownReveal,
+  ScrollRevealGroup,
 } from '@/src/components/ui/PopdownReveal';
 
-const ABOUT_PROFILE_HOVER_TITLE = 'maybe munching on digestive cookies';
+const ABOUT_HERO_IMAGE = '/images/optimized/about/about.jpg';
+const RESUME_PDF_HREF =
+  'https://docs.google.com/document/d/1W0-QIjajoPcEnDEO99qnTczTWo3l3Wu7W1VPZ29Igfw/edit?usp=sharing';
 
-interface ExperienceEducationEntry {
+const resumeButtonClass = cn(
+  'group font-mono text-base inline-flex items-center h-12 px-4 rounded-sm',
+  'bg-footer-contact-bg text-footer-console-text',
+  'hover:bg-footer-contact-bg-hover transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
+  'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
+);
+
+const resumeButtonIconSlotClass = cn(
+  'inline-flex overflow-hidden max-w-0',
+  'transition-[max-width,margin-left] duration-[180ms] ease-move motion-reduce:transition-none',
+  'group-hover:ml-2xs group-hover:max-w-5',
+  'group-focus-visible:ml-2xs group-focus-visible:max-w-5',
+  'motion-reduce:ml-2xs motion-reduce:max-w-5',
+);
+
+const resumeButtonIconClass = cn(
+  'size-5 shrink-0 -translate-x-full scale-95 opacity-0',
+  'transition-[transform_180ms_cubic-bezier(0.4,0,0.2,1)_0ms,opacity_120ms_cubic-bezier(0.4,0,0.2,1)_0ms]',
+  'motion-reduce:transition-none',
+  'group-hover:translate-x-0 group-hover:scale-100 group-hover:opacity-100',
+  'group-hover:transition-[transform_180ms_cubic-bezier(0.4,0,0.2,1)_0ms,opacity_120ms_cubic-bezier(0.4,0,0.2,1)_90ms]',
+  'group-focus-visible:translate-x-0 group-focus-visible:scale-100 group-focus-visible:opacity-100',
+  'group-focus-visible:transition-[transform_180ms_cubic-bezier(0.4,0,0.2,1)_0ms,opacity_120ms_cubic-bezier(0.4,0,0.2,1)_90ms]',
+  'motion-reduce:translate-x-0 motion-reduce:scale-100 motion-reduce:opacity-100',
+);
+
+const SHOWCASE_IMAGES = [
+  { src: '/images/optimized/about/showcase-1.jpg', alt: 'Group photo at an outdoor event' },
+  { src: '/images/optimized/about/showcase-2.jpg', alt: 'City skyline at night' },
+  { src: '/images/optimized/about/showcase-3.jpg', alt: 'Dragon boat team on the water' },
+  { src: '/images/optimized/about/showcase-4.jpg', alt: 'Team portrait outdoors' },
+  { src: '/images/optimized/about/showcase-5.jpg', alt: 'Street scene with friends' },
+  { src: '/images/optimized/about/showcase-6.jpg', alt: 'Outdoor gathering in the city' },
+] as const;
+
+interface AboutRoleEntry {
   title: string;
   subtitle: string;
   date: string;
   href: string;
-  imageSrc?: string;
+  imageSrc: string;
 }
 
-const EXPERIENCES: ExperienceEducationEntry[] = [
-  { title: 'RevisionDojo', subtitle: 'Product Design Intern', date: '2026 - Present', href: 'https://www.revisiondojo.com/', imageSrc: '/images/optimized/home/revisiondojo.webp' },
-  { title: 'MCSS', subtitle: 'Designer', date: '2024 - Present', href: 'https://www.mcss.ca/', imageSrc: '/images/optimized/home/mcss.webp' },
-  { title: 'USThing', subtitle: 'Product Designer', date: '2025 - 2026', href: 'https://usthing.xyz', imageSrc: '/images/optimized/home/usthing.webp' },
-  { title: 'DFSG', subtitle: 'Design Fellow', date: '2026', href: 'https://www.studio-school.com/', imageSrc: '/images/optimized/home/DFSG.webp' },
-  { title: 'Lyft', subtitle: 'UX Research Intern • MicroEXP', date: '2025', href: 'https://lyfturbansolutions.com/', imageSrc: '/images/optimized/home/lyft.webp' }
+const EXPERIENCES: AboutRoleEntry[] = [
+  {
+    title: 'RevisionDojo',
+    subtitle: 'Product Design Intern',
+    date: 'Summer 2026',
+    href: 'https://www.revisiondojo.com/',
+    imageSrc: '/images/optimized/about/experience-revisiondojo.png',
+  },
+  {
+    title: 'DSFG',
+    subtitle: 'Product Design Fellow',
+    date: 'Spring 2026',
+    href: 'https://www.studio-school.com/',
+    imageSrc: '/images/optimized/about/experience-dfsg.png',
+  },
+  {
+    title: 'Lyft',
+    subtitle: 'UX Research Intern • McGill MicroEXP Program',
+    date: 'May 2025',
+    href: 'https://lyfturbansolutions.com/',
+    imageSrc: '/images/optimized/about/experience-lyft.png',
+  },
 ];
 
-const EDUCATION: ExperienceEducationEntry[] = [
-  { title: 'McGill', subtitle: 'BCom', date: '2024 - 2027', href: 'https://www.mcgill.ca/', imageSrc: '/images/optimized/home/mcgill.webp' },
-  { title: 'HKUST', subtitle: 'Exchange', date: '2025 - 2026', href: 'https://hkust.edu.hk/', imageSrc: '/images/optimized/home/hkust.webp' },
+const COMMUNITY_ROLES: AboutRoleEntry[] = [
+  {
+    title: 'MCSS',
+    subtitle: 'Graphic & Web Designer',
+    date: 'Fall 2024 - Present',
+    href: 'https://www.mcss.ca/',
+    imageSrc: '/images/optimized/about/community-mcss.png',
+  },
+  {
+    title: 'USThing',
+    subtitle: 'Product Designer',
+    date: 'Fall 2025 - Spring 2026',
+    href: 'https://usthing.xyz',
+    imageSrc: '/images/optimized/about/community-usthing.png',
+  },
 ];
 
-const EXPERIENCE_BASE_DELAY_MS = POPDOWN_REVEAL_STAGGER_MS * 3;
-const EDUCATION_BASE_DELAY_MS =
-  EXPERIENCE_BASE_DELAY_MS + POPDOWN_REVEAL_STAGGER_MS * (EXPERIENCES.length + 1);
+type AboutRoleRowProps = AboutRoleEntry;
+
+const AboutRoleRow: React.FC<AboutRoleRowProps> = ({
+  title,
+  subtitle,
+  date,
+  href,
+  imageSrc,
+}) => {
+  return (
+    <div className="flex w-full items-start gap-2xs">
+      <div className="relative size-11 shrink-0 overflow-hidden rounded-lg bg-surface-2">
+        <Image src={imageSrc} alt="" fill className="object-cover" sizes="44px" />
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col justify-center">
+        <div className="flex items-center justify-between gap-sm">
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-sans text-base text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-[60ms] ease-snap"
+          >
+            {title}
+          </a>
+          <span className="shrink-0 font-sans text-base text-text-muted">{date}</span>
+        </div>
+        <span className="font-sans text-base text-text-subtle">{subtitle}</span>
+      </div>
+    </div>
+  );
+};
+
+type AboutRoleListProps = {
+  heading: string;
+  items: AboutRoleEntry[];
+  revealed: boolean;
+  baseDelayMs: number;
+};
+
+const AboutRoleList: React.FC<AboutRoleListProps> = ({
+  heading,
+  items,
+  revealed,
+  baseDelayMs,
+}) => {
+  return (
+    <div className="flex flex-col gap-lg">
+      <PopdownReveal reveal={revealed} delayMs={baseDelayMs}>
+        <h3 className="font-sans text-base font-medium text-text">{heading}</h3>
+      </PopdownReveal>
+      <div className="flex flex-col gap-lg">
+        {items.map((item, index) => (
+          <PopdownReveal
+            key={item.title}
+            reveal={revealed}
+            delayMs={baseDelayMs + POPDOWN_REVEAL_STAGGER_MS * (index + 1)}
+          >
+            <AboutRoleRow {...item} />
+          </PopdownReveal>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export const AboutSection: React.FC = () => {
-  const revealed = useMountPopdownReveal();
-
   return (
     <section
       className="w-full py-12 md:py-20"
       aria-labelledby="about-heading"
       id="about"
     >
-      <PopdownReveal reveal={revealed} delayMs={0}>
-        <h2
-          id="about-heading"
-          className="text-text font-sans font-medium text-2xl md:text-3xl mb-8 md:mb-10"
-        >
-          About
-        </h2>
-      </PopdownReveal>
-
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col lg:flex-row gap-4 overflow-hidden">
-          <PopdownReveal
-            reveal={revealed}
-            delayMs={POPDOWN_REVEAL_STAGGER_MS}
-            className="relative w-full lg:w-[40%] lg:max-w-[360px] shrink-0 aspect-[1/1] lg:min-h-[320px] rounded-lg overflow-hidden"
-          >
-            <HoverSurface className="h-full w-full" hoverTitle={ABOUT_PROFILE_HOVER_TITLE}>
-              <img
-                src="/images/optimized/home/about.webp"
-                alt="Vassili Prokopenko"
-                className="h-full w-full object-cover"
-                srcSet="
-                  /images/optimized/home/about.webp 1600w,
-                "
-                sizes="(max-width: 1023px) min(calc(100vw - 2.5rem), 1160px), 720px"
-                loading="eager"
-              />
-            </HoverSurface>
-          </PopdownReveal>
-
-          <PopdownReveal
-            reveal={revealed}
-            delayMs={POPDOWN_REVEAL_STAGGER_MS * 2}
-            className="flex flex-col rounded-lg bg-surface-1 px-sm py-md flex-1 bg-[url('/images/optimized/home/about-sky.webp')] bg-cover bg-center bg-no-repeat bg-blend-soft-light"
-          >
-            <p className="text-text-subtle font-sans text-base leading-relaxed mb-4">
-              Hey, I&apos;m Vassili — meaning &quot;king&quot; in Greek. I&apos;m a multidisciplinary designer and business analytics student at McGill, currently on exchange at HKUST. I&apos;m somewhere experimenting between design, code, and data-driven thinking, blending different mediums to bring anew to the world. I believe the future belongs to designers who build and understand technological craftsmanship.
-            </p>
-            <p className="text-text-subtle font-sans text-base leading-relaxed">
-              It&apos;s a wonderful time to be alive.
-            </p>
-          </PopdownReveal>
-        </div>
-
-        <div className="flex flex-col gap-4 rounded-lg bg-surface-1">
-          <div className="px-sm py-md">
-            <PopdownReveal reveal={revealed} delayMs={EXPERIENCE_BASE_DELAY_MS}>
-              <h3 className="text-text font-sans font-medium text-lg md:text-xl mb-4">
-                Experience
-              </h3>
-            </PopdownReveal>
-            <ul className="list-none p-0 m-0 border-border-divider">
-              {EXPERIENCES.map((item, index) => (
-                <ExperienceEducationItem
-                  key={`${item.title}-${item.subtitle}-${item.date}`}
-                  title={item.title}
-                  subtitle={item.subtitle}
-                  date={item.date}
-                  href={item.href}
-                  imageSrc={item.imageSrc}
-                  tone="experience"
-                  reveal={revealed}
-                  revealDelayMs={EXPERIENCE_BASE_DELAY_MS + POPDOWN_REVEAL_STAGGER_MS * (index + 1)}
-                />
-              ))}
-            </ul>
+      <div className="mx-auto flex w-full max-w-[760px] flex-col gap-xl md:gap-2xl">
+        <ScrollPopdownReveal delayMs={0}>
+          <div className="relative aspect-[760/456] w-full overflow-hidden rounded-sm bg-surface-2">
+            <Image
+              src={ABOUT_HERO_IMAGE}
+              alt="Vassili Prokopenko"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 760px"
+              priority
+            />
           </div>
+        </ScrollPopdownReveal>
 
-          <div className="px-sm py-md">
-            <PopdownReveal reveal={revealed} delayMs={EDUCATION_BASE_DELAY_MS}>
-              <h3 className="text-text font-sans font-medium text-lg md:text-xl mb-4">
-                Education
-              </h3>
-            </PopdownReveal>
-            <ul className="list-none p-0 m-0 border-border-divider">
-              {EDUCATION.map((item, index) => (
-                <ExperienceEducationItem
-                  key={`${item.title}-${item.subtitle}-${item.date}`}
-                  title={item.title}
-                  subtitle={item.subtitle}
-                  date={item.date}
-                  href={item.href}
-                  imageSrc={item.imageSrc}
-                  tone="education"
-                  reveal={revealed}
-                  revealDelayMs={EDUCATION_BASE_DELAY_MS + POPDOWN_REVEAL_STAGGER_MS * (index + 1)}
-                />
-              ))}
-            </ul>
+        <ScrollPopdownReveal delayMs={0}>
+          <div className="flex flex-col gap-lg">
+            <h2
+              id="about-heading"
+              className="font-sans text-base font-medium text-text"
+            >
+              About
+            </h2>
+            <div className="max-w-[672px] font-sans text-base leading-normal text-text-subtle">
+              <p className="mb-0">
+                I&apos;m a multidisciplinary designer and business analytics student at McGill
+                University in Montreal.
+              </p>
+              <p className="mb-0">&nbsp;</p>
+              <p className="mb-0">
+                I design for a more curious, healthier, and prettier world. A place where people
+                feel that they belong and are loved.
+              </p>
+              <p className="mb-0">&nbsp;</p>
+              <p className="mb-0">
+                As a life-long creator, I have been drawn to different mediums to express my ideas.
+              </p>
+              <p className="mb-0">&nbsp;</p>
+              <p>I also enjoy crispy tofu and dragon boat.</p>
+            </div>
           </div>
-        </div>
+        </ScrollPopdownReveal>
+
+        <ScrollRevealGroup className="grid grid-cols-1 gap-sm sm:grid-cols-2 lg:grid-cols-3">
+          {(revealed) =>
+            SHOWCASE_IMAGES.map((image, index) => (
+              <PopdownReveal
+                key={image.src}
+                reveal={revealed}
+                delayMs={POPDOWN_REVEAL_STAGGER_MS * index}
+                className="relative aspect-[335/200] overflow-hidden rounded-lg bg-surface-2"
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  className="rounded-sm object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 245px"
+                />
+              </PopdownReveal>
+            ))
+          }
+        </ScrollRevealGroup>
+
+        <ScrollRevealGroup className="flex flex-col gap-xl md:gap-2xl">
+          {(revealed) => {
+            const communityBaseDelayMs =
+              POPDOWN_REVEAL_STAGGER_MS * (EXPERIENCES.length + 2);
+            const resumeDelayMs =
+              communityBaseDelayMs + POPDOWN_REVEAL_STAGGER_MS * (COMMUNITY_ROLES.length + 1);
+
+            return (
+              <>
+                <AboutRoleList
+                  heading="Experience"
+                  items={EXPERIENCES}
+                  revealed={revealed}
+                  baseDelayMs={0}
+                />
+                <AboutRoleList
+                  heading="Community"
+                  items={COMMUNITY_ROLES}
+                  revealed={revealed}
+                  baseDelayMs={communityBaseDelayMs}
+                />
+                <PopdownReveal reveal={revealed} delayMs={resumeDelayMs}>
+                  <a
+                    href={RESUME_PDF_HREF}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={resumeButtonClass}
+                    aria-label="Open PDF resume in a new tab"
+                  >
+                    PDF Resume
+                    <span className={resumeButtonIconSlotClass} aria-hidden>
+                      <ArrowUpRight
+                        className={resumeButtonIconClass}
+                        strokeWidth={2}
+                      />
+                    </span>
+                  </a>
+                </PopdownReveal>
+              </>
+            );
+          }}
+        </ScrollRevealGroup>
       </div>
     </section>
   );
