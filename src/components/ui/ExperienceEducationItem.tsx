@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import { useReducedMotion } from 'motion/react';
+import { getPopdownRevealProps } from '@/src/components/ui/PopdownReveal';
 import { cn } from '@/src/utils/cn';
 
 const HOVER_IMAGE_WIDTH = 320;
@@ -17,6 +19,8 @@ export interface ExperienceEducationItemProps {
   imageSrc?: string;
   tone?: 'experience' | 'education';
   className?: string;
+  reveal?: boolean;
+  revealDelayMs?: number;
 }
 
 export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = ({
@@ -27,7 +31,14 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
   imageSrc,
   tone = 'experience',
   className,
+  reveal,
+  revealDelayMs = 0,
 }) => {
+  const prefersReducedMotion = useReducedMotion();
+  const revealProps =
+    reveal === undefined
+      ? null
+      : getPopdownRevealProps(reveal, revealDelayMs, prefersReducedMotion);
   const [expanded, setExpanded] = useState(false);
   const rowRef = useRef<HTMLLIElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -116,6 +127,10 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
         )}
       />
       <div
+        className={revealProps?.className}
+        style={revealProps?.style}
+      >
+      <div
         className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0 px-xs py-2xs cursor-pointer md:cursor-default"
         onClick={() => setExpanded((prev) => !prev)}
       >
@@ -134,22 +149,6 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
         <span className="font-sans text-text-subtle shrink-0">{date}</span>
       </div>
 
-      {/* Hover image — desktop only, only mounts when cursor position exists */}
-      {isHovering && hoverImageX !== null && (
-        <div
-          ref={imageRef}
-          className="hidden md:block absolute top-1/2 z-10 pointer-events-none"
-          style={{
-            left: `${hoverImageX}px`,
-            transform: 'translate(-50%, -50%)',
-          }}
-        >
-          <div className="w-[320px] aspect-[5/3] rounded-sm overflow-hidden border border-border-base">
-            {imageContent}
-          </div>
-        </div>
-      )}
-
       {/* Mobile expanded image */}
       <div
         className={cn(
@@ -165,6 +164,23 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
           </div>
         </div>
       </div>
+      </div>
+
+      {/* Hover image — desktop only, only mounts when cursor position exists */}
+      {isHovering && hoverImageX !== null && (
+        <div
+          ref={imageRef}
+          className="hidden md:block absolute top-1/2 z-10 pointer-events-none"
+          style={{
+            left: `${hoverImageX}px`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <div className="w-[320px] aspect-[5/3] rounded-sm overflow-hidden border border-border-base">
+            {imageContent}
+          </div>
+        </div>
+      )}
     </li>
   );
 };

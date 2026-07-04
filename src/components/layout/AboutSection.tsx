@@ -1,8 +1,15 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { ExperienceEducationItem } from '@/src/components/ui/ExperienceEducationItem';
+import { HoverSurface } from '@/src/components/ui/HoverMetaPill';
+import {
+  POPDOWN_REVEAL_STAGGER_MS,
+  PopdownReveal,
+  useMountPopdownReveal,
+} from '@/src/components/ui/PopdownReveal';
+
+const ABOUT_PROFILE_HOVER_TITLE = 'maybe munching on digestive cookies';
 
 interface ExperienceEducationEntry {
   title: string;
@@ -25,67 +32,72 @@ const EDUCATION: ExperienceEducationEntry[] = [
   { title: 'HKUST', subtitle: 'Exchange', date: '2025 - 2026', href: 'https://hkust.edu.hk/', imageSrc: '/images/optimized/home/hkust.webp' },
 ];
 
+const EXPERIENCE_BASE_DELAY_MS = POPDOWN_REVEAL_STAGGER_MS * 3;
+const EDUCATION_BASE_DELAY_MS =
+  EXPERIENCE_BASE_DELAY_MS + POPDOWN_REVEAL_STAGGER_MS * (EXPERIENCES.length + 1);
+
 export const AboutSection: React.FC = () => {
+  const revealed = useMountPopdownReveal();
+
   return (
     <section
-      className="w-full py-12 md:py-20 animate-fade-in-up-fast"
+      className="w-full py-12 md:py-20"
       aria-labelledby="about-heading"
       id="about"
     >
-      <h2
-        id="about-heading"
-        className="text-text font-sans font-medium text-2xl md:text-3xl mb-8 md:mb-10"
-      >
-        About
-      </h2>
+      <PopdownReveal reveal={revealed} delayMs={0}>
+        <h2
+          id="about-heading"
+          className="text-text font-sans font-medium text-2xl md:text-3xl mb-8 md:mb-10"
+        >
+          About
+        </h2>
+      </PopdownReveal>
 
       <div className="flex flex-col gap-4">
-        
         <div className="flex flex-col lg:flex-row gap-4 overflow-hidden">
-          <div className="relative w-full lg:w-[40%] lg:max-w-[360px] shrink-0 aspect-[1/1] lg:min-h-[320px] rounded-lg overflow-hidden">
-            
-          <div className="rounded-lg border border-border-base bg-surface-2 text-text absolute bottom-0 left-0 right-0 mx-xs my-xs">
-            <div className="mx-auto px-3 py-3">
-              <div className="flex flex-row justify-between gap-4">
-                <div className="px-2 py-1 rounded-sm bg-surface-3 text-sm font-mono text-text-muted">
-                  Name:
-                </div>
-                <div className="px-2 py-1 rounded-sm text-sm font-mono">
-                  Vassili Prokopenko
-                </div>
-              </div>
-            </div>
-          </div>
-            
-            <img
-              src="/images/optimized/home/about.webp"
-              alt="Vassili Prokopenko"
-              className="w-full h-full object-cover"
-              srcSet="
-                /images/optimized/home/about.webp 1600w,
-              "
-              sizes="(max-width: 1023px) min(calc(100vw - 2.5rem), 1160px), 720px"
-              loading="eager"
-            />
-          </div>
-          <div className="flex flex-col rounded-lg bg-surface-1 px-sm py-md flex-1 bg-[url('/images/optimized/home/about-sky.webp')] bg-cover bg-center bg-no-repeat bg-blend-soft-light">
+          <PopdownReveal
+            reveal={revealed}
+            delayMs={POPDOWN_REVEAL_STAGGER_MS}
+            className="relative w-full lg:w-[40%] lg:max-w-[360px] shrink-0 aspect-[1/1] lg:min-h-[320px] rounded-lg overflow-hidden"
+          >
+            <HoverSurface className="h-full w-full" hoverTitle={ABOUT_PROFILE_HOVER_TITLE}>
+              <img
+                src="/images/optimized/home/about.webp"
+                alt="Vassili Prokopenko"
+                className="h-full w-full object-cover"
+                srcSet="
+                  /images/optimized/home/about.webp 1600w,
+                "
+                sizes="(max-width: 1023px) min(calc(100vw - 2.5rem), 1160px), 720px"
+                loading="eager"
+              />
+            </HoverSurface>
+          </PopdownReveal>
+
+          <PopdownReveal
+            reveal={revealed}
+            delayMs={POPDOWN_REVEAL_STAGGER_MS * 2}
+            className="flex flex-col rounded-lg bg-surface-1 px-sm py-md flex-1 bg-[url('/images/optimized/home/about-sky.webp')] bg-cover bg-center bg-no-repeat bg-blend-soft-light"
+          >
             <p className="text-text-subtle font-sans text-base leading-relaxed mb-4">
-            Hey, I&apos;m Vassili — meaning &quot;king&quot; in Greek. I&apos;m a multidisciplinary designer and business analytics student at McGill, currently on exchange at HKUST. I&apos;m somewhere experimenting between design, code, and data-driven thinking, blending different mediums to bring anew to the world. I believe the future belongs to designers who build and understand technological craftsmanship.
+              Hey, I&apos;m Vassili — meaning &quot;king&quot; in Greek. I&apos;m a multidisciplinary designer and business analytics student at McGill, currently on exchange at HKUST. I&apos;m somewhere experimenting between design, code, and data-driven thinking, blending different mediums to bring anew to the world. I believe the future belongs to designers who build and understand technological craftsmanship.
             </p>
             <p className="text-text-subtle font-sans text-base leading-relaxed">
               It&apos;s a wonderful time to be alive.
             </p>
-          </div>
+          </PopdownReveal>
         </div>
 
-        {/* Experience */}
         <div className="flex flex-col gap-4 rounded-lg bg-surface-1">
           <div className="px-sm py-md">
-            <h3 className="text-text font-sans font-medium text-lg md:text-xl mb-4">
-              Experience
-            </h3>
+            <PopdownReveal reveal={revealed} delayMs={EXPERIENCE_BASE_DELAY_MS}>
+              <h3 className="text-text font-sans font-medium text-lg md:text-xl mb-4">
+                Experience
+              </h3>
+            </PopdownReveal>
             <ul className="list-none p-0 m-0 border-border-divider">
-              {EXPERIENCES.map((item) => (
+              {EXPERIENCES.map((item, index) => (
                 <ExperienceEducationItem
                   key={`${item.title}-${item.subtitle}-${item.date}`}
                   title={item.title}
@@ -94,18 +106,21 @@ export const AboutSection: React.FC = () => {
                   href={item.href}
                   imageSrc={item.imageSrc}
                   tone="experience"
+                  reveal={revealed}
+                  revealDelayMs={EXPERIENCE_BASE_DELAY_MS + POPDOWN_REVEAL_STAGGER_MS * (index + 1)}
                 />
               ))}
             </ul>
           </div>
 
-          {/* Education */}
           <div className="px-sm py-md">
-            <h3 className="text-text font-sans font-medium text-lg md:text-xl mb-4">
-              Education
-            </h3>
+            <PopdownReveal reveal={revealed} delayMs={EDUCATION_BASE_DELAY_MS}>
+              <h3 className="text-text font-sans font-medium text-lg md:text-xl mb-4">
+                Education
+              </h3>
+            </PopdownReveal>
             <ul className="list-none p-0 m-0 border-border-divider">
-              {EDUCATION.map((item) => (
+              {EDUCATION.map((item, index) => (
                 <ExperienceEducationItem
                   key={`${item.title}-${item.subtitle}-${item.date}`}
                   title={item.title}
@@ -114,12 +129,13 @@ export const AboutSection: React.FC = () => {
                   href={item.href}
                   imageSrc={item.imageSrc}
                   tone="education"
+                  reveal={revealed}
+                  revealDelayMs={EDUCATION_BASE_DELAY_MS + POPDOWN_REVEAL_STAGGER_MS * (index + 1)}
                 />
               ))}
             </ul>
           </div>
         </div>
-
       </div>
     </section>
   );
