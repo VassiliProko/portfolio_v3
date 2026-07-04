@@ -273,7 +273,7 @@ export const Footer: React.FC = () => {
               Email Me
             </a>
           </div>
-          <p className="font-mono text-base text-footer-last-updated shrink-0 self-start">
+          <p className="font-mono text-sm text-footer-last-updated shrink-0 self-start">
             {formatLastUpdated(LAST_UPDATED_ISO)}
           </p>
         </div>

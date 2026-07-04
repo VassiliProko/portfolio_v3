@@ -63,6 +63,12 @@
   /* Case study card: USThing app feature (Figma node 545:623) */
   --gradient-usthing-app: linear-gradient(323deg, #186CC7 -0.07%, #7BDAF0 50.45%, #D5F6FA 100%);
 
+  /* Work showcase: Cool idea CTA card */
+  --gradient-showcase-cool-idea: linear-gradient(165deg, #DDF6FA 0%, #E8EEFF 48%, #FFF6E8 100%);
+  --color-showcase-cool-idea-glow-center: #ffffff;
+  --opacity-showcase-cool-idea-glow: 0.44;
+  --blur-showcase-cool-idea-glow: 36px;
+
   /* Case study card: Prettify Minerva (gray base + red overlay) */
   --gradient-prettify-minerva: linear-gradient(180deg, #464646 0%, #232323 48.56%, #1A1A1A 100%),
     linear-gradient(180deg, #4C133C 0%, #291307 18.27%, #4B1614 46.15%, #AB2039 77.4%, #BB191B 100%);
@@ -177,6 +183,11 @@
 
   --shadow-highlight-reel-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   --shadow-highlight-reel-video-outer: 0 0 0 4px rgba(255, 255, 255, 0.12);
+
+  /* Work showcase: Cool idea CTA card — dark, same hue story as light variant */
+  --gradient-showcase-cool-idea: linear-gradient(165deg, #1A3539 0%, #222638 48%, #2D2619 100%);
+  --opacity-showcase-cool-idea-glow: 0.16;
+  --blur-showcase-cool-idea-glow: 40px;
 }
 
 @media (min-width: 768px) {
@@ -388,6 +399,19 @@ main:has([data-not-found]) footer {
 
 .mcss-phase-image-glow {
   box-shadow: var(--shadow-mcss-phase-image-glow);
+}
+
+/* Work showcase: cool idea card — soft white radial glow (inscribed circle) */
+.showcase-cool-idea-glow {
+  background-color: var(--color-showcase-cool-idea-glow-center);
+  opacity: var(--opacity-showcase-cool-idea-glow);
+  filter: blur(var(--blur-showcase-cool-idea-glow));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase-cool-idea-glow {
+    filter: blur(16px);
+  }
 }
 
 /* Hero stat: pulsing back dot (1s repeat) */

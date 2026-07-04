@@ -5,8 +5,13 @@ import Image from 'next/image';
 import React from 'react';
 import { useReducedMotion } from 'motion/react';
 import { HoverMetaPill, HoverSurfaceContext, useHoverSurface, usePointerWithinElement } from '@/src/components/ui/HoverMetaPill';
+import {
+  HOME_INTRO_SUBTITLE_LINK_FOCUS_CLASS,
+  HOME_INTRO_SUBTITLE_PILL_CLASS,
+} from '@/src/components/ui/homeIntroMotion';
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
 import { ShowcaseRivePreview } from '@/src/components/ui/ShowcaseRivePreview';
+import { cn } from '@/src/utils/cn';
 
 type WorkCardShellProps = {
   className: string;
@@ -19,6 +24,7 @@ type WorkCardShellProps = {
   children: React.ReactNode;
   reveal?: boolean;
   delayMs?: number;
+  hideHoverPills?: boolean;
 };
 type WorkShowcaseSectionProps = {
   visible?: boolean;
@@ -26,6 +32,7 @@ type WorkShowcaseSectionProps = {
 type ShowcaseColumnCount = 2 | 3;
 type ShowcaseCardKey =
   | 'prettify-minerva'
+  | 'cool-idea'
   | 'dojo-icons'
   | 'usthing'
   | 'mcss'
@@ -81,6 +88,7 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   children,
   reveal = true,
   delayMs = 0,
+  hideHoverPills = false,
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const { ref: cardRef, isPointerWithin, localPointer } = usePointerWithinElement<HTMLElement>();
@@ -91,13 +99,13 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   const revealClass = reveal
     ? 'opacity-100 translate-y-0 blur-0'
     : 'opacity-0 -translate-y-3 blur-[2px]';
-  const sharedClassName = [
+  const sharedClassName = cn(
     'group relative w-full overflow-hidden rounded-lg bg-surface-dark-1',
     'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
     revealClass,
-    domId === 'play' ? 'scroll-mt-16 md:scroll-mt-20' : '',
+    domId === 'play' && 'scroll-mt-16 md:scroll-mt-20',
     className,
-  ].join(' ');
+  );
   const mergedStyle: React.CSSProperties = {
     ...style,
     transitionProperty: 'opacity, transform, filter',
@@ -110,7 +118,7 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   const innerContent = (
     <HoverSurfaceContext.Provider value={hoverContextValue}>
       {children}
-      <HoverMetaPill title={hoverTitle} />
+      {!hideHoverPills && <HoverMetaPill title={hoverTitle} />}
     </HoverSurfaceContext.Provider>
   );
 
@@ -353,6 +361,44 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
   );
 };
 
+const CoolIdeaCard: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  return (
+    <WorkCardShell
+      className="aspect-square"
+      ariaLabel="Have a cool idea? Get in touch via email"
+      style={{ background: 'var(--gradient-showcase-cool-idea)' }}
+      reveal={reveal}
+      delayMs={delayMs}
+      hideHoverPills
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden motion-reduce:opacity-80"
+      >
+        <div className="showcase-cool-idea-glow absolute left-1/2 top-1/2 size-full -translate-x-1/2 -translate-y-1/2 rounded-full" />
+      </div>
+      <div className="relative z-[1] flex h-full flex-col items-center justify-center gap-4 p-sm text-center">
+        <p className="font-sans text-xl font-medium leading-tight text-text">
+          have a cool idea?
+        </p>
+        <a
+          href="mailto:vassiligb12@gmail.com"
+          className={cn(
+            HOME_INTRO_SUBTITLE_PILL_CLASS,
+            HOME_INTRO_SUBTITLE_LINK_FOCUS_CLASS,
+            'font-sans text-xl font-medium text-text-muted',
+          )}
+        >
+          Email Me
+        </a>
+      </div>
+    </WorkCardShell>
+  );
+};
+
 /**
  * Showcase card order and reveal timing.
  * - `priority`: lower = earlier in column stack and higher in the grid (0 is first).
@@ -367,26 +413,32 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     render: (props) => <PrettifyMinervaFeaturedCaseStudy {...props} />,
   },
   {
-    key: 'dojo-icons',
+    key: 'cool-idea',
     priority: 1,
+    delayMs: 50,
+    render: (props) => <CoolIdeaCard {...props} />,
+  },
+  {
+    key: 'dojo-icons',
+    priority: 2,
     delayMs: 100,
     render: (props) => <DojoIconsCaseStudy {...props} />,
   },
   {
     key: 'usthing',
-    priority: 2,
+    priority: 3,
     delayMs: 200,
     render: (props) => <UsthingCaseStudy {...props} />,
   },
   {
     key: 'mcss',
-    priority: 3,
+    priority: 4,
     delayMs: 300,
     render: (props) => <McssFeaturedCaseStudy {...props} />,
   },
   {
     key: 'oneprep-pro-trial',
-    priority: 4,
+    priority: 5,
     delayMs: 400,
     render: (props) => <OnePrepProTrialCaseStudy {...props} />,
   },
@@ -395,11 +447,11 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 /** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
-    ['prettify-minerva', 'usthing'],
+    ['prettify-minerva', 'usthing', 'cool-idea'],
     ['dojo-icons', 'mcss', 'oneprep-pro-trial'],
   ],
   3: [
-    ['prettify-minerva'],
+    ['prettify-minerva', 'cool-idea'],
     ['dojo-icons', 'mcss'],
     ['usthing', 'oneprep-pro-trial'],
   ],

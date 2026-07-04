@@ -11,6 +11,8 @@ import {
   HOME_INTRO_SECONDARY_ENTER_EARLY_MS,
   HOME_INTRO_SECONDARY_ENTER_EASE,
   HOME_INTRO_SUBTITLE_ENTER_OFFSET_PX,
+  HOME_INTRO_SUBTITLE_LINK_FOCUS_CLASS,
+  HOME_INTRO_SUBTITLE_PILL_CLASS,
 } from '@/src/components/ui/homeIntroMotion';
 
 const WAVE_DELAY_MS = 55;
@@ -20,12 +22,6 @@ const INTRO_TEXT_CLASS =
   'relative max-w-full cursor-default text-left font-sans text-[32px] font-medium leading-normal text-text';
 
 const REVISION_DOJO_HREF = 'https://revisiondojo.com';
-
-const SUBTITLE_PILL_CLASS =
-  'inline-flex rounded-full bg-intro-highlight-rest px-xs py-4xs transition-colors duration-[180ms] ease-move hover:bg-surface-2 hover:text-text motion-reduce:transition-none';
-
-const SUBTITLE_LINK_FOCUS_CLASS =
-  'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline';
 
 type HomeIntroSectionProps = {
   onHeadlineComplete?: () => void;
@@ -85,7 +81,7 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({
           target="_blank"
           rel="noopener noreferrer"
           aria-label="RevisionDojo. Opens in a new tab."
-          className={`${SUBTITLE_PILL_CLASS} ${SUBTITLE_LINK_FOCUS_CLASS}`}
+          className={`${HOME_INTRO_SUBTITLE_PILL_CLASS} ${HOME_INTRO_SUBTITLE_LINK_FOCUS_CLASS}`}
           whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
           transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
         >
