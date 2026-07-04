@@ -99,6 +99,8 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
     <div className="w-full h-full bg-surface-dark-1" />
   );
   const isActive = isHovering || expanded;
+  const mobileExpandEasing = 'cubic-bezier(0.22, 1, 0.36, 1)';
+  const mobileExpandDurationMs = prefersReducedMotion ? 0 : 520;
   const barClassName =
     tone === 'experience'
       ? isActive
@@ -152,13 +154,28 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
       {/* Mobile expanded image */}
       <div
         className={cn(
-          'md:hidden grid transition-[grid-template-rows] duration-[350ms] ease-move',
-          expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+          'md:hidden grid motion-reduce:transition-none',
+          expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',
         )}
+        style={{
+          transitionProperty: 'grid-template-rows',
+          transitionDuration: `${mobileExpandDurationMs}ms`,
+          transitionTimingFunction: mobileExpandEasing,
+        }}
       >
         <div className="overflow-hidden min-h-0">
-          <div className="px-xs pb-xs">
-            <div className="w-full aspect-[5/3] rounded-sm overflow-hidden">
+          <div
+            className={cn(
+              'px-xs pb-xs motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:translate-y-0',
+              expanded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2',
+            )}
+            style={{
+              transitionProperty: 'opacity, transform',
+              transitionDuration: `${mobileExpandDurationMs}ms`,
+              transitionTimingFunction: mobileExpandEasing,
+            }}
+          >
+            <div className="w-full aspect-[5/3] rounded-sm overflow-hidden border border-border-base">
               {imageContent}
             </div>
           </div>

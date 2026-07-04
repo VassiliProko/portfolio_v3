@@ -42,7 +42,13 @@ const config: Config = {
   				'inverted-1': 'var(--color-text-inverted-1)',
   				'inverted-2': 'var(--color-text-inverted-2)'
   			},
-  			border: 'hsl(var(--border))',
+  			border: {
+  				DEFAULT: 'hsl(var(--border))',
+  				base: 'var(--color-border-base)',
+  				divider: 'var(--color-border-divider)',
+  				hover: 'var(--color-border-hover)',
+  				focus: 'var(--color-border-focus)',
+  			},
   			'focus-outline': 'var(--color-focus-outline)',
   			overlay: {
   				backdrop: 'var(--color-overlay-backdrop)',
