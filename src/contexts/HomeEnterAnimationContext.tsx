@@ -3,8 +3,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from 'react';
 import { usePathname } from 'next/navigation';
 import { useReducedMotion } from 'motion/react';
-import { isCaseStudyPath } from '@/src/constants/caseStudyPaths';
-
 type HomeEnterAnimationContextValue = {
   introBlurReady: boolean;
   mainContentVisible: boolean;
@@ -60,8 +58,7 @@ export function HomeEnterAnimationProvider({ children }: { children: React.React
   const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
   const isHomeRoute = pathname === '/';
-  const showNavbar = !isCaseStudyPath(pathname);
-  const enableNavbarEnter = showNavbar && isHomeRoute && !prefersReducedMotion;
+  const enableNavbarEnter = isHomeRoute && !prefersReducedMotion;
   const initialReady =
     !enableNavbarEnter || (typeof document !== 'undefined' && document.readyState === 'complete');
   const [state, dispatch] = useReducer(homeEnterReducer, {

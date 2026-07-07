@@ -21,7 +21,8 @@ export default function PrettifyMinervaCaseStudyPage() {
   return (
     <CaseStudyLayout
       title="Prettify Minerva"
-      heroImageSrc="/images/optimized/prettify-minerva/prettify-minerva-head.webp"
+      subtitle="Browser Extension"
+      heroImageSrc="/images/optimized/prettify-minerva/prettify-minerva-head.jpg"
       heroImageAlt="Prettify Minerva preview"
       overview={PRETTIFY_MINERVA_OVERVIEW}
       meta={{
@@ -32,8 +33,7 @@ export default function PrettifyMinervaCaseStudyPage() {
       websiteUrl="https://chromewebstore.google.com/detail/gligldkmadhkgfbomifkomimankgljji?utm_source=item-share-cb"
       websiteLabel="view chrome web store"
       githubUrl="https://github.com/VassiliProko/prettify_minerva"
-      backHref="/"
-      
+
     >
 
       <CaseStudyImage
