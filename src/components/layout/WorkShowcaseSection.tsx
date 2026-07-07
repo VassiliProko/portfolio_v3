@@ -36,7 +36,8 @@ type ShowcaseCardKey =
   | 'dojo-icons'
   | 'usthing'
   | 'mcss'
-  | 'oneprep-pro-trial';
+  | 'oneprep-pro-trial'
+  | 'visual-explorations';
 type ShowcaseCardProps = { reveal?: boolean; delayMs?: number };
 type ShowcaseCardConfig = {
   key: ShowcaseCardKey;
@@ -209,6 +210,7 @@ const DojoIconsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
         ]}
         className="h-full w-full object-cover"
         ariaLabel="Dojo Icons preview animation"
+        loopDelayMs={1000}
       />
     </WorkCardShell>
   );
@@ -231,6 +233,30 @@ const OnePrepProTrialCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }>
         riveSrc="/other/pro_trial_unlock.riv"
         backgroundSrc="/other/oneprep_trial_background.png"
         ariaLabel="OnePrep Pro Trial unlock animation"
+      />
+    </WorkCardShell>
+  );
+};
+
+const VisualExplorationsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  return (
+    <WorkCardShell
+      className="aspect-square"
+      ariaLabel="Visual Explorations preview"
+      reveal={reveal}
+      delayMs={delayMs}
+      hoverTitle="Visual Explorations"
+    >
+      <ShowcaseLoopingVideo
+        sources={[
+          { src: '/other/heart.webm', type: 'video/webm' },
+          { src: '/other/heart.mp4', type: 'video/mp4' },
+        ]}
+        className="h-full w-full object-cover"
+        ariaLabel="Visual Explorations preview animation"
       />
     </WorkCardShell>
   );
@@ -427,16 +453,22 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     delayMs: 400,
     render: (props) => <OnePrepProTrialCaseStudy {...props} />,
   },
+  {
+    key: 'visual-explorations',
+    priority: 6,
+    delayMs: 450,
+    render: (props) => <VisualExplorationsCaseStudy {...props} />,
+  },
 ];
 
 /** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
     ['prettify-minerva', 'usthing', 'cool-idea'],
-    ['dojo-icons', 'mcss', 'oneprep-pro-trial'],
+    ['dojo-icons', 'mcss', 'oneprep-pro-trial', 'visual-explorations'],
   ],
   3: [
-    ['prettify-minerva', 'cool-idea'],
+    ['prettify-minerva', 'visual-explorations', 'cool-idea'],
     ['dojo-icons', 'mcss'],
     ['usthing', 'oneprep-pro-trial'],
   ],

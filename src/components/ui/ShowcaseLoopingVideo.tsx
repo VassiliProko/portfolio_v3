@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 
-const DEFAULT_LOOP_DELAY_MS = 1000;
-
 type ShowcaseLoopingVideoProps = {
   src?: string;
   sources?: Array<{
@@ -12,6 +10,7 @@ type ShowcaseLoopingVideoProps = {
   }>;
   className?: string;
   ariaLabel: string;
+  /** Pause before replay; 0 uses native seamless loop. */
   loopDelayMs?: number;
 };
 
@@ -20,11 +19,16 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
   sources,
   className,
   ariaLabel,
-  loopDelayMs = DEFAULT_LOOP_DELAY_MS,
+  loopDelayMs = 0,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const useDelayedLoop = loopDelayMs > 0;
 
   useEffect(() => {
+    if (!useDelayedLoop) {
+      return;
+    }
+
     const video = videoRef.current;
     if (!video) {
       return;
@@ -46,7 +50,7 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
       video.removeEventListener('ended', restartAfterDelay);
       window.clearTimeout(loopTimeoutId);
     };
-  }, [loopDelayMs, src]);
+  }, [loopDelayMs, src, useDelayedLoop]);
 
   return (
     <video
@@ -56,6 +60,7 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
       muted
       playsInline
       autoPlay
+      loop={!useDelayedLoop}
       preload="auto"
       aria-label={ariaLabel}
     >
