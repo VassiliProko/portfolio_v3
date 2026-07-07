@@ -130,6 +130,8 @@ const config: Config = {
   			sm: '15px',
   			md: '20px',
   			lg: '30px',
+  			'about-role-icon': 'var(--spacing-about-role-icon)',
+  			'about-role-section': 'var(--spacing-about-role-section)',
   			xl: '40px',
   			'2xl': '60px',
   			'3xl': '80px',

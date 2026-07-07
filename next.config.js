@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 
 function getLastUpdatedFromMain() {
-  const refs = ['origin/main', 'main'];
+  const refs = ['HEAD', 'origin/main', 'main'];
 
   for (const ref of refs) {
     try {

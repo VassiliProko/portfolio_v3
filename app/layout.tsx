@@ -4,6 +4,7 @@ import { Oxygen_Mono, Satisfy } from 'next/font/google';
 import '@/src/styles/globals.css';
 import { ConditionalNav } from '@/src/components/layout/ConditionalNav';
 import { Footer } from '@/src/components/layout/Footer';
+import { FooterLastUpdated } from '@/src/components/layout/FooterLastUpdated';
 import { MainContentShell } from '@/src/components/layout/MainContentShell';
 import { ThemeScript } from '@/src/components/ThemeScript';
 import { HomeEnterAnimationProvider } from '@/src/contexts/HomeEnterAnimationContext';
@@ -63,7 +64,7 @@ export default function RootLayout({
           <ConditionalNav />
           <MainContentShell>
             {children}
-            <Footer />
+            <Footer lastUpdated={<FooterLastUpdated />} />
           </MainContentShell>
         </HomeEnterAnimationProvider>
         <Analytics />

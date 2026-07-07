@@ -1,6 +1,6 @@
 export const HOME_MAIN_CONTENT_ENTER_S = 0.22;
 export const HOME_NAV_LOGO_PEAK_WIDTH_MULTIPLIER = 1.5;
-export const HOME_NAV_LOGO_OUTBOUND_S = 0.48;
+export const HOME_NAV_LOGO_OUTBOUND_S = 0.24;
 export const HOME_NAV_LOGO_RETURN_S = 0.52;
 export const HOME_NAV_RIGHT_ENTER_S = 0.72;
 export const HOME_NAV_RIGHT_ENTER_OFFSET_PX = 14;

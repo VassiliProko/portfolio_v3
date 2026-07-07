@@ -12,6 +12,8 @@ export const spacing = {
   sm: '15px',
   md: '20px',
   lg: '30px',
+  'about-role-icon': '12px',
+  'about-role-section': '24px',
   xl: '40px',
   '2xl': '60px',
   '3xl': '80px',

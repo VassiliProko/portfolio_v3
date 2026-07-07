@@ -5,7 +5,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { cn } from '@/src/utils/cn';
-import { formatLastUpdated, LAST_UPDATED_ISO } from '@/src/utils/last-updated';
+
+type FooterProps = {
+  lastUpdated: React.ReactNode;
+};
 
 const linkClass =
   'text-footer-console-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm';
@@ -94,7 +97,7 @@ function renderConsoleLine(
 const LINE_START_DELAY_MS = 100;
 const CHAR_DELAY_MS = 35;
 
-export const Footer: React.FC = () => {
+export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
   const pathname = usePathname();
   const consoleRef = useRef<HTMLDivElement>(null);
   const imageCardRef = useRef<HTMLDivElement>(null);
@@ -273,9 +276,7 @@ export const Footer: React.FC = () => {
               Email Me
             </a>
           </div>
-          <p className="font-mono text-sm text-footer-last-updated shrink-0 self-start">
-            {formatLastUpdated(LAST_UPDATED_ISO)}
-          </p>
+          {lastUpdated}
         </div>
     </footer>
   );

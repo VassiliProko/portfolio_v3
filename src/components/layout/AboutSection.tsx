@@ -109,7 +109,7 @@ const AboutRoleRow: React.FC<AboutRoleRowProps> = ({
   imageSrc,
 }) => {
   return (
-    <div className="flex w-full items-start gap-2xs">
+    <div className="flex w-full items-start gap-about-role-icon">
       <div className="relative size-11 shrink-0 overflow-hidden rounded-lg bg-surface-2">
         <Image src={imageSrc} alt="" fill className="object-cover" sizes="44px" />
       </div>
@@ -145,11 +145,11 @@ const AboutRoleList: React.FC<AboutRoleListProps> = ({
   baseDelayMs,
 }) => {
   return (
-    <div className="flex flex-col gap-lg">
+    <div className="flex flex-col gap-about-role-section">
       <PopdownReveal reveal={revealed} delayMs={baseDelayMs}>
         <h3 className="font-sans text-base font-medium text-text">{heading}</h3>
       </PopdownReveal>
-      <div className="flex flex-col gap-lg">
+      <div className="flex flex-col gap-md">
         {items.map((item, index) => (
           <PopdownReveal
             key={item.title}
