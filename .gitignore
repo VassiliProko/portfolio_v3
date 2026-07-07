@@ -37,3 +37,6 @@ next-env.d.ts
 
 # unoptimized images
 public/images/unoptimized
+
+# figma tokens
+design-tokens/
