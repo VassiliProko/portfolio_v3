@@ -29,3 +29,7 @@ export const HOME_NAV_ABOUT_PROFILE_TOP_GAP_PX = 30;
 export const HOME_NAV_ABOUT_PROFILE_ROTATE = -16;
 export const HOME_NAV_ABOUT_PROFILE_ENTER_FROM_X = 180;
 export const HOME_NAV_ABOUT_PROFILE_ENTER_FROM_ROTATE = 14;
+
+/** Mobile nav menu — hamburger panel below ~786px */
+export const HOME_NAV_MOBILE_MENU_ENTER_S = 0.28;
+export const HOME_NAV_MOBILE_ABOUT_IMAGE = '/images/optimized/about/about.jpg';

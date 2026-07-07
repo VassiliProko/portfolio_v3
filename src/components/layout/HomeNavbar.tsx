@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, useAnimationControls, useReducedMotion } from 'motion/react';
 import { ThemeToggle } from '@/src/components/ui/ThemeToggle';
+import { MobileNavMenuPanel, MobileNavMenuToggle } from '@/src/components/layout/MobileNavMenu';
 import { useHomeEnterAnimation } from '@/src/contexts/HomeEnterAnimationContext';
 import {
   HOME_NAV_ABOUT_PROFILE_DELAY_S,
@@ -52,6 +53,7 @@ export const HomeNavbar: React.FC = () => {
   const peckRepeatTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const aboutLinkRef = useRef<HTMLAnchorElement>(null);
   const [isAboutHovering, setIsAboutHovering] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [aboutLinkWidthPx, setAboutLinkWidthPx] = useState(0);
   const logoControls = useAnimationControls();
   const peckControls = useAnimationControls();
@@ -95,6 +97,28 @@ export const HomeNavbar: React.FC = () => {
       setIsAboutHovering(false);
     }
   }, [isAboutPage]);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     readyForRevealRef.current = readyForReveal;
@@ -278,8 +302,9 @@ export const HomeNavbar: React.FC = () => {
   useEffect(() => () => clearPeckRepeat(), [clearPeckRepeat]);
 
   return (
-    <div className="flex w-full items-center justify-between">
-      <Link
+    <div className="relative">
+      <div className="relative z-10 flex w-full items-center justify-between bg-background">
+        <Link
         href="/"
         prefetch={false}
         onClick={handleHomeClick}
@@ -325,55 +350,70 @@ export const HomeNavbar: React.FC = () => {
         animate={rightControls}
         initial={enableNavbarEnter ? { opacity: 0, y: -HOME_NAV_RIGHT_ENTER_OFFSET_PX } : false}
       >
-        <ThemeToggle />
-        <div
-          className="relative overflow-visible"
-          onMouseEnter={() => {
-            if (!isAboutPage) {
-              setIsAboutHovering(true);
-            }
-          }}
-          onMouseLeave={() => setIsAboutHovering(false)}
-        >
-          <Link
-            ref={aboutLinkRef}
-            href="/about"
-            prefetch={false}
-            aria-current={isAboutPage ? 'page' : undefined}
-            className="block py-3 font-mono text-base uppercase text-text transition-colors duration-[60ms] ease-snap focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
+        <div className="hidden min-[787px]:flex min-[787px]:items-center min-[787px]:gap-3">
+          <ThemeToggle />
+          <div
+            className="relative overflow-visible"
+            onMouseEnter={() => {
+              if (!isAboutPage) {
+                setIsAboutHovering(true);
+              }
+            }}
+            onMouseLeave={() => setIsAboutHovering(false)}
           >
-            About
-          </Link>
-
-          {!isAboutPage && aboutProfileSizePx > 0 ? (
-            <motion.div
-              className="pointer-events-none absolute left-0 top-full z-50 w-max overflow-visible"
-              style={{ paddingTop: HOME_NAV_ABOUT_PROFILE_TOP_GAP_PX }}
-              initial={false}
-              animate={{
-                opacity: isAboutHovering ? 1 : 0,
-                x: isAboutHovering
-                  ? HOME_NAV_ABOUT_PROFILE_OFFSET_X
-                  : HOME_NAV_ABOUT_PROFILE_ENTER_FROM_X,
-                rotate: isAboutHovering
-                  ? HOME_NAV_ABOUT_PROFILE_ROTATE
-                  : HOME_NAV_ABOUT_PROFILE_ENTER_FROM_ROTATE,
-              }}
-              transition={aboutProfileTransition}
-              aria-hidden={!isAboutHovering}
+            <Link
+              ref={aboutLinkRef}
+              href="/about"
+              prefetch={false}
+              aria-current={isAboutPage ? 'page' : undefined}
+              className="block py-3 font-mono text-base uppercase text-text transition-colors duration-[60ms] ease-snap focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
             >
-              <Image
-                src={HOME_NAV_ABOUT_PROFILE_SRC}
-                alt=""
-                width={aboutProfileSizePx}
-                height={aboutProfileSizePx}
-                className="block max-w-none rounded-lg object-cover shadow-about-profile-stamp"
-                sizes={`${aboutProfileSizePx}px`}
-              />
-            </motion.div>
-          ) : null}
+              About
+            </Link>
+
+            {!isAboutPage && aboutProfileSizePx > 0 ? (
+              <motion.div
+                className="pointer-events-none absolute left-0 top-full z-50 w-max overflow-visible"
+                style={{ paddingTop: HOME_NAV_ABOUT_PROFILE_TOP_GAP_PX }}
+                initial={false}
+                animate={{
+                  opacity: isAboutHovering ? 1 : 0,
+                  x: isAboutHovering
+                    ? HOME_NAV_ABOUT_PROFILE_OFFSET_X
+                    : HOME_NAV_ABOUT_PROFILE_ENTER_FROM_X,
+                  rotate: isAboutHovering
+                    ? HOME_NAV_ABOUT_PROFILE_ROTATE
+                    : HOME_NAV_ABOUT_PROFILE_ENTER_FROM_ROTATE,
+                }}
+                transition={aboutProfileTransition}
+                aria-hidden={!isAboutHovering}
+              >
+                <Image
+                  src={HOME_NAV_ABOUT_PROFILE_SRC}
+                  alt=""
+                  width={aboutProfileSizePx}
+                  height={aboutProfileSizePx}
+                  className="block max-w-none rounded-lg object-cover shadow-about-profile-stamp"
+                  sizes={`${aboutProfileSizePx}px`}
+                />
+              </motion.div>
+            ) : null}
+          </div>
         </div>
+
+        <MobileNavMenuToggle
+          isOpen={mobileMenuOpen}
+          onToggle={() => setMobileMenuOpen((open) => !open)}
+          className="min-[787px]:hidden"
+        />
       </motion.div>
+      </div>
+
+      <MobileNavMenuPanel
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        isAboutPage={isAboutPage}
+      />
     </div>
   );
 };
