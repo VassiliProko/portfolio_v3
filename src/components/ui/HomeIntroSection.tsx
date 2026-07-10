@@ -21,7 +21,7 @@ const WAVE_DURATION_S = 0.65;
 const INTRO_TEXT_CLASS =
   'relative max-w-full cursor-default text-left font-sans text-[32px] font-medium leading-normal text-text';
 
-const REVISION_DOJO_HREF = 'https://revisiondojo.com';
+const GENERAL_LEARNING_HREF = 'https://www.generallearning.com/';
 
 type HomeIntroSectionProps = {
   onHeadlineComplete?: () => void;
@@ -77,15 +77,15 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({
       >
         <span>{'// currently designing at'}</span>
         <motion.a
-          href={REVISION_DOJO_HREF}
+          href={GENERAL_LEARNING_HREF}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="RevisionDojo. Opens in a new tab."
+          aria-label="General Learning. Opens in a new tab."
           className={`${HOME_INTRO_SUBTITLE_PILL_CLASS} ${HOME_INTRO_SUBTITLE_LINK_FOCUS_CLASS}`}
           whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
           transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
         >
-          RevisionDojo (YC F24)
+          General Learning (YC F24)
         </motion.a>
       </motion.div>
     </div>

@@ -61,7 +61,7 @@ export const MobileNavMenuPanel: React.FC<MobileNavMenuPanelProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const transition = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: HOME_NAV_MOBILE_MENU_ENTER_S, ease: HOME_NAV_RIGHT_ENTER_EASE };
+    : { duration: HOME_NAV_MOBILE_MENU_ENTER_S, ease: [...HOME_NAV_RIGHT_ENTER_EASE] };
 
   return (
     <AnimatePresence initial={false}>
@@ -76,11 +76,11 @@ export const MobileNavMenuPanel: React.FC<MobileNavMenuPanelProps> = ({
           className={cn(
             'pointer-events-auto absolute top-full z-0 min-[787px]:hidden',
             'left-[calc(-1*var(--page-margin))] w-[calc(100%+2*var(--page-margin))]',
-            'overflow-hidden bg-background rounded-b-lg',
+            'border-b border-border-divider bg-background',
             'px-[var(--page-margin)] pb-[var(--page-margin)] pt-2xs',
           )}
         >
-          <div className="flex w-full gap-2xs">
+          <div className="flex w-full gap-3">
             <Link
               href="/about"
               prefetch={false}

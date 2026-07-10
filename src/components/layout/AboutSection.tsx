@@ -60,11 +60,11 @@ interface AboutRoleEntry {
 
 const EXPERIENCES: AboutRoleEntry[] = [
   {
-    title: 'RevisionDojo',
+    title: 'General Learning',
     subtitle: 'Product Design Intern',
     date: 'Summer 2026',
-    href: 'https://www.revisiondojo.com/',
-    imageSrc: '/images/optimized/about/experience-revisiondojo.png',
+    href: 'https://www.generallearning.com/',
+    imageSrc: '/images/optimized/about/experience-general-learning.png',
   },
   {
     title: 'DSFG',
