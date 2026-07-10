@@ -61,7 +61,7 @@ export const MobileNavMenuPanel: React.FC<MobileNavMenuPanelProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const transition = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: HOME_NAV_MOBILE_MENU_ENTER_S, ease: [...HOME_NAV_RIGHT_ENTER_EASE] };
+    : { duration: HOME_NAV_MOBILE_MENU_ENTER_S, ease: HOME_NAV_RIGHT_ENTER_EASE };
 
   return (
     <AnimatePresence initial={false}>
