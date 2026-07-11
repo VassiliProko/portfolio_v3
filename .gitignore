@@ -38,5 +38,8 @@ next-env.d.ts
 # unoptimized images
 public/images/unoptimized
 
+# unused / archived art assets
+public/images/optimized/unused-assets
+
 # figma tokens
 design-tokens/

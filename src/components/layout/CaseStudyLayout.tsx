@@ -1,13 +1,15 @@
 'use client';
 
 import React from 'react';
+import { cn } from '@/src/utils/cn';
 import {
   POPDOWN_REVEAL_STAGGER_MS,
   PopdownReveal,
   ScrollPopdownReveal,
   ScrollRevealGroup,
 } from '@/src/components/ui/PopdownReveal';
-import { cn } from '@/src/utils/cn';
+
+export { CASE_STUDY_BODY_CLASS } from '@/src/constants/caseStudy';
 
 export interface CaseStudyLayoutProps {
   /** Project or case study title */
@@ -209,7 +211,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
                   </h2>
                 </PopdownReveal>
                 <PopdownReveal reveal={revealed} delayMs={POPDOWN_REVEAL_STAGGER_MS}>
-                  <div className="text-text-subtle">{overview}</div>
+                  <div className="text-text-subtle [&_p]:max-w-[50ch]">{overview}</div>
                 </PopdownReveal>
                 {(websiteUrl ?? githubUrl) && (
                   <PopdownReveal reveal={revealed} delayMs={POPDOWN_REVEAL_STAGGER_MS * 2}>

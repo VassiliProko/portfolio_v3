@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import { CASE_STUDY_BODY_CLASS } from '@/src/constants/caseStudy';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { McssMobileCarousel } from '@/src/components/ui/McssMobileCarousel';
+import { cn } from '@/src/utils/cn';
 
 export const metadata: Metadata = {
   title: "McGill Chinese Students' Society",
@@ -11,7 +13,7 @@ export const metadata: Metadata = {
 
 const MCSS_OVERVIEW = (
   <>
-    <p>
+    <p className={CASE_STUDY_BODY_CLASS}>
     I revamped the MCSS website with a cleaner layout and improved mobile navigation, making it easier for students to discover events, sponsors, and society events. I also brought in a more vibrant visual language that better reflects the society’s cultural energy.
     </p>
     {/* Add more overview content as needed */}
@@ -95,9 +97,11 @@ export default function MCSSCaseStudyPage() {
         <h2 id="background-heading" className="mb-4 text-xl md:text-2xl font-bold text-text">
           Background
         </h2>
-        <div className="md:max-w-[65%]">
-          <p className="mb-4 text-text-subtle">{MCSS_BACKGROUND_INTRO}</p>
-          <p className="text-text-subtle">{MCSS_BACKGROUND}</p>
+        <div>
+          <p className={cn(CASE_STUDY_BODY_CLASS, 'mb-4 text-text-subtle')}>
+            {MCSS_BACKGROUND_INTRO}
+          </p>
+          <p className={cn(CASE_STUDY_BODY_CLASS, 'text-text-subtle')}>{MCSS_BACKGROUND}</p>
         </div>
       </section>
 
@@ -117,9 +121,11 @@ export default function MCSSCaseStudyPage() {
               >
                 {phase.title}
               </h3>
-              <p className="text-text-subtle">{phase.body}</p>
+              <p className={cn(CASE_STUDY_BODY_CLASS, 'text-text-subtle')}>{phase.body}</p>
               {phase.title === 'Structural Refresh' ? (
-                <p className="mt-4 text-text-subtle">Yet, something still felt missing...</p>
+                <p className={cn(CASE_STUDY_BODY_CLASS, 'mt-4 text-text-subtle')}>
+                  Yet, something still felt missing...
+                </p>
               ) : null}
             </div>
             <div className="flex justify-center py-8 md:py-10">
@@ -171,14 +177,18 @@ export default function MCSSCaseStudyPage() {
 
       <section className="w-full py-8 md:py-12 font-sans text-md md:text-lg leading-relaxed">
         <h2 className="mb-4 text-xl md:text-2xl font-bold text-text">Capturing Culture and Vibes</h2>
-        <p className="md:max-w-[65%] text-text-subtle">{MCSS_CULTURE_AND_VIBES}</p>
+        <p className={cn(CASE_STUDY_BODY_CLASS, 'text-text-subtle')}>{MCSS_CULTURE_AND_VIBES}</p>
       </section>
 
       <section className="w-full py-8 md:py-12 font-sans text-md md:text-lg leading-relaxed">
         <h2 className="mb-4 text-xl md:text-2xl font-bold text-text">Implementation</h2>
-        <div className="md:max-w-[65%]">
-          <p className="text-text-subtle">{MCSS_IMPLEMENTATION_PRIMARY}</p>
-          <p className="mt-4 text-text-subtle">{MCSS_IMPLEMENTATION_SECONDARY}</p>
+        <div>
+          <p className={cn(CASE_STUDY_BODY_CLASS, 'text-text-subtle')}>
+            {MCSS_IMPLEMENTATION_PRIMARY}
+          </p>
+          <p className={cn(CASE_STUDY_BODY_CLASS, 'mt-4 text-text-subtle')}>
+            {MCSS_IMPLEMENTATION_SECONDARY}
+          </p>
         </div>
       </section>
 
@@ -196,7 +206,7 @@ export default function MCSSCaseStudyPage() {
 
       <section className="w-full py-8 md:py-12 font-sans text-md md:text-lg leading-relaxed">
         <h2 className="mb-4 text-xl md:text-2xl font-bold text-text">Results</h2>
-        <p className="md:max-w-[65%] text-text-subtle">{MCSS_RESULTS}</p>
+        <p className={cn(CASE_STUDY_BODY_CLASS, 'text-text-subtle')}>{MCSS_RESULTS}</p>
       </section>
     </CaseStudyLayout>
   );
