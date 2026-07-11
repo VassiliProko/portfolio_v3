@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
 import { useReducedMotion } from 'motion/react';
-import { HoverMetaPill, HoverSurfaceContext, useHoverSurface, usePointerWithinElement } from '@/src/components/ui/HoverMetaPill';
+import { HoverMetaPill, HoverSurfaceContext, usePointerWithinElement } from '@/src/components/ui/HoverMetaPill';
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
 import { ShowcaseRivePreview } from '@/src/components/ui/ShowcaseRivePreview';
 import { cn } from '@/src/utils/cn';
@@ -92,29 +92,47 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
     () => ({ isPointerWithin, localPointer }),
     [isPointerWithin, localPointer],
   );
+  const isLinked = Boolean(href || externalHref);
   const revealClass = reveal
     ? 'opacity-100 translate-y-0 blur-0'
     : 'opacity-0 -translate-y-3 blur-[2px]';
-  const sharedClassName = cn(
-    'group relative w-full overflow-hidden rounded-lg bg-surface-dark-1',
+  const revealDelayMs = prefersReducedMotion || !reveal ? 0 : delayMs;
+
+  // Outer: layout + hit area only. Surface: the visible card (radius + clip + scale).
+  // Matching USThing — radius scales with the surface; children stay inset with padding.
+  const layoutClassName = cn(
+    'group relative w-full',
     'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
     revealClass,
     domId === 'play' && 'scroll-mt-16 md:scroll-mt-20',
     className,
   );
-  const mergedStyle: React.CSSProperties = {
-    ...style,
-    transitionProperty: 'opacity, transform, filter',
-    transitionDuration: prefersReducedMotion ? '0ms' : '600ms',
-    transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
-    transitionDelay: prefersReducedMotion || !reveal ? '0ms' : `${delayMs}ms`,
-    willChange: 'transform, opacity, filter',
-  };
+  const hasCustomSurfaceBackground = Boolean(style?.background);
+  const surfaceClassName = cn(
+    'absolute inset-0 overflow-hidden rounded-lg',
+    !hasCustomSurfaceBackground && 'bg-surface-dark-1',
+    isLinked &&
+      !prefersReducedMotion &&
+      'origin-center transform-gpu transition-transform duration-[280ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-[0.98] group-focus-visible:scale-[0.98]',
+  );
+  const layoutStyle: React.CSSProperties = prefersReducedMotion
+    ? {
+        transition: 'none',
+      }
+    : {
+        transitionProperty: 'opacity, transform, filter',
+        transitionDuration: '600ms',
+        transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        transitionDelay: `${revealDelayMs}ms`,
+        willChange: 'transform, opacity, filter',
+      };
 
   const innerContent = (
     <HoverSurfaceContext.Provider value={hoverContextValue}>
-      {children}
-      {!hideHoverPills && <HoverMetaPill title={hoverTitle} />}
+      <div className={surfaceClassName} style={style}>
+        {children}
+        {!hideHoverPills && <HoverMetaPill title={hoverTitle} />}
+      </div>
     </HoverSurfaceContext.Provider>
   );
 
@@ -125,8 +143,8 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
         href={href}
         id={domId}
         aria-label={ariaLabel}
-        className={sharedClassName}
-        style={mergedStyle}
+        className={layoutClassName}
+        style={layoutStyle}
       >
         {innerContent}
       </Link>
@@ -142,8 +160,8 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
         rel="noopener noreferrer"
         id={domId}
         aria-label={ariaLabel}
-        className={sharedClassName}
-        style={mergedStyle}
+        className={layoutClassName}
+        style={layoutStyle}
       >
         {innerContent}
       </a>
@@ -154,8 +172,8 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
     <article
       ref={cardRef as React.Ref<HTMLElement>}
       id={domId}
-      className={sharedClassName}
-      style={mergedStyle}
+      className={layoutClassName}
+      style={layoutStyle}
       aria-label={ariaLabel}
     >
       {innerContent}
@@ -266,22 +284,24 @@ const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   return (
     <WorkCardShell
       href="/usthing"
-      className="flex aspect-[255/292] items-center justify-center p-2xs md:p-xs xl:p-sm"
+      className="aspect-[255/292]"
       ariaLabel="Open USThing case study"
       hoverTitle="USThing / App Feature"
       style={{ background: 'var(--gradient-usthing-app)' }}
       reveal={reveal}
       delayMs={delayMs}
     >
-      <Image
-        src="/images/optimized/Other/usthing-preview.png"
-        alt=""
-        width={633}
-        height={1314}
-        className="pointer-events-none h-auto max-h-[90%] w-[72%] select-none object-contain md:max-h-[86%] md:w-[62%] xl:max-h-[82%] xl:w-[55%]"
-        sizes="(max-width: 768px) 36vw, (max-width: 1279px) 32vw, 190px"
-        priority={false}
-      />
+      <div className="flex h-full w-full items-center justify-center p-2xs md:p-xs xl:p-sm">
+        <Image
+          src="/images/optimized/Other/usthing-preview.png"
+          alt=""
+          width={633}
+          height={1314}
+          className="pointer-events-none h-auto max-h-[90%] w-[72%] select-none object-contain md:max-h-[86%] md:w-[62%] xl:max-h-[82%] xl:w-[55%]"
+          sizes="(max-width: 768px) 36vw, (max-width: 1279px) 32vw, 190px"
+          priority={false}
+        />
+      </div>
     </WorkCardShell>
   );
 };
@@ -306,31 +326,22 @@ const WorkColumns: React.FC<{ visible: boolean }> = ({ visible }) => {
 };
 
 const PrettifyMinervaCardContent: React.FC = () => {
-  const { isPointerWithin } = useHoverSurface();
-
   return (
     <>
+      {/* Nested like USThing: padded inset, clipped by the scaling surface radius. */}
       <div
-        aria-hidden
-        className={[
-          'pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-[390ms] ease-move',
-          isPointerWithin ? 'opacity-100' : 'opacity-0',
-          'group-focus-visible:opacity-100',
-          'motion-reduce:transition-none',
-        ].join(' ')}
-        style={{ background: 'var(--gradient-prettify-minerva-showcase-hover)' }}
-      />
-      <div
-        className="absolute left-[var(--spacing-prettify-minerva-showcase-offset)] top-[var(--spacing-prettify-minerva-showcase-offset)] z-[2] w-full rounded-tl-[6px] shadow-prettify-minerva-showcase-frame"
+        className="absolute inset-0 z-[2] p-[var(--spacing-prettify-minerva-showcase-offset)] pb-0 pr-0"
         aria-hidden
       >
-        <div className="overflow-hidden rounded-tl-[6px]">
+        <div
+          className="relative h-full w-full overflow-hidden rounded-tl-[6px] shadow-prettify-minerva-showcase-frame"
+          style={{ backgroundColor: 'var(--color-prettify-minerva-chrome)' }}
+        >
           <Image
             src="/images/optimized/prettify-minerva/minerva-preview.png"
             alt=""
-            width={1054}
-            height={908}
-            className="pointer-events-none block h-auto w-full max-w-none select-none"
+            fill
+            className="pointer-events-none select-none object-cover object-left-top"
             sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
             priority={false}
             unoptimized
