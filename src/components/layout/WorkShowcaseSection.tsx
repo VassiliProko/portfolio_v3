@@ -5,10 +5,6 @@ import Image from 'next/image';
 import React from 'react';
 import { useReducedMotion } from 'motion/react';
 import { HoverMetaPill, HoverSurfaceContext, useHoverSurface, usePointerWithinElement } from '@/src/components/ui/HoverMetaPill';
-import {
-  HOME_INTRO_SUBTITLE_LINK_FOCUS_CLASS,
-  HOME_INTRO_SUBTITLE_PILL_CLASS,
-} from '@/src/components/ui/homeIntroMotion';
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
 import { ShowcaseRivePreview } from '@/src/components/ui/ShowcaseRivePreview';
 import { cn } from '@/src/utils/cn';
@@ -32,7 +28,6 @@ type WorkShowcaseSectionProps = {
 type ShowcaseColumnCount = 2 | 3;
 type ShowcaseCardKey =
   | 'prettify-minerva'
-  | 'cool-idea'
   | 'dojo-icons'
   | 'usthing'
   | 'mcss'
@@ -175,17 +170,19 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
   return (
     <WorkCardShell
       href="/mcss"
-      className="p-sm"
+      className="relative aspect-[1352/909]"
       ariaLabel="Open MCSS case study"
-      style={{ background: 'var(--gradient-mcss)' }}
       reveal={reveal}
       delayMs={delayMs}
-      hoverTitle="Cultural Website"
+      hoverTitle="Website & Graphics"
     >
-      <ShowcaseLoopingVideo
-        src="/other/mcss_video.webm"
-        className="block w-full rounded-md aspect-[1908/1080] object-contain"
-        ariaLabel="MCSS featured case study video"
+      <Image
+        src="/images/optimized/home/mcss-preview.jpg"
+        alt=""
+        fill
+        className="object-cover"
+        sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
+        priority={false}
       />
     </WorkCardShell>
   );
@@ -269,31 +266,22 @@ const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   return (
     <WorkCardShell
       href="/usthing"
-      className="p-sm flex flex-col items-center"
+      className="flex aspect-[255/292] items-center justify-center p-2xs md:p-xs xl:p-sm"
       ariaLabel="Open USThing case study"
       hoverTitle="USThing / App Feature"
       style={{ background: 'var(--gradient-usthing-app)' }}
       reveal={reveal}
       delayMs={delayMs}
     >
-      <div className="relative w-full max-w-[340px]">
-        <div className="absolute left-[7.1%] right-[7.1%] top-[6%] bottom-[5.7%] overflow-hidden rounded-[clamp(10px,9%,26px)]">
-          <ShowcaseLoopingVideo
-            src="/other/grade_distribution_showcase_short.webm"
-            className="pointer-events-none absolute top-0 w-[186%] h-auto"
-            ariaLabel="Grade Distribution mobile app preview"
-          />
-        </div>
-        <Image
-          src="/images/optimized/Other/iphone_case.webp"
-          alt=""
-          width={281}
-          height={584}
-          className="pointer-events-none select-none h-auto w-full object-contain scale-[.92]"
-          sizes="(max-width: 768px) 45vw, (max-width: 1279px) 50vw, 340px"
-          priority={false}
-        />
-      </div>
+      <Image
+        src="/images/optimized/Other/usthing-preview.png"
+        alt=""
+        width={633}
+        height={1314}
+        className="pointer-events-none h-auto max-h-[90%] w-[72%] select-none object-contain md:max-h-[86%] md:w-[62%] xl:max-h-[82%] xl:w-[55%]"
+        sizes="(max-width: 768px) 36vw, (max-width: 1279px) 32vw, 190px"
+        priority={false}
+      />
     </WorkCardShell>
   );
 };
@@ -372,44 +360,6 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
   );
 };
 
-const CoolIdeaCard: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
-  reveal = true,
-  delayMs = 0,
-}) => {
-  return (
-    <WorkCardShell
-      className="aspect-square"
-      ariaLabel="Have a cool idea? Get in touch via email"
-      style={{ background: 'var(--gradient-showcase-cool-idea)' }}
-      reveal={reveal}
-      delayMs={delayMs}
-      hideHoverPills
-    >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden motion-reduce:opacity-80"
-      >
-        <div className="showcase-cool-idea-glow absolute left-1/2 top-1/2 size-full -translate-x-1/2 -translate-y-1/2 rounded-full" />
-      </div>
-      <div className="relative z-[1] flex h-full flex-col items-center justify-center gap-4 p-sm text-center">
-        <p className="font-sans text-xl font-medium leading-tight text-text">
-          have a cool idea?
-        </p>
-        <a
-          href="mailto:vassiligb12@gmail.com"
-          className={cn(
-            HOME_INTRO_SUBTITLE_PILL_CLASS,
-            HOME_INTRO_SUBTITLE_LINK_FOCUS_CLASS,
-            'font-sans text-xl font-medium text-text-muted',
-          )}
-        >
-          Email Me
-        </a>
-      </div>
-    </WorkCardShell>
-  );
-};
-
 /**
  * Showcase card order and reveal timing.
  * - `priority`: reveal stagger ordering reference (see `delayMs`).
@@ -424,38 +374,32 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     render: (props) => <PrettifyMinervaFeaturedCaseStudy {...props} />,
   },
   {
-    key: 'cool-idea',
-    priority: 1,
-    delayMs: 50,
-    render: (props) => <CoolIdeaCard {...props} />,
-  },
-  {
     key: 'dojo-icons',
-    priority: 2,
+    priority: 1,
     delayMs: 100,
     render: (props) => <DojoIconsCaseStudy {...props} />,
   },
   {
     key: 'usthing',
-    priority: 3,
+    priority: 2,
     delayMs: 200,
     render: (props) => <UsthingCaseStudy {...props} />,
   },
   {
     key: 'mcss',
-    priority: 4,
+    priority: 3,
     delayMs: 300,
     render: (props) => <McssFeaturedCaseStudy {...props} />,
   },
   {
     key: 'oneprep-pro-trial',
-    priority: 5,
+    priority: 4,
     delayMs: 400,
     render: (props) => <OnePrepProTrialCaseStudy {...props} />,
   },
   {
     key: 'visual-explorations',
-    priority: 6,
+    priority: 5,
     delayMs: 450,
     render: (props) => <VisualExplorationsCaseStudy {...props} />,
   },
@@ -464,11 +408,11 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 /** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
-    ['prettify-minerva', 'usthing', 'cool-idea'],
+    ['prettify-minerva', 'usthing'],
     ['dojo-icons', 'mcss', 'oneprep-pro-trial', 'visual-explorations'],
   ],
   3: [
-    ['prettify-minerva', 'visual-explorations', 'cool-idea'],
+    ['prettify-minerva', 'visual-explorations'],
     ['dojo-icons', 'mcss'],
     ['usthing', 'oneprep-pro-trial'],
   ],

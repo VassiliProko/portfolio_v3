@@ -61,7 +61,7 @@ export default function MCSSCaseStudyPage() {
   return (
     <CaseStudyLayout
       title="McGill Chinese Students' Society"
-      subtitle="Cultural Website"
+      subtitle="Website & Graphics"
       heroVideoSrc="/other/mcss_video.webm"
       heroVideoTitle="MCSS website preview video"
       heroMediaStyle={{ background: 'var(--gradient-mcss)' }}
