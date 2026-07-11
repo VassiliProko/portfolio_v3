@@ -7,6 +7,7 @@ import { useReducedMotion } from 'motion/react';
 import { HoverMetaPill, HoverSurfaceContext, usePointerWithinElement } from '@/src/components/ui/HoverMetaPill';
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
 import { ShowcaseRivePreview } from '@/src/components/ui/ShowcaseRivePreview';
+import { getPopdownRevealProps } from '@/src/components/ui/PopdownReveal';
 import { cn } from '@/src/utils/cn';
 
 type WorkCardShellProps = {
@@ -21,9 +22,16 @@ type WorkCardShellProps = {
   reveal?: boolean;
   delayMs?: number;
   hideHoverPills?: boolean;
+  /**
+   * When false, the surface is in-flow so padded media can define height
+   * (illustration cards). Default true keeps absolute fill for aspect-ratio cards.
+   */
+  fillSurface?: boolean;
 };
 type WorkShowcaseSectionProps = {
   visible?: boolean;
+  /** Animate the whole grid once (return home visit) instead of staggering cards */
+  unifiedReveal?: boolean;
 };
 type ShowcaseColumnCount = 2 | 3;
 type ShowcaseCardKey =
@@ -32,7 +40,9 @@ type ShowcaseCardKey =
   | 'usthing'
   | 'mcss'
   | 'oneprep-pro-trial'
-  | 'visual-explorations';
+  | 'visual-explorations'
+  | 'discord-snowsgiving'
+  | 'yinlin';
 type ShowcaseCardProps = { reveal?: boolean; delayMs?: number };
 type ShowcaseCardConfig = {
   key: ShowcaseCardKey;
@@ -85,6 +95,7 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   reveal = true,
   delayMs = 0,
   hideHoverPills = false,
+  fillSurface = true,
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const { ref: cardRef, isPointerWithin, localPointer } = usePointerWithinElement<HTMLElement>();
@@ -107,9 +118,10 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
     domId === 'play' && 'scroll-mt-16 md:scroll-mt-20',
     className,
   );
-  const hasCustomSurfaceBackground = Boolean(style?.background);
+  const hasCustomSurfaceBackground = Boolean(style?.background || style?.backgroundColor);
   const surfaceClassName = cn(
-    'absolute inset-0 overflow-hidden rounded-lg',
+    'overflow-hidden rounded-lg',
+    fillSurface ? 'absolute inset-0' : 'relative w-full',
     !hasCustomSurfaceBackground && 'bg-surface-dark-1',
     isLinked &&
       !prefersReducedMotion &&
@@ -216,7 +228,7 @@ const DojoIconsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       ariaLabel="Dojo Icons project preview"
       reveal={reveal}
       delayMs={delayMs}
-      hoverTitle="Dojo / Icons"
+      hoverTitle="RevisionDojo Icons"
     >
       <ShowcaseLoopingVideo
         sources={[
@@ -242,7 +254,7 @@ const OnePrepProTrialCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }>
       ariaLabel="OnePrep Pro Trial animation preview"
       reveal={reveal}
       delayMs={delayMs}
-      hoverTitle="OnePrep / Animation"
+      hoverTitle="OnePrep Animation"
     >
       <ShowcaseRivePreview
         riveSrc="/other/pro_trial_unlock.riv"
@@ -263,7 +275,7 @@ const VisualExplorationsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
       ariaLabel="Visual Explorations preview"
       reveal={reveal}
       delayMs={delayMs}
-      hoverTitle="Visual Explorations"
+      hoverTitle="A Cute Heart Animation"
     >
       <ShowcaseLoopingVideo
         sources={[
@@ -286,7 +298,7 @@ const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       href="/usthing"
       className="aspect-[255/292]"
       ariaLabel="Open USThing case study"
-      hoverTitle="USThing / App Feature"
+      hoverTitle="USThing App Feature"
       style={{ background: 'var(--gradient-usthing-app)' }}
       reveal={reveal}
       delayMs={delayMs}
@@ -364,17 +376,89 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
       style={{ background: 'var(--gradient-prettify-minerva-showcase)' }}
       reveal={reveal}
       delayMs={delayMs}
-      hoverTitle="Prettify Minerva / Browser Extension"
+      hoverTitle="Prettify Minerva ∙ Browser Extension"
     >
       <PrettifyMinervaCardContent />
     </WorkCardShell>
   );
 };
 
+type IllustrationShowcaseCardProps = {
+  reveal?: boolean;
+  delayMs?: number;
+  src: string;
+  ariaLabel: string;
+  hoverTitle: string;
+  background: string;
+};
+
+/** Padded 16:9 illustration preview on a project gradient surface. */
+const IllustrationShowcaseCard: React.FC<IllustrationShowcaseCardProps> = ({
+  reveal = true,
+  delayMs = 0,
+  src,
+  ariaLabel,
+  hoverTitle,
+  background,
+}) => {
+  return (
+    <WorkCardShell
+      className="relative"
+      ariaLabel={ariaLabel}
+      hoverTitle={hoverTitle}
+      reveal={reveal}
+      delayMs={delayMs}
+      fillSurface={false}
+      style={{ background }}
+    >
+      <div className="box-border flex w-full items-center justify-center p-showcase-illustration-sm sm:p-showcase-illustration">
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded">
+          <Image
+            src={src}
+            alt=""
+            fill
+            className="pointer-events-none select-none object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
+            priority={false}
+          />
+        </div>
+      </div>
+    </WorkCardShell>
+  );
+};
+
+const DiscordSnowsgivingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => (
+  <IllustrationShowcaseCard
+    reveal={reveal}
+    delayMs={delayMs}
+    src="/images/optimized/home/discord-snowsgiving-preview.jpg"
+    ariaLabel="Discord Snowsgiving illustration preview"
+    hoverTitle="Discord Snowsgiving"
+    background="var(--gradient-discord-snowsgiving-showcase)"
+  />
+);
+
+const YinlinIllustrationCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => (
+  <IllustrationShowcaseCard
+    reveal={reveal}
+    delayMs={delayMs}
+    src="/images/optimized/home/yinlin-preview.jpg"
+    ariaLabel="Yinlin illustration preview"
+    hoverTitle="Yinlin Illustration"
+    background="var(--gradient-yinlin-showcase)"
+  />
+);
+
 /**
  * Showcase card order and reveal timing.
  * - `priority`: reveal stagger ordering reference (see `delayMs`).
- * - `delayMs`: entrance animation stagger.
+ * - `delayMs`: entrance animation stagger (50% faster than original 0–450ms).
  * - Column stack order: card order in `SHOWCASE_COLUMN_KEYS` (top → bottom).
  */
 const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
@@ -385,33 +469,45 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     render: (props) => <PrettifyMinervaFeaturedCaseStudy {...props} />,
   },
   {
-    key: 'dojo-icons',
+    key: 'discord-snowsgiving',
     priority: 1,
-    delayMs: 100,
+    delayMs: 25,
+    render: (props) => <DiscordSnowsgivingCaseStudy {...props} />,
+  },
+  {
+    key: 'yinlin',
+    priority: 2,
+    delayMs: 45,
+    render: (props) => <YinlinIllustrationCaseStudy {...props} />,
+  },
+  {
+    key: 'dojo-icons',
+    priority: 3,
+    delayMs: 50,
     render: (props) => <DojoIconsCaseStudy {...props} />,
   },
   {
     key: 'usthing',
-    priority: 2,
-    delayMs: 200,
+    priority: 4,
+    delayMs: 100,
     render: (props) => <UsthingCaseStudy {...props} />,
   },
   {
     key: 'mcss',
-    priority: 3,
-    delayMs: 300,
+    priority: 5,
+    delayMs: 150,
     render: (props) => <McssFeaturedCaseStudy {...props} />,
   },
   {
     key: 'oneprep-pro-trial',
-    priority: 4,
-    delayMs: 400,
+    priority: 6,
+    delayMs: 200,
     render: (props) => <OnePrepProTrialCaseStudy {...props} />,
   },
   {
     key: 'visual-explorations',
-    priority: 5,
-    delayMs: 450,
+    priority: 7,
+    delayMs: 225,
     render: (props) => <VisualExplorationsCaseStudy {...props} />,
   },
 ];
@@ -419,12 +515,12 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 /** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
-    ['prettify-minerva', 'usthing'],
+    ['prettify-minerva', 'discord-snowsgiving', 'yinlin', 'usthing'],
     ['dojo-icons', 'mcss', 'oneprep-pro-trial', 'visual-explorations'],
   ],
   3: [
-    ['prettify-minerva', 'visual-explorations'],
-    ['dojo-icons', 'mcss'],
+    ['prettify-minerva', 'discord-snowsgiving', 'yinlin'],
+    ['dojo-icons', 'mcss', 'visual-explorations'],
     ['usthing', 'oneprep-pro-trial'],
   ],
 };
@@ -439,7 +535,24 @@ const getShowcaseColumnGroups = (columnCount: ShowcaseColumnCount) => {
   );
 };
 
-export const WorkShowcaseSection: React.FC<WorkShowcaseSectionProps> = ({ visible = false }) => {
+export const WorkShowcaseSection: React.FC<WorkShowcaseSectionProps> = ({
+  visible = false,
+  unifiedReveal = false,
+}) => {
+  const prefersReducedMotion = useReducedMotion();
+
+  if (unifiedReveal) {
+    const revealProps = getPopdownRevealProps(visible, 0, prefersReducedMotion);
+
+    return (
+      <section className="w-full pt-2 pb-12 md:pt-4 md:pb-20" aria-label="WorkShowcase">
+        <div className={revealProps.className} style={revealProps.style}>
+          <WorkColumns visible />
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="w-full pt-2 pb-12 md:pt-4 md:pb-20" aria-label="WorkShowcase">
       <WorkColumns visible={visible} />

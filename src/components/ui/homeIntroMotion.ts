@@ -1,8 +1,12 @@
 /** Shared enter motion for home intro secondary content (subtitle + highlight reel) */
 export const HOME_INTRO_SECONDARY_ENTER_DURATION_S = 2.4;
 export const HOME_INTRO_SECONDARY_ENTER_EASE = [0, 0.9, 0.1, 1] as const;
-/** Start subtitle + highlight reel before BlurText wave fully finishes */
-export const HOME_INTRO_SECONDARY_ENTER_EARLY_MS = 500;
+/** Start subtitle + highlight reel before BlurText wave fully finishes (scaled with 40% faster wave) */
+export const HOME_INTRO_SECONDARY_ENTER_EARLY_MS = 300;
+
+/** BlurText wave — 40% faster than original 55ms / 0.65s */
+export const HOME_INTRO_WAVE_DELAY_MS = 33;
+export const HOME_INTRO_WAVE_DURATION_S = 0.39;
 
 export const HOME_INTRO_SUBTITLE_ENTER_OFFSET_PX = 28;
 

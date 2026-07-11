@@ -4,12 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/src/utils/cn';
-import {
-  POPDOWN_REVEAL_STAGGER_MS,
-  PopdownReveal,
-  ScrollPopdownReveal,
-  ScrollRevealGroup,
-} from '@/src/components/ui/PopdownReveal';
+import { ScrollPopdownReveal } from '@/src/components/ui/PopdownReveal';
 
 const ABOUT_HERO_IMAGE = '/images/optimized/about/about.jpg';
 const RESUME_PDF_HREF =
@@ -134,30 +129,15 @@ const AboutRoleRow: React.FC<AboutRoleRowProps> = ({
 type AboutRoleListProps = {
   heading: string;
   items: AboutRoleEntry[];
-  revealed: boolean;
-  baseDelayMs: number;
 };
 
-const AboutRoleList: React.FC<AboutRoleListProps> = ({
-  heading,
-  items,
-  revealed,
-  baseDelayMs,
-}) => {
+const AboutRoleList: React.FC<AboutRoleListProps> = ({ heading, items }) => {
   return (
     <div className="flex flex-col gap-about-role-section">
-      <PopdownReveal reveal={revealed} delayMs={baseDelayMs}>
-        <h3 className="font-sans text-base font-medium text-text">{heading}</h3>
-      </PopdownReveal>
+      <h3 className="font-sans text-base font-medium text-text">{heading}</h3>
       <div className="flex flex-col gap-md">
-        {items.map((item, index) => (
-          <PopdownReveal
-            key={item.title}
-            reveal={revealed}
-            delayMs={baseDelayMs + POPDOWN_REVEAL_STAGGER_MS * (index + 1)}
-          >
-            <AboutRoleRow {...item} />
-          </PopdownReveal>
+        {items.map((item) => (
+          <AboutRoleRow key={item.title} {...item} />
         ))}
       </div>
     </div>
@@ -213,69 +193,45 @@ export const AboutSection: React.FC = () => {
           </div>
         </ScrollPopdownReveal>
 
-        <ScrollRevealGroup className="grid grid-cols-2 gap-2xs md:grid-cols-3">
-          {(revealed) =>
-            SHOWCASE_IMAGES.map((image, index) => (
-              <PopdownReveal
-                key={image.src}
-                reveal={revealed}
-                delayMs={POPDOWN_REVEAL_STAGGER_MS * index}
-                className="relative aspect-[335/200] overflow-hidden rounded-sm bg-surface-2"
-              >
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 50vw, 245px"
-                />
-              </PopdownReveal>
-            ))
-          }
-        </ScrollRevealGroup>
+        <ScrollPopdownReveal delayMs={0} className="grid grid-cols-2 gap-2xs md:grid-cols-3">
+          {SHOWCASE_IMAGES.map((image) => (
+            <div
+              key={image.src}
+              className="relative aspect-[335/200] overflow-hidden rounded-sm bg-surface-2"
+            >
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 50vw, 245px"
+              />
+            </div>
+          ))}
+        </ScrollPopdownReveal>
 
-        <ScrollRevealGroup className="flex flex-col gap-xl md:gap-2xl">
-          {(revealed) => {
-            const communityBaseDelayMs =
-              POPDOWN_REVEAL_STAGGER_MS * (EXPERIENCES.length + 2);
-            const resumeDelayMs =
-              communityBaseDelayMs + POPDOWN_REVEAL_STAGGER_MS * (COMMUNITY_ROLES.length + 1);
+        <ScrollPopdownReveal delayMs={0}>
+          <AboutRoleList heading="Experience" items={EXPERIENCES} />
+        </ScrollPopdownReveal>
 
-            return (
-              <>
-                <AboutRoleList
-                  heading="Experience"
-                  items={EXPERIENCES}
-                  revealed={revealed}
-                  baseDelayMs={0}
-                />
-                <AboutRoleList
-                  heading="Community"
-                  items={COMMUNITY_ROLES}
-                  revealed={revealed}
-                  baseDelayMs={communityBaseDelayMs}
-                />
-                <PopdownReveal reveal={revealed} delayMs={resumeDelayMs}>
-                  <a
-                    href={RESUME_PDF_HREF}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={resumeButtonClass}
-                    aria-label="Open PDF resume in a new tab"
-                  >
-                    PDF Resume
-                    <span className={resumeButtonIconSlotClass} aria-hidden>
-                      <ArrowUpRight
-                        className={resumeButtonIconClass}
-                        strokeWidth={2}
-                      />
-                    </span>
-                  </a>
-                </PopdownReveal>
-              </>
-            );
-          }}
-        </ScrollRevealGroup>
+        <ScrollPopdownReveal delayMs={0}>
+          <AboutRoleList heading="Community" items={COMMUNITY_ROLES} />
+        </ScrollPopdownReveal>
+
+        <ScrollPopdownReveal delayMs={0}>
+          <a
+            href={RESUME_PDF_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={resumeButtonClass}
+            aria-label="Open PDF resume in a new tab"
+          >
+            PDF Resume
+            <span className={resumeButtonIconSlotClass} aria-hidden>
+              <ArrowUpRight className={resumeButtonIconClass} strokeWidth={2} />
+            </span>
+          </a>
+        </ScrollPopdownReveal>
       </div>
     </section>
   );

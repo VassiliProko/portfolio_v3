@@ -81,6 +81,10 @@
   /* Matches browser chrome in the preview — fills subpixel gaps at rounded-tl */
   --color-prettify-minerva-chrome: #e8e8e8;
 
+  /* Work showcase: illustration cards */
+  --gradient-discord-snowsgiving-showcase: linear-gradient(180deg, #DCECF0 0%, #EEF2F3 22.39%, #C7EEF2 70.08%, #CAF0F4 100%);
+  --gradient-yinlin-showcase: linear-gradient(180deg, #F2B4FF 0%, #010C2B 100%);
+
   /* Home navbar name + intro highlights */
   --gradient-name-text: linear-gradient(90deg, var(--color-primary-base) 0%, var(--color-accent-base) 100%);
   --color-intro-munching: #ffa303;
@@ -113,6 +117,8 @@
   --spacing-lg: 30px;
   --spacing-about-role-icon: 12px;
   --spacing-about-role-section: 24px;
+  --spacing-showcase-illustration: 32px;
+  --spacing-showcase-illustration-sm: 24px;
   --spacing-xl: 40px;
   --spacing-2xl: 60px;
   --spacing-3xl: 80px;
