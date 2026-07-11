@@ -201,7 +201,7 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
         {/* Upper section: console-style card with background image — color on hover over this element only */}
         <div
           ref={imageCardRef}
-          className="group relative overflow-hidden rounded-tl-md rounded-tr-md min-h-[360px] md:min-h-[440px] bg-surface-dark-1"
+          className="group relative overflow-hidden rounded-tl-md rounded-tr-md min-h-[432px] md:min-h-[528px] bg-surface-dark-1"
         >
           {/* Background image: grayscale by default, color on hover over this card */}
           <div
@@ -235,7 +235,7 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
           {/* Console text content — scroll-triggered line-by-line reveal */}
           <div
             ref={consoleRef}
-            className="relative z-10 flex flex-col justify-between h-full min-h-[360px] md:min-h-[440px] p-5 md:p-6"
+            className="relative z-10 flex flex-col justify-between h-full min-h-[432px] md:min-h-[528px] p-5 md:p-6"
           >
             <pre className="font-mono text-sm md:text-base text-footer-console-text leading-relaxed flex flex-col gap-0 min-w-0 whitespace-pre-wrap break-words">
               {CONSOLE_LINES.map((line, index) => (
