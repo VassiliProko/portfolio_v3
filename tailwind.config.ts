@@ -142,7 +142,11 @@ const config: Config = {
   		borderRadius: {
   			sm: 'calc(var(--radius) - 4px)',
   			md: 'calc(var(--radius) - 2px)',
-  			lg: 'var(--radius)'
+  			lg: 'var(--radius)',
+  			'image-preview': 'var(--radius-image-preview)',
+  		},
+  		minWidth: {
+  			'image-preview-caption': 'var(--size-image-preview-caption-min)',
   		},
   		transitionTimingFunction: {
   			snap: 'cubic-bezier(0,.9,.1,1)',

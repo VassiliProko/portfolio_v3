@@ -5,6 +5,10 @@ import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/src/utils/cn';
 import { ScrollPopdownReveal } from '@/src/components/ui/PopdownReveal';
+import {
+  ImagePreview,
+  type ImagePreviewItem,
+} from '@/src/components/ui/ImagePreview';
 
 const ABOUT_HERO_IMAGE = '/images/optimized/about/about.jpg';
 const RESUME_PDF_HREF =
@@ -36,14 +40,72 @@ const resumeButtonIconClass = cn(
   'motion-reduce:translate-x-0 motion-reduce:scale-100 motion-reduce:opacity-100',
 );
 
-const SHOWCASE_IMAGES = [
-  { src: '/images/optimized/about/dojo.jpg', alt: 'Group photo at colorful outdoor stairs' },
-  { src: '/images/optimized/about/usthing.jpg', alt: 'USThing team group photo indoors' },
-  { src: '/images/optimized/about/hk.jpg', alt: 'Portrait with Hong Kong skyline' },
-  { src: '/images/optimized/about/mcss.jpg', alt: 'MCSS team in front of a stone building' },
-  { src: '/images/optimized/about/dragonboat.jpg', alt: 'Dragon boat team on the water' },
-  { src: '/images/optimized/about/mcgill.jpg', alt: 'McGill campus street in autumn' },
-] as const;
+/**
+ * About page gallery lightbox items — edit name / description here.
+ * All use `captionTone: 'on-dark'` so chrome stays white over the photos.
+ */
+const SHOWCASE_IMAGES: ImagePreviewItem[] = [
+  {
+    src: '/images/optimized/about/dojo.jpg',
+    name: 'RevisionDojo',
+    description:
+      'Kuala Lumpur, Malaysia Offsite with the General Learning team',
+    alt: 'Group photo at colorful outdoor stairs',
+    width: 992,
+    height: 592,
+    captionTone: 'on-dark',
+  },
+  {
+    src: '/images/optimized/about/usthing.jpg',
+    name: 'USThing',
+    description:
+      'USThing team photo after eating McDonalds',
+    alt: 'USThing team group photo indoors',
+    width: 992,
+    height: 592,
+    captionTone: 'on-dark',
+  },
+  {
+    src: '/images/optimized/about/hk.jpg',
+    name: 'Hong Kong',
+    description:
+      'Living life in Hong Kong',
+    alt: 'Portrait with Hong Kong skyline',
+    width: 992,
+    height: 592,
+    captionTone: 'on-dark',
+  },
+  {
+    src: '/images/optimized/about/mcss.jpg',
+    name: 'MCSS',
+    description:
+      "A super cool uni society I've been a part of",
+    alt: 'MCSS team in front of a stone building',
+    width: 992,
+    height: 592,
+    captionTone: 'on-dark',
+  },
+  {
+    src: '/images/optimized/about/dragonboat.jpg',
+    name: 'Dragon boat',
+    description:
+      'Hong Kong International Dragon Boat Festival',
+    alt: 'Dragon boat team on the water',
+    width: 992,
+    height: 592,
+    captionTone: 'on-dark',
+  },
+  {
+    src: '/images/optimized/about/mcgill.jpg',
+    name: 'McGill',
+    description:
+      'McGill campus in the fall - so prettyyy',
+    alt: 'McGill campus street in autumn',
+    width: 992,
+    height: 592,
+    captionTone: 'on-dark',
+  },
+];
 
 interface AboutRoleEntry {
   title: string;
@@ -145,6 +207,8 @@ const AboutRoleList: React.FC<AboutRoleListProps> = ({ heading, items }) => {
 };
 
 export const AboutSection: React.FC = () => {
+  const [previewItem, setPreviewItem] = React.useState<ImagePreviewItem | null>(null);
+
   return (
     <section
       className="w-full py-12 md:py-20"
@@ -195,18 +259,24 @@ export const AboutSection: React.FC = () => {
 
         <ScrollPopdownReveal delayMs={0} className="grid grid-cols-2 gap-2xs md:grid-cols-3">
           {SHOWCASE_IMAGES.map((image) => (
-            <div
+            <button
               key={image.src}
-              className="relative aspect-[335/200] overflow-hidden rounded-sm bg-surface-2"
+              type="button"
+              onClick={() => setPreviewItem(image)}
+              aria-label={`Open ${image.name} image preview`}
+              className={cn(
+                'relative aspect-[335/200] cursor-zoom-in overflow-hidden rounded-sm border-0 bg-surface-2 p-0',
+                'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
+              )}
             >
               <Image
                 src={image.src}
-                alt={image.alt}
+                alt={image.alt ?? image.name}
                 fill
-                className="object-cover"
+                className="pointer-events-none object-cover"
                 sizes="(max-width: 768px) 50vw, 245px"
               />
-            </div>
+            </button>
           ))}
         </ScrollPopdownReveal>
 
@@ -233,6 +303,12 @@ export const AboutSection: React.FC = () => {
           </a>
         </ScrollPopdownReveal>
       </div>
+
+      <ImagePreview
+        item={previewItem}
+        open={Boolean(previewItem)}
+        onClose={() => setPreviewItem(null)}
+      />
     </section>
   );
 };

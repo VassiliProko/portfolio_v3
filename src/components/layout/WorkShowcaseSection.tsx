@@ -5,6 +5,10 @@ import Image from 'next/image';
 import React from 'react';
 import { useReducedMotion } from 'motion/react';
 import { HoverMetaPill, HoverSurfaceContext, usePointerWithinElement } from '@/src/components/ui/HoverMetaPill';
+import {
+  ImagePreview,
+  type ImagePreviewItem,
+} from '@/src/components/ui/ImagePreview';
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
 import { ShowcaseRivePreview } from '@/src/components/ui/ShowcaseRivePreview';
 import { getPopdownRevealProps } from '@/src/components/ui/PopdownReveal';
@@ -17,6 +21,8 @@ type WorkCardShellProps = {
   domId?: string;
   href?: string;
   externalHref?: string;
+  /** Opens a non-navigating action (e.g. image preview). Skips hover scale; uses zoom-in cursor. */
+  onActivate?: () => void;
   style?: React.CSSProperties;
   children: React.ReactNode;
   reveal?: boolean;
@@ -27,6 +33,25 @@ type WorkCardShellProps = {
    * (illustration cards). Default true keeps absolute fill for aspect-ratio cards.
    */
   fillSurface?: boolean;
+};
+
+const YINLIN_IMAGE_PREVIEW: ImagePreviewItem = {
+  src: '/images/optimized/home/yinlin-preview.jpg',
+  name: 'Yinlin Illustration',
+  description: [
+    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
+    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
+    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
+    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
+    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
+    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
+    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
+    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
+  ].join('\n'),
+  alt: 'Yinlin illustration',
+  width: 1186,
+  height: 661,
+  captionTone: 'on-dark',
 };
 type WorkShowcaseSectionProps = {
   visible?: boolean;
@@ -90,6 +115,7 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   domId,
   href,
   externalHref,
+  onActivate,
   style,
   children,
   reveal = true,
@@ -104,6 +130,7 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
     [isPointerWithin, localPointer],
   );
   const isLinked = Boolean(href || externalHref);
+  const isPreviewTrigger = Boolean(onActivate) && !isLinked;
   const revealClass = reveal
     ? 'opacity-100 translate-y-0 blur-0'
     : 'opacity-0 -translate-y-3 blur-[2px]';
@@ -114,6 +141,7 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   const layoutClassName = cn(
     'group relative w-full',
     'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
+    isPreviewTrigger && 'cursor-zoom-in',
     revealClass,
     domId === 'play' && 'scroll-mt-16 md:scroll-mt-20',
     className,
@@ -177,6 +205,22 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
       >
         {innerContent}
       </a>
+    );
+  }
+
+  if (onActivate) {
+    return (
+      <button
+        type="button"
+        ref={cardRef as React.Ref<HTMLButtonElement>}
+        id={domId}
+        aria-label={ariaLabel}
+        className={cn(layoutClassName, 'border-0 bg-transparent p-0 text-left')}
+        style={layoutStyle}
+        onClick={onActivate}
+      >
+        {innerContent}
+      </button>
     );
   }
 
@@ -441,19 +485,43 @@ const DiscordSnowsgivingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
   />
 );
 
+/** Full-bleed illustration — image fills the card at its native aspect ratio. */
 const YinlinIllustrationCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   reveal = true,
   delayMs = 0,
-}) => (
-  <IllustrationShowcaseCard
-    reveal={reveal}
-    delayMs={delayMs}
-    src="/images/optimized/home/yinlin-preview.jpg"
-    ariaLabel="Yinlin illustration preview"
-    hoverTitle="Yinlin Illustration"
-    background="var(--gradient-yinlin-showcase)"
-  />
-);
+}) => {
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+
+  return (
+    <>
+      <WorkCardShell
+        className="relative"
+        ariaLabel="Open Yinlin illustration preview"
+        hoverTitle="Yinlin Illustration"
+        reveal={reveal}
+        delayMs={delayMs}
+        fillSurface={false}
+        onActivate={() => setPreviewOpen(true)}
+      >
+        <div className="relative aspect-[16/9] w-full overflow-hidden">
+          <Image
+            src={YINLIN_IMAGE_PREVIEW.src}
+            alt=""
+            fill
+            className="pointer-events-none select-none object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
+            priority={false}
+          />
+        </div>
+      </WorkCardShell>
+      <ImagePreview
+        item={YINLIN_IMAGE_PREVIEW}
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+      />
+    </>
+  );
+};
 
 /**
  * Showcase card order and reveal timing.

@@ -83,7 +83,6 @@
 
   /* Work showcase: illustration cards */
   --gradient-discord-snowsgiving-showcase: linear-gradient(180deg, #DCECF0 0%, #EEF2F3 22.39%, #C7EEF2 70.08%, #CAF0F4 100%);
-  --gradient-yinlin-showcase: linear-gradient(180deg, #F2B4FF 0%, #010C2B 100%);
 
   /* Home navbar name + intro highlights */
   --gradient-name-text: linear-gradient(90deg, var(--color-primary-base) 0%, var(--color-accent-base) 100%);
@@ -99,6 +98,16 @@
   --color-border-divider: rgba(0, 0, 0, 0.06);
   --color-border-hover: rgba(0, 0, 0, 0.18);
   --color-border-focus: rgba(0, 0, 0, 0.24);
+
+  /* Image preview lightbox */
+  --radius-image-preview: 12px;
+  --size-image-preview-caption-min: 280px;
+  /* Title + first description line + caption top padding visible at scroll=0 */
+  --size-image-preview-caption-peek: 68px;
+  /* Opaque matte behind rounded art — prevents light page bleed in corner AA */
+  --color-image-preview-matte: #000000;
+  /* Title + one description line + pill padding visible at rest */
+  --spacing-image-preview-caption-peek: 88px;
 
   /* Compare image divider */
   --shadow-compare-divider: -6px 0 14px rgba(0, 0, 0, 0.18);
