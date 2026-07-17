@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useBackgroundSafeVideo } from '@/src/hooks/useBackgroundSafeVideo';
+import { playVideoSafely } from '@/src/utils/playVideoSafely';
 
 type ShowcaseLoopingVideoProps = {
   src?: string;
@@ -24,6 +26,8 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const useDelayedLoop = loopDelayMs > 0;
 
+  useBackgroundSafeVideo(videoRef, { enabled: true, shouldPlay: true });
+
   useEffect(() => {
     if (!useDelayedLoop) {
       return;
@@ -38,8 +42,11 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
 
     const restartAfterDelay = () => {
       loopTimeoutId = window.setTimeout(() => {
+        if (document.hidden) {
+          return;
+        }
         video.currentTime = 0;
-        void video.play();
+        void playVideoSafely(video);
       }, loopDelayMs);
     };
 
@@ -59,7 +66,7 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
       className={className}
       muted
       playsInline
-      autoPlay
+      autoPlay={false}
       loop={!useDelayedLoop}
       preload="auto"
       aria-label={ariaLabel}

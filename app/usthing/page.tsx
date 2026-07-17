@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { CASE_STUDY_BODY_CLASS } from '@/src/constants/caseStudy';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
+import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
 
 export const metadata: Metadata = {
   title: 'USThing',
@@ -22,13 +23,10 @@ const USTHING_HERO = (
   >
     <div className="relative w-[clamp(266px,95vw,302px)]">
       <div className="absolute bottom-[5.7%] left-[7.1%] right-[7.1%] top-[6%] overflow-hidden rounded-[clamp(10px,9%,26px)]">
-        <video
+        <BackgroundSafeVideo
           className="pointer-events-none absolute top-0 h-auto w-[186%]"
           src="/other/grade_distribution_showcase_short.webm"
-          autoPlay
-          muted
           loop
-          playsInline
           aria-label="Grade Distribution mobile app preview"
         />
       </div>

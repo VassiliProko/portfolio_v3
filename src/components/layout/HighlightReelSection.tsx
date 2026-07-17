@@ -5,6 +5,8 @@ import { motion, useReducedMotion } from 'motion/react';
 import Image from 'next/image';
 import { Pause, Play } from 'lucide-react';
 import { cn } from '@/src/utils/cn';
+import { useBackgroundSafeVideo } from '@/src/hooks/useBackgroundSafeVideo';
+import { playVideoSafely } from '@/src/utils/playVideoSafely';
 import {
   HOME_INTRO_HIGHLIGHT_REEL_ENTER_BLUR_PX,
   HOME_INTRO_HIGHLIGHT_REEL_ENTER_DURATION_S,
@@ -25,7 +27,14 @@ export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
   const loopTimeoutRef = useRef<number | undefined>(undefined);
+  const userPausedRef = useRef(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
+
+  useBackgroundSafeVideo(videoRef, {
+    enabled: !prefersReducedMotion,
+    shouldPlay: !prefersReducedMotion && !userPaused,
+  });
 
   const togglePlayback = useCallback(() => {
     const video = videoRef.current;
@@ -39,10 +48,14 @@ export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
       if (video.ended) {
         video.currentTime = 0;
       }
-      void video.play();
+      userPausedRef.current = false;
+      setUserPaused(false);
+      void playVideoSafely(video);
       return;
     }
 
+    userPausedRef.current = true;
+    setUserPaused(true);
     video.pause();
   }, []);
 
@@ -50,12 +63,12 @@ export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
     setIsPaused(true);
     loopTimeoutRef.current = window.setTimeout(() => {
       const video = videoRef.current;
-      if (!video) {
+      if (!video || document.hidden || userPausedRef.current) {
         return;
       }
 
       video.currentTime = 0;
-      void video.play();
+      void playVideoSafely(video);
     }, HIGHLIGHT_REEL_LOOP_DELAY_MS);
   }, []);
 
@@ -102,7 +115,7 @@ export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
           <div className="group relative aspect-video w-full overflow-hidden rounded-md bg-background shadow-highlight-reel-video-outer">
             <video
               ref={videoRef}
-              autoPlay={!prefersReducedMotion}
+              autoPlay={false}
               muted
               playsInline
               onPlay={() => setIsPaused(false)}

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { cn } from '@/src/utils/cn';
+import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
 import {
   POPDOWN_REVEAL_STAGGER_MS,
   PopdownReveal,
@@ -92,13 +93,10 @@ function CaseStudyHeroMedia({
       >
         <div className="w-full overflow-hidden rounded-lg">
           {heroVideoSrc ? (
-            <video
+            <BackgroundSafeVideo
               className="pointer-events-none block h-auto w-full"
               src={heroVideoSrc}
-              autoPlay
-              muted
               loop
-              playsInline
               aria-label={heroVideoTitle}
             />
           ) : (
