@@ -38,16 +38,7 @@ type WorkCardShellProps = {
 const YINLIN_IMAGE_PREVIEW: ImagePreviewItem = {
   src: '/images/optimized/home/yinlin-preview.jpg',
   name: 'Yinlin Illustration',
-  description: [
-    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
-    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
-    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
-    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
-    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
-    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
-    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
-    'xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx',
-  ].join('\n'),
+  description: 'Fanart of a Wuthering Waves character',
   alt: 'Yinlin illustration',
   width: 1186,
   height: 661,

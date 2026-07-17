@@ -101,13 +101,8 @@
 
   /* Image preview lightbox */
   --radius-image-preview: 12px;
-  --size-image-preview-caption-min: 280px;
-  /* Title + first description line + caption top padding visible at scroll=0 */
-  --size-image-preview-caption-peek: 68px;
   /* Opaque matte behind rounded art — prevents light page bleed in corner AA */
   --color-image-preview-matte: #000000;
-  /* Title + one description line + pill padding visible at rest */
-  --spacing-image-preview-caption-peek: 88px;
 
   /* Compare image divider */
   --shadow-compare-divider: -6px 0 14px rgba(0, 0, 0, 0.18);

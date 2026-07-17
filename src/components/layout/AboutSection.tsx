@@ -207,7 +207,7 @@ const AboutRoleList: React.FC<AboutRoleListProps> = ({ heading, items }) => {
 };
 
 export const AboutSection: React.FC = () => {
-  const [previewItem, setPreviewItem] = React.useState<ImagePreviewItem | null>(null);
+  const [previewIndex, setPreviewIndex] = React.useState<number | null>(null);
 
   return (
     <section
@@ -258,11 +258,11 @@ export const AboutSection: React.FC = () => {
         </ScrollPopdownReveal>
 
         <ScrollPopdownReveal delayMs={0} className="grid grid-cols-2 gap-2xs md:grid-cols-3">
-          {SHOWCASE_IMAGES.map((image) => (
+          {SHOWCASE_IMAGES.map((image, index) => (
             <button
               key={image.src}
               type="button"
-              onClick={() => setPreviewItem(image)}
+              onClick={() => setPreviewIndex(index)}
               aria-label={`Open ${image.name} image preview`}
               className={cn(
                 'relative aspect-[335/200] cursor-zoom-in overflow-hidden rounded-sm border-0 bg-surface-2 p-0',
@@ -305,9 +305,11 @@ export const AboutSection: React.FC = () => {
       </div>
 
       <ImagePreview
-        item={previewItem}
-        open={Boolean(previewItem)}
-        onClose={() => setPreviewItem(null)}
+        items={SHOWCASE_IMAGES}
+        activeIndex={previewIndex ?? 0}
+        onActiveIndexChange={setPreviewIndex}
+        open={previewIndex !== null}
+        onClose={() => setPreviewIndex(null)}
       />
     </section>
   );

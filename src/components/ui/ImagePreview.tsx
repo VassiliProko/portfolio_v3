@@ -23,7 +23,13 @@ export type ImagePreviewItem = {
 };
 
 type ImagePreviewProps = {
-  item: ImagePreviewItem | null;
+  /** Single-image mode (e.g. Yinlin). Ignored when `items` is provided. */
+  item?: ImagePreviewItem | null;
+  /** Gallery mode — enables dots + arrow-key navigation. */
+  items?: ImagePreviewItem[];
+  /** Controlled index into `items`. */
+  activeIndex?: number;
+  onActiveIndexChange?: (index: number) => void;
   open: boolean;
   onClose: () => void;
 };
@@ -33,24 +39,58 @@ const PREVIEW_INSET_PX = 40;
 /** Cap preview width on ultra-wide / 4K viewports. */
 const PREVIEW_MAX_WIDTH_PX = 2160;
 
+const slideEase = [0.22, 1, 0.36, 1] as const;
+
 /**
- * Full-screen image lightbox. Reuse anywhere by passing an `ImagePreviewItem`
- * and controlling `open` / `onClose` (e.g. from a zoom-cursor trigger).
- *
- * @example
- * const [item, setItem] = useState<ImagePreviewItem | null>(null);
- * <button type="button" className="cursor-zoom-in" onClick={() => setItem(meta)} />
- * <ImagePreview item={item} open={Boolean(item)} onClose={() => setItem(null)} />
+ * Full-screen image lightbox. Pass `items` + `activeIndex` for a gallery
+ * (dots + ←/→). Pass a single `item` for one-off previews.
  */
-export const ImagePreview: React.FC<ImagePreviewProps> = ({ item, open, onClose }) => {
+export const ImagePreview: React.FC<ImagePreviewProps> = ({
+  item = null,
+  items,
+  activeIndex = 0,
+  onActiveIndexChange,
+  open,
+  onClose,
+}) => {
   const prefersReducedMotion = useReducedMotion();
   const [mounted, setMounted] = React.useState(false);
+  const [direction, setDirection] = React.useState(0);
   const closeButtonRef = React.useRef<HTMLButtonElement>(null);
-  const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  const gallery = items && items.length > 0 ? items : null;
+  const isGallery = Boolean(gallery && gallery.length > 1);
+  const safeIndex = gallery
+    ? Math.min(Math.max(activeIndex, 0), gallery.length - 1)
+    : 0;
+  const activeItem = gallery ? gallery[safeIndex] : item;
+
+  const goToIndex = React.useCallback(
+    (nextIndex: number) => {
+      if (!gallery || !onActiveIndexChange) return;
+      const len = gallery.length;
+      const wrapped = ((nextIndex % len) + len) % len;
+      if (wrapped === safeIndex) return;
+      const forwardSteps = (wrapped - safeIndex + len) % len;
+      const backwardSteps = (safeIndex - wrapped + len) % len;
+      setDirection(forwardSteps <= backwardSteps ? 1 : -1);
+      onActiveIndexChange(wrapped);
+    },
+    [gallery, onActiveIndexChange, safeIndex],
+  );
 
   React.useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Focus close only when the lightbox opens — not on every gallery index change.
+  React.useEffect(() => {
+    if (!open) return;
+    const focusTimer = window.setTimeout(() => {
+      closeButtonRef.current?.focus();
+    }, 0);
+    return () => window.clearTimeout(focusTimer);
+  }, [open]);
 
   React.useEffect(() => {
     if (!open) return;
@@ -62,24 +102,25 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({ item, open, onClose 
       if (event.key === 'Escape') {
         event.preventDefault();
         onClose();
+        return;
+      }
+      if (!isGallery || !gallery) return;
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        goToIndex(safeIndex + 1);
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        goToIndex(safeIndex - 1);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
 
-    const focusTimer = window.setTimeout(() => {
-      closeButtonRef.current?.focus();
-    }, 0);
-
-    // Reset scroll so each open starts at title + first description line.
-    scrollRef.current?.scrollTo({ top: 0 });
-
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', handleKeyDown);
-      window.clearTimeout(focusTimer);
     };
-  }, [open, onClose]);
+  }, [open, onClose, isGallery, gallery, goToIndex, safeIndex]);
 
   if (!mounted) return null;
 
@@ -92,31 +133,29 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({ item, open, onClose 
   const backdropTransition = prefersReducedMotion
     ? { duration: 0 }
     : { duration: 0.28, ease: [0.4, 0, 0.2, 1] as const };
+  const slideTransition = prefersReducedMotion
+    ? { duration: 0 }
+    : { duration: 0.32, ease: slideEase };
 
-  const imageWidth = item?.width ?? 1200;
-  const imageHeight = item?.height ?? 675;
+  const imageWidth = activeItem?.width ?? 1200;
+  const imageHeight = activeItem?.height ?? 675;
   const aspect = imageWidth / imageHeight;
-  const onDark = item?.captionTone === 'on-dark';
-
-  /** Always-light chrome for dark artwork — ignores theme inverted tokens. */
+  const onDark = activeItem?.captionTone === 'on-dark';
   const chromeTextClass = onDark ? 'text-footer-console-text' : 'text-text';
 
-  const frameMaxHeight = `calc(100vh - ${PREVIEW_INSET_PX * 2}px)`;
+  const frameMaxHeight = `calc(100vh - ${PREVIEW_INSET_PX * 2}px - ${isGallery ? 36 : 0}px)`;
   const frameWidth = `min(100%, ${PREVIEW_MAX_WIDTH_PX}px, calc(${frameMaxHeight} * ${aspect}))`;
 
   return createPortal(
     <AnimatePresence>
-      {open && item ? (
+      {open && activeItem ? (
         <div
           key="image-preview"
           className="fixed inset-0 z-[100]"
           role="dialog"
           aria-modal="true"
-          aria-label={`${item.name} image preview`}
+          aria-label={`${activeItem.name} image preview`}
         >
-          {/*
-            Opaque dark underlay so rounded-corner AA never samples the light page.
-          */}
           <motion.div
             aria-hidden
             className="absolute inset-0 bg-surface-dark-3"
@@ -145,17 +184,12 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({ item, open, onClose 
             onClick={onClose}
           >
             <div
-              className="flex w-full items-center justify-center"
+              className="flex w-full flex-col items-center justify-center gap-xs"
               style={{
                 padding: PREVIEW_INSET_PX,
                 maxWidth: PREVIEW_MAX_WIDTH_PX + PREVIEW_INSET_PX * 2,
               }}
-              onClick={(event) => event.stopPropagation()}
             >
-              {/*
-                Scale lives on this wrapper only — keep radius/overflow on the
-                child so transform compositing does not fringe the corners.
-              */}
               <motion.div
                 className="max-w-full"
                 style={{ width: frameWidth }}
@@ -167,11 +201,8 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({ item, open, onClose 
                     : { opacity: 0, scale: 0.98, transition: exitTransition }
                 }
                 transition={enterTransition}
+                onClick={(event) => event.stopPropagation()}
               >
-                {/*
-                  Frame is exactly the image aspect — never shrunk for caption.
-                  Caption overlays and scrolls independently on top.
-                */}
                 <div
                   className="relative w-full overflow-hidden rounded-image-preview bg-surface-dark-3"
                   style={{
@@ -180,22 +211,41 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({ item, open, onClose 
                     clipPath: 'inset(0 round var(--radius-image-preview))',
                   }}
                 >
-                  {/*
-                    Slight overscan hides JPEG edge mats / encode fringes that
-                    otherwise read as a white arc along the rounded clip.
-                  */}
-                  <div className="absolute -inset-[2px]">
-                    <Image
-                      src={item.src}
-                      alt={item.alt ?? item.name}
-                      fill
-                      className="pointer-events-none select-none object-cover"
-                      sizes={`(max-width: 768px) 100vw, min(100vw, ${PREVIEW_MAX_WIDTH_PX}px)`}
-                      priority
-                    />
-                  </div>
+                  <AnimatePresence initial={false} custom={direction} mode="sync">
+                    <motion.div
+                      key={activeItem.src}
+                      className="absolute -inset-[2px]"
+                      custom={direction}
+                      initial={
+                        prefersReducedMotion
+                          ? { opacity: 0 }
+                          : {
+                              opacity: 0,
+                              x: direction * 28,
+                            }
+                      }
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={
+                        prefersReducedMotion
+                          ? { opacity: 0 }
+                          : {
+                              opacity: 0,
+                              x: direction * -28,
+                            }
+                      }
+                      transition={slideTransition}
+                    >
+                      <Image
+                        src={activeItem.src}
+                        alt={activeItem.alt ?? activeItem.name}
+                        fill
+                        className="pointer-events-none select-none object-cover"
+                        sizes={`(max-width: 768px) 100vw, min(100vw, ${PREVIEW_MAX_WIDTH_PX}px)`}
+                        priority
+                      />
+                    </motion.div>
+                  </AnimatePresence>
 
-                  {/* Close stays pinned to the frame */}
                   <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-end p-md">
                     <button
                       ref={closeButtonRef}
@@ -215,56 +265,120 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({ item, open, onClose 
                     </button>
                   </div>
 
-                  {/*
-                    Caption reveal scroll: spacer parks title + first description
-                    line at the bottom; further scroll moves caption up over the
-                    still image.
-                  */}
-                  <div
-                    ref={scrollRef}
-                    className="absolute inset-0 z-10 overflow-y-auto overflow-x-hidden overscroll-contain scrollbar-overlay"
-                  >
+                  {/* Overlay caption — desktop / wide viewports only */}
+                  <div className="absolute bottom-md left-md right-md z-10 hidden min-[787px]:block">
                     <div
-                      aria-hidden
-                      className="pointer-events-none w-full"
-                      style={{
-                        height: 'calc(100% - var(--size-image-preview-caption-peek))',
-                      }}
-                    />
-                    <div className="px-md pb-md">
-                      <div
-                        className={cn(
-                          'relative min-w-image-preview-caption w-full max-w-[60ch] p-md',
-                          onDark && 'rounded-sm',
-                        )}
-                      >
-                        {onDark ? (
+                      className={cn(
+                        'relative w-fit max-w-full p-md',
+                        onDark && 'rounded-sm',
+                      )}
+                    >
+                      {onDark ? (
+                        <div
+                          aria-hidden
+                          className="pointer-events-none absolute inset-0 -z-[1] rounded-sm bg-gradient-to-tr from-overlay-backdrop via-overlay-uniform to-transparent backdrop-blur-md"
+                        />
+                      ) : null}
+                      <AnimatePresence initial={false} mode="wait">
+                        <motion.div
+                          key={`${activeItem.src}-caption-overlay`}
+                          initial={prefersReducedMotion ? false : { opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={prefersReducedMotion ? undefined : { opacity: 0 }}
+                          transition={
+                            prefersReducedMotion
+                              ? { duration: 0 }
+                              : { duration: 0.2, ease: slideEase }
+                          }
+                        >
                           <div
-                            aria-hidden
-                            className="pointer-events-none absolute inset-0 -z-[1] rounded-sm bg-gradient-to-tr from-overlay-backdrop via-overlay-uniform to-transparent backdrop-blur-md"
-                          />
-                        ) : null}
+                            className={cn(
+                              'font-sans text-sm font-medium leading-none',
+                              chromeTextClass,
+                            )}
+                          >
+                            {activeItem.name}
+                          </div>
+                          <p
+                            className={cn(
+                              'mt-2xs max-w-[80ch] font-sans text-sm leading-relaxed',
+                              chromeTextClass,
+                            )}
+                          >
+                            {activeItem.description}
+                          </p>
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Below-image caption — small viewports (≤786px) */}
+                <div className="mt-xs w-full min-[787px]:hidden">
+                  <div className="relative w-full rounded-sm bg-surface-dark-1 p-md">
+                    <AnimatePresence initial={false} mode="wait">
+                      <motion.div
+                        key={`${activeItem.src}-caption-below`}
+                        initial={prefersReducedMotion ? false : { opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={prefersReducedMotion ? undefined : { opacity: 0 }}
+                        transition={
+                          prefersReducedMotion
+                            ? { duration: 0 }
+                            : { duration: 0.2, ease: slideEase }
+                        }
+                      >
                         <div
                           className={cn(
                             'w-full font-sans text-sm font-medium leading-none',
                             chromeTextClass,
                           )}
                         >
-                          {item.name}
+                          {activeItem.name}
                         </div>
                         <p
                           className={cn(
-                            'mt-2xs w-full whitespace-pre-line font-sans text-sm leading-relaxed',
+                            'mt-2xs w-full max-w-[80ch] font-sans text-sm leading-relaxed',
                             chromeTextClass,
                           )}
                         >
-                          {item.description}
+                          {activeItem.description}
                         </p>
-                      </div>
-                    </div>
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
                 </div>
               </motion.div>
+
+              {isGallery && gallery ? (
+                <div
+                  className="flex items-center justify-center gap-2xs"
+                  role="tablist"
+                  aria-label="Gallery images"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  {gallery.map((galleryItem, index) => {
+                    const isActive = index === safeIndex;
+                    return (
+                      <button
+                        key={galleryItem.src}
+                        type="button"
+                        role="tab"
+                        aria-selected={isActive}
+                        aria-label={`Show ${galleryItem.name}`}
+                        onClick={() => goToIndex(index)}
+                        className={cn(
+                          'size-2 rounded-full transition-colors duration-[180ms] ease-move',
+                          'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
+                          isActive
+                            ? 'bg-footer-console-text'
+                            : 'bg-text-muted hover:bg-footer-console-text/60',
+                        )}
+                      />
+                    );
+                  })}
+                </div>
+              ) : null}
             </div>
           </motion.div>
         </div>
