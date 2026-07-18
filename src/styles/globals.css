@@ -242,6 +242,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Default paragraph: case-study overview measure (Satoshi medium, text color) */
+p {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
 main {
   flex: 1;
   width: 100%;

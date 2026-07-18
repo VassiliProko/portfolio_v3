@@ -237,7 +237,7 @@ export const AboutSection: React.FC = () => {
             >
               About
             </h2>
-            <div className="max-w-[672px] font-sans text-base leading-normal text-text-subtle">
+            <div className="max-w-[672px]">
               <p className="mb-0">
                 I&apos;m a multidisciplinary designer and business analytics student at McGill
                 University in Montreal.
@@ -245,10 +245,11 @@ export const AboutSection: React.FC = () => {
               <p className="mb-0">&nbsp;</p>
               <p className="mb-0">
                 I design for a more curious, healthier, and prettier world. A place where people
-                feel that they belong and are loved. By bringing a deep level of care and thought, I believe that we can design a wonderful future.
+                feel that they belong and are loved. By bringing a deep level of care and thought, I
+                believe that we can design a wonderful future.
               </p>
               <p className="mb-0">&nbsp;</p>
-              <p>I also enjoy crispy tofu and dragon boat.</p>
+              <p className="mb-0">I also enjoy crispy tofu and dragon boat.</p>
             </div>
           </div>
         </ScrollPopdownReveal>

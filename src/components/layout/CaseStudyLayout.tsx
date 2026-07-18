@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/src/utils/cn';
 import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
 import {
@@ -9,6 +10,10 @@ import {
   ScrollPopdownReveal,
   ScrollRevealGroup,
 } from '@/src/components/ui/PopdownReveal';
+import {
+  CASE_STUDY_CONTENT_CLASS,
+  CASE_STUDY_OVERVIEW_COLUMNS_CLASS,
+} from '@/src/constants/caseStudy';
 
 export { CASE_STUDY_BODY_CLASS } from '@/src/constants/caseStudy';
 
@@ -31,9 +36,9 @@ export interface CaseStudyLayoutProps {
   heroMediaStyle?: React.CSSProperties;
   /** Custom hero block (replaces image/video hero when set) */
   hero?: React.ReactNode;
-  /** Overview content (text or custom React node) */
+  /** Overview paragraphs (editorial columns; stack on small viewports) */
   overview: React.ReactNode;
-  /** Optional meta: time, role, tools, skills (displayed in right column) */
+  /** Optional meta: time, role, tools, skills (displayed under overview) */
   meta?: {
     time?: string;
     role?: string;
@@ -46,6 +51,8 @@ export interface CaseStudyLayoutProps {
   websiteLabel?: string;
   /** Optional "View GitHub" link (external) */
   githubUrl?: string;
+  /** Custom label for GitHub link (default: "Github") */
+  githubLabel?: string;
   /** Rest of the case study (images, sections, etc.) */
   children?: React.ReactNode;
   className?: string;
@@ -59,15 +66,21 @@ const CASE_STUDY_SUBTITLE_CLASS =
 
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-col gap-0">
-      <span className="font-bold text-text">{label}</span>
-      <span className="text-text">{value}</span>
+    <div className="flex min-w-0 flex-col gap-2xs pr-about-role-icon">
+      <span className="font-sans text-base font-normal leading-normal text-text-subtle">
+        {label}
+      </span>
+      <span className="font-sans text-base font-medium leading-normal text-text">{value}</span>
     </div>
   );
 }
 
-const caseStudyLinkClass =
-  'py-1.5 text-text text-base font-mono leading-tight hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline transition-all duration-200';
+const caseStudyLinkClass = cn(
+  'group inline-flex h-12 w-full items-center justify-between gap-2xs rounded-sm bg-surface-1 px-4',
+  'font-mono text-sm leading-6 text-text-muted',
+  'transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)] hover:bg-surface-2',
+  'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
+);
 
 function CaseStudyHeroMedia({
   heroVideoSrc,
@@ -150,12 +163,14 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
   websiteUrl,
   websiteLabel = 'View website',
   githubUrl,
+  githubLabel = 'Github',
   children,
   className,
 }) => {
   const hasMeta = meta && (meta.time ?? meta.role ?? meta.tools ?? meta.skills);
   const hasDefaultHero = Boolean(heroVideoSrc || heroVideoEmbedUrl || heroImageSrc);
   const hasHero = Boolean(hero ?? hasDefaultHero);
+  const hasLinks = Boolean(websiteUrl ?? githubUrl);
 
   const metaEntries = hasMeta
     ? ([
@@ -195,68 +210,71 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
         ) : null}
       </div>
 
-      <div className="py-8 md:py-10">
+      <div className={cn(CASE_STUDY_CONTENT_CLASS, 'flex flex-col gap-showcase-illustration py-lg')}>
         <ScrollRevealGroup>
           {(revealed) => (
             <section
-              className="flex max-w-none flex-col font-sans text-md leading-relaxed md:flex-row md:gap-12 md:text-lg lg:gap-16"
-              aria-labelledby="overview-heading"
+              className="flex flex-col gap-showcase-illustration"
+              aria-label="Project overview"
             >
-              <div className="min-w-0 flex-1">
-                <PopdownReveal reveal={revealed} delayMs={0}>
-                  <h2 id="overview-heading" className="mb-4 text-xl font-bold text-text md:text-2xl">
-                    Overview
-                  </h2>
-                </PopdownReveal>
-                <PopdownReveal reveal={revealed} delayMs={POPDOWN_REVEAL_STAGGER_MS}>
-                  <div className="text-text-subtle [&_p]:max-w-[50ch]">{overview}</div>
-                </PopdownReveal>
-                {(websiteUrl ?? githubUrl) && (
-                  <PopdownReveal reveal={revealed} delayMs={POPDOWN_REVEAL_STAGGER_MS * 2}>
-                    <div className="mt-4 flex w-fit flex-col flex-wrap gap-x-4 gap-y-1">
-                      {websiteUrl && (
-                        <a
-                          href={websiteUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={caseStudyLinkClass}
-                        >
-                          {websiteLabel}
-                        </a>
-                      )}
-                      {githubUrl && (
-                        <a
-                          href={githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={caseStudyLinkClass}
-                        >
-                          view github
-                        </a>
-                      )}
-                    </div>
-                  </PopdownReveal>
-                )}
-              </div>
+              <PopdownReveal reveal={revealed} delayMs={0}>
+                <div className={cn(CASE_STUDY_OVERVIEW_COLUMNS_CLASS, '[&_p]:m-0')}>
+                  {overview}
+                </div>
+              </PopdownReveal>
+
               {metaEntries.length > 0 && (
-                <div className="mt-8 flex min-w-0 flex-1 flex-col gap-6 md:mt-0 md:gap-8">
+                <div className="grid grid-cols-2 gap-x-showcase-illustration gap-y-md md:grid-cols-4">
                   {metaEntries.map((entry, index) => (
                     <PopdownReveal
                       key={entry.label}
                       reveal={revealed}
                       delayMs={POPDOWN_REVEAL_STAGGER_MS * (index + 1)}
+                      className="min-w-0"
                     >
                       <MetaRow label={entry.label} value={entry.value} />
                     </PopdownReveal>
                   ))}
                 </div>
               )}
+
+              {hasLinks && (
+                <PopdownReveal
+                  reveal={revealed}
+                  delayMs={POPDOWN_REVEAL_STAGGER_MS * (metaEntries.length + 1)}
+                >
+                  <div className="grid grid-cols-1 gap-about-role-icon sm:grid-cols-2">
+                    {websiteUrl && (
+                      <a
+                        href={websiteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={caseStudyLinkClass}
+                      >
+                        <span className="min-w-0 truncate">{websiteLabel}</span>
+                        <ArrowUpRight className="size-5 shrink-0" strokeWidth={2} aria-hidden />
+                      </a>
+                    )}
+                    {githubUrl && (
+                      <a
+                        href={githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={caseStudyLinkClass}
+                      >
+                        <span className="min-w-0 truncate">{githubLabel}</span>
+                        <ArrowUpRight className="size-5 shrink-0" strokeWidth={2} aria-hidden />
+                      </a>
+                    )}
+                  </div>
+                </PopdownReveal>
+              )}
             </section>
           )}
         </ScrollRevealGroup>
 
         {children ? (
-          <div className="mt-10 flex flex-col gap-4 md:mt-12 md:gap-8">
+          <div className="flex flex-col gap-4 md:gap-8">
             {React.Children.toArray(children).map((child, index) => (
               <ScrollPopdownReveal key={index} delayMs={0}>
                 {child}

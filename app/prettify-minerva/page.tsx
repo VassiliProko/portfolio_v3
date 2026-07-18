@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { CASE_STUDY_BODY_CLASS } from '@/src/constants/caseStudy';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
 import { CompareImage } from '@/src/components/ui/CompareImage';
@@ -11,11 +10,15 @@ export const metadata: Metadata = {
 };
 
 const PRETTIFY_MINERVA_OVERVIEW = (
-  <>
-    <p className={CASE_STUDY_BODY_CLASS}>
-    I improved the appearance of Minerva, McGill's central university portal, with a javascript browser extension. After being frustrated with Minerva’s outdated interface and hearing similar complaints from other students, I decided to see if I could reshape the platform. I initially made a Figma dashboard concept that I shared on Reddit which received a comment on how a browser extension solution may be viable. I took this idea and went on to build a browser extension which applies custom styling and layout improvements directly to the live Minerva site. Currently the extension is published on the chrome web store and has over 200 active users.
-    </p>
-  </>
+  <p>
+    I improved the appearance of Minerva, McGill&apos;s central university portal, with a javascript
+    browser extension. After being frustrated with Minerva’s outdated interface and hearing similar
+    complaints from other students, I decided to see if I could reshape the platform. I initially
+    made a Figma dashboard concept that I shared on Reddit which received a comment on how a browser
+    extension solution may be viable. I took this idea and went on to build a browser extension which
+    applies custom styling and layout improvements directly to the live Minerva site. Currently the
+    extension is published on the chrome web store and has over 200 active users.
+  </p>
 );
 
 export default function PrettifyMinervaCaseStudyPage() {
@@ -32,11 +35,10 @@ export default function PrettifyMinervaCaseStudyPage() {
         skills: 'UI design, Browser Extension development',
       }}
       websiteUrl="https://chromewebstore.google.com/detail/gligldkmadhkgfbomifkomimankgljji?utm_source=item-share-cb"
-      websiteLabel="view chrome web store"
+      websiteLabel="Chrome Web Store"
       githubUrl="https://github.com/VassiliProko/prettify_minerva"
-
+      githubLabel="Github"
     >
-
       <CaseStudyImage
         src="/images/optimized/prettify-minerva/prettify-minerva-mock.webp"
         alt="Prettify Minerva case study — overview"

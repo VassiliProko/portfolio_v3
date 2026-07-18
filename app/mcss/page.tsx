@@ -12,12 +12,11 @@ export const metadata: Metadata = {
 };
 
 const MCSS_OVERVIEW = (
-  <>
-    <p className={CASE_STUDY_BODY_CLASS}>
-    I revamped the MCSS website with a cleaner layout and improved mobile navigation, making it easier for students to discover events, sponsors, and society events. I also brought in a more vibrant visual language that better reflects the society’s cultural energy.
-    </p>
-    {/* Add more overview content as needed */}
-  </>
+  <p>
+    I revamped the MCSS website with a cleaner layout and improved mobile navigation, making it
+    easier for students to discover events, sponsors, and society events. I also brought in a more
+    vibrant visual language that better reflects the society’s cultural energy.
+  </p>
 );
 
 const MCSS_BACKGROUND_INTRO =
@@ -74,8 +73,9 @@ export default function MCSSCaseStudyPage() {
         skills: 'Web design, Frontend development',
       }}
       websiteUrl="https://mcss.ca/"
-      websiteLabel="view website"
+      websiteLabel="Website"
       githubUrl="https://github.com/Dev-MCSS/websitev2"
+      githubLabel="Github"
     >
       <section className="w-full rounded-[8px] bg-gradient-to-b from-background to-surface-2 p-3 md:p-5">
         <div className="overflow-hidden rounded-[8px]">

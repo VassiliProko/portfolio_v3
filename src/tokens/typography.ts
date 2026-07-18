@@ -13,4 +13,12 @@ export const typography = {
     semibold: 600,
     bold: 700,
   },
+  /** Default body paragraph — Satoshi medium, text color */
+  paragraph: {
+    fontFamily: 'sans',
+    fontSize: '1rem',
+    fontWeight: 500,
+    lineHeight: 1.5,
+    color: 'text',
+  },
 } as const;

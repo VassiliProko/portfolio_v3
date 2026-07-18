@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { CASE_STUDY_BODY_CLASS } from '@/src/constants/caseStudy';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
 
@@ -11,8 +10,9 @@ export const metadata: Metadata = {
 };
 
 const USTHING_OVERVIEW = (
-  <p className={CASE_STUDY_BODY_CLASS}>
-    Highlight of a grade distribution feature design shipped for USThing, used by 8,000+ students at HKUST. 
+  <p>
+    Highlight of a grade distribution feature design shipped for USThing, used by 8,000+ students at
+    HKUST.
   </p>
 );
 
