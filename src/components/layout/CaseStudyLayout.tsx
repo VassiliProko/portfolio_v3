@@ -64,13 +64,18 @@ const CASE_STUDY_TITLE_CLASS =
 const CASE_STUDY_SUBTITLE_CLASS =
   'font-sans text-xl font-medium leading-normal text-text-muted';
 
+/** Overview field label — Role / Tools / Skills (not the page subtitle). */
+const META_LABEL_CLASS =
+  'font-sans text-base font-normal leading-normal text-text-subtle';
+
+const META_VALUE_CLASS =
+  'font-sans text-base font-medium leading-normal text-text';
+
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex min-w-0 flex-col gap-2xs pr-about-role-icon">
-      <span className="font-sans text-base font-normal leading-normal text-text-subtle">
-        {label}
-      </span>
-      <span className="font-sans text-base font-medium leading-normal text-text">{value}</span>
+      <span className={META_LABEL_CLASS}>{label}</span>
+      <span className={META_VALUE_CLASS}>{value}</span>
     </div>
   );
 }

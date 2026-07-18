@@ -14,6 +14,10 @@ const ABOUT_HERO_IMAGE = '/images/optimized/about/about.jpg';
 const RESUME_PDF_HREF =
   'https://docs.google.com/document/d/1W0-QIjajoPcEnDEO99qnTczTWo3l3Wu7W1VPZ29Igfw/edit?usp=sharing';
 
+/** Same as case-study overview meta labels (Role / Tools / Skills). */
+const ABOUT_SECTION_HEADING_CLASS =
+  'font-sans text-base font-normal leading-normal text-text-subtle';
+
 const resumeButtonClass = cn(
   'group font-mono text-base inline-flex items-center h-12 px-4 rounded-sm',
   'bg-footer-contact-bg text-footer-console-text',
@@ -176,13 +180,13 @@ const AboutRoleRow: React.FC<AboutRoleRowProps> = ({
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-base text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-[60ms] ease-snap"
+            className="font-sans text-base font-medium text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-[60ms] ease-snap"
           >
             {title}
           </a>
-          <span className="shrink-0 font-sans text-base text-text-muted">{date}</span>
+          <span className="shrink-0 font-sans text-base font-medium text-text-muted">{date}</span>
         </div>
-        <span className="font-sans text-base text-text-subtle">{subtitle}</span>
+        <span className="font-sans text-base font-medium text-text-subtle">{subtitle}</span>
       </div>
     </div>
   );
@@ -196,7 +200,7 @@ type AboutRoleListProps = {
 const AboutRoleList: React.FC<AboutRoleListProps> = ({ heading, items }) => {
   return (
     <div className="flex flex-col gap-about-role-section">
-      <h3 className="font-sans text-base font-medium text-text">{heading}</h3>
+      <h3 className={ABOUT_SECTION_HEADING_CLASS}>{heading}</h3>
       <div className="flex flex-col gap-md">
         {items.map((item) => (
           <AboutRoleRow key={item.title} {...item} />
@@ -231,10 +235,7 @@ export const AboutSection: React.FC = () => {
 
         <ScrollPopdownReveal delayMs={0}>
           <div className="flex flex-col gap-lg">
-            <h2
-              id="about-heading"
-              className="font-sans text-base font-medium text-text"
-            >
+            <h2 id="about-heading" className={ABOUT_SECTION_HEADING_CLASS}>
               About
             </h2>
             <div className="max-w-[672px]">
