@@ -4,18 +4,12 @@ import React, { useEffect, useRef } from 'react';
 import {
   DUCK_INTRO_CELL_PX,
   DUCK_INTRO_DISPLAY_PX,
-  type DuckIntroColorModeId,
-  type DuckIntroEffectId,
+  DUCK_INTRO_DITHER_DURATION_S,
 } from '@/src/components/ui/duckIntro/duckIntroSettings';
 import { renderDuckIntroFrame } from '@/src/components/ui/duckIntro/ditherEffects';
 import { loadDuckPixels, type DuckPixel } from '@/src/components/ui/duckIntro/duckPixels';
 
 type DuckDitherCanvasProps = {
-  effectId: DuckIntroEffectId;
-  colorModeId: DuckIntroColorModeId;
-  durationS: number;
-  /** Increments to restart playback from a full duck */
-  playToken: number;
   /** When true, run the dither dissolve */
   dithering: boolean;
   onComplete?: () => void;
@@ -40,10 +34,6 @@ function drawPixels(
 }
 
 export const DuckDitherCanvas: React.FC<DuckDitherCanvasProps> = ({
-  effectId,
-  colorModeId,
-  durationS,
-  playToken,
   dithering,
   onComplete,
   className,
@@ -51,15 +41,10 @@ export const DuckDitherCanvas: React.FC<DuckDitherCanvasProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pixelsRef = useRef<DuckPixel[] | null>(null);
   const onCompleteRef = useRef(onComplete);
-  const reducedMotionRef = useRef(false);
 
   useEffect(() => {
     onCompleteRef.current = onComplete;
   }, [onComplete]);
-
-  useEffect(() => {
-    reducedMotionRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -114,13 +99,13 @@ export const DuckDitherCanvas: React.FC<DuckDitherCanvasProps> = ({
       return;
     }
 
-    if (reducedMotionRef.current) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       finish();
       return;
     }
 
-    const durationMs = Math.max(1, durationS * 1000);
-    const seed = playToken * 9973 + 42;
+    const durationMs = Math.max(1, DUCK_INTRO_DITHER_DURATION_S * 1000);
+    const seed = 42;
     const start = performance.now();
 
     const tick = (now: number) => {
@@ -132,12 +117,10 @@ export const DuckDitherCanvas: React.FC<DuckDitherCanvasProps> = ({
 
       const elapsed = now - start;
       const progress = Math.min(1, elapsed / durationMs);
-      const frame = renderDuckIntroFrame(effectId, {
+      const frame = renderDuckIntroFrame({
         pixels,
         progress,
         seed,
-        timeMs: elapsed,
-        colorModeId,
       });
 
       drawPixels(ctx, frame);
@@ -155,7 +138,7 @@ export const DuckDitherCanvas: React.FC<DuckDitherCanvasProps> = ({
     return () => {
       window.cancelAnimationFrame(rafId);
     };
-  }, [colorModeId, durationS, dithering, effectId, playToken]);
+  }, [dithering]);
 
   return (
     <canvas

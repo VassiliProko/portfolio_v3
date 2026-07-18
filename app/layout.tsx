@@ -6,6 +6,7 @@ import { ConditionalNav } from '@/src/components/layout/ConditionalNav';
 import { Footer } from '@/src/components/layout/Footer';
 import { FooterLastUpdated } from '@/src/components/layout/FooterLastUpdated';
 import { MainContentShell } from '@/src/components/layout/MainContentShell';
+import { ThemeProvider } from '@/src/components/ThemeProvider';
 import { ThemeScript } from '@/src/components/ThemeScript';
 import { HomeEnterAnimationProvider } from '@/src/contexts/HomeEnterAnimationContext';
 import { Analytics } from "@vercel/analytics/next"
@@ -55,18 +56,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${satoshiVariable.variable} ${oxygenMono.variable} ${satisfy.variable}`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <ThemeScript />
       </head>
-      <body suppressHydrationWarning>
-        <HomeEnterAnimationProvider>
-          <ConditionalNav />
-          <MainContentShell>
-            {children}
-            <Footer lastUpdated={<FooterLastUpdated />} />
-          </MainContentShell>
-        </HomeEnterAnimationProvider>
+      <body
+        className={`${satoshiVariable.variable} ${oxygenMono.variable} ${satisfy.variable}`}
+        suppressHydrationWarning
+      >
+        <ThemeProvider>
+          <HomeEnterAnimationProvider>
+            <ConditionalNav />
+            <MainContentShell>
+              {children}
+              <Footer lastUpdated={<FooterLastUpdated />} />
+            </MainContentShell>
+          </HomeEnterAnimationProvider>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

@@ -3,6 +3,19 @@ export const THEME_TRANSITION_MS = 300;
 
 export type Theme = 'light' | 'dark';
 
+const themeListeners = new Set<() => void>();
+
+function emitThemeChange() {
+  themeListeners.forEach((listener) => listener());
+}
+
+export function subscribeTheme(onStoreChange: () => void): () => void {
+  themeListeners.add(onStoreChange);
+  return () => {
+    themeListeners.delete(onStoreChange);
+  };
+}
+
 export function getStoredTheme(): Theme | null {
   if (typeof window === 'undefined') return null;
 
@@ -20,6 +33,17 @@ export function getSystemTheme(): Theme {
 
 export function resolveTheme(): Theme {
   return getStoredTheme() ?? getSystemTheme();
+}
+
+/** Snapshot for useSyncExternalStore — always the resolved effective theme. */
+export function getThemeSnapshot(): Theme {
+  return resolveTheme();
+}
+
+const SERVER_THEME_SNAPSHOT: Theme = 'light';
+
+export function getServerThemeSnapshot(): Theme {
+  return SERVER_THEME_SNAPSHOT;
 }
 
 let themeTransitionTimeout: ReturnType<typeof setTimeout> | undefined;
@@ -43,6 +67,7 @@ export function applyTheme(theme: Theme, options?: { animate?: boolean }) {
   }
 
   root.classList.toggle('dark', theme === 'dark');
+  root.style.colorScheme = theme === 'dark' ? 'dark' : 'light';
 
   if (shouldAnimate) {
     themeTransitionTimeout = setTimeout(() => {
@@ -50,4 +75,11 @@ export function applyTheme(theme: Theme, options?: { animate?: boolean }) {
       themeTransitionTimeout = undefined;
     }, THEME_TRANSITION_MS);
   }
+
+  emitThemeChange();
+}
+
+export function setStoredTheme(theme: Theme, options?: { animate?: boolean }) {
+  localStorage.setItem(THEME_STORAGE_KEY, theme);
+  applyTheme(theme, options);
 }

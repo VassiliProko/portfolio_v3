@@ -3,7 +3,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useReducedMotion } from 'motion/react';
-import { DUCK_INTRO_PLAYGROUND } from '@/src/components/ui/duckIntro/duckIntroSettings';
 
 type HomeEntryMode = 'full' | 'return' | null;
 
@@ -14,8 +13,6 @@ type HomeEnterAnimationContextValue = {
   readyForReveal: boolean;
   /** Full-screen duck dither splash (first home entry) */
   duckIntroActive: boolean;
-  /** Playground sidebar mode — home stays gated after play */
-  duckIntroPlayground: boolean;
   /** `full` = first site entry on home; `return` = already on site, navigating home */
   homeEntryMode: HomeEntryMode;
   isReturnHomeVisit: boolean;
@@ -143,7 +140,6 @@ export function HomeEnterAnimationProvider({ children }: { children: React.React
   }, [isHomeRoute]);
 
   const enableNavbarEnter = homeEntryMode === 'full';
-  const duckIntroPlayground = enableNavbarEnter && DUCK_INTRO_PLAYGROUND;
   const skipDuckIntro = !enableNavbarEnter || Boolean(prefersReducedMotion);
   const initialReady =
     !enableNavbarEnter || (typeof document !== 'undefined' && document.readyState === 'complete');
@@ -185,14 +181,10 @@ export function HomeEnterAnimationProvider({ children }: { children: React.React
   }, [enableNavbarEnter, skipDuckIntro]);
 
   const completeDuckIntro = useCallback(() => {
-    if (duckIntroPlayground) {
-      return;
-    }
     dispatch({ type: 'DUCK_INTRO_COMPLETE', enableNavbarEnter, skipDuckIntro });
-  }, [duckIntroPlayground, enableNavbarEnter, skipDuckIntro]);
+  }, [enableNavbarEnter, skipDuckIntro]);
 
-  const duckIntroActive =
-    enableNavbarEnter && !skipDuckIntro && (duckIntroPlayground || !state.duckIntroComplete);
+  const duckIntroActive = enableNavbarEnter && !skipDuckIntro && !state.duckIntroComplete;
 
   const value = useMemo(
     () => ({
@@ -201,7 +193,6 @@ export function HomeEnterAnimationProvider({ children }: { children: React.React
       enableNavbarEnter,
       readyForReveal: state.readyForReveal,
       duckIntroActive,
-      duckIntroPlayground,
       homeEntryMode,
       isReturnHomeVisit: homeEntryMode === 'return',
       notifyNavbarPeak,
@@ -213,7 +204,6 @@ export function HomeEnterAnimationProvider({ children }: { children: React.React
       state.readyForReveal,
       enableNavbarEnter,
       duckIntroActive,
-      duckIntroPlayground,
       homeEntryMode,
       notifyNavbarPeak,
       completeDuckIntro,

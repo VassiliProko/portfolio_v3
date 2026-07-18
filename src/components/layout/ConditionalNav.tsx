@@ -6,15 +6,11 @@ import { DuckIntroSplash } from '@/src/components/ui/duckIntro/DuckIntroSplash';
 import { useHomeEnterAnimation } from '@/src/contexts/HomeEnterAnimationContext';
 
 export const ConditionalNav: React.FC = () => {
-  const { duckIntroActive, duckIntroPlayground, completeDuckIntro } = useHomeEnterAnimation();
+  const { duckIntroActive, completeDuckIntro } = useHomeEnterAnimation();
 
   return (
     <>
-      <DuckIntroSplash
-        active={duckIntroActive}
-        playground={duckIntroPlayground}
-        onComplete={completeDuckIntro}
-      />
+      <DuckIntroSplash active={duckIntroActive} onComplete={completeDuckIntro} />
       <nav
         className="sticky top-0 z-50 overflow-visible"
         aria-label="Primary"
