@@ -46,15 +46,14 @@ const resumeButtonIconClass = cn(
 
 /**
  * About page gallery lightbox items — edit name / description here.
- * All use `captionTone: 'on-dark'` so chrome stays white over the photos.
+ * All use `captionTone: 'on-dark'` so the close control stays light over the photos.
  */
 const SHOWCASE_IMAGES: ImagePreviewItem[] = [
   {
     src: '/images/optimized/about/dojo.jpg',
-    name: 'RevisionDojo',
+    name: 'Internship @ General Learning',
     description:
-      'Kuala Lumpur, Malaysia Offsite with the General Learning team',
-    alt: 'Group photo at colorful outdoor stairs',
+      'Kuala Lumpur, Malaysia General Learning Offsite',
     width: 992,
     height: 592,
     captionTone: 'on-dark',
@@ -64,7 +63,6 @@ const SHOWCASE_IMAGES: ImagePreviewItem[] = [
     name: 'USThing',
     description:
       'USThing team photo after eating McDonalds',
-    alt: 'USThing team group photo indoors',
     width: 992,
     height: 592,
     captionTone: 'on-dark',
@@ -73,8 +71,7 @@ const SHOWCASE_IMAGES: ImagePreviewItem[] = [
     src: '/images/optimized/about/hk.jpg',
     name: 'Hong Kong',
     description:
-      'Living life in Hong Kong',
-    alt: 'Portrait with Hong Kong skyline',
+      'Spent an incredible year studying in Hong Kong',
     width: 992,
     height: 592,
     captionTone: 'on-dark',
@@ -84,17 +81,15 @@ const SHOWCASE_IMAGES: ImagePreviewItem[] = [
     name: 'MCSS',
     description:
       "A super cool uni society I've been a part of",
-    alt: 'MCSS team in front of a stone building',
     width: 992,
     height: 592,
     captionTone: 'on-dark',
   },
   {
     src: '/images/optimized/about/dragonboat.jpg',
-    name: 'Dragon boat',
+    name: 'Dragon Boat',
     description:
       'Hong Kong International Dragon Boat Festival',
-    alt: 'Dragon boat team on the water',
     width: 992,
     height: 592,
     captionTone: 'on-dark',
@@ -103,8 +98,7 @@ const SHOWCASE_IMAGES: ImagePreviewItem[] = [
     src: '/images/optimized/about/mcgill.jpg',
     name: 'McGill',
     description:
-      'McGill campus in the fall - so prettyyy',
-    alt: 'McGill campus street in autumn',
+      'McGill campus in the fall, pretty indeed',
     width: 992,
     height: 592,
     captionTone: 'on-dark',
@@ -269,7 +263,7 @@ export const AboutSection: React.FC = () => {
             >
               <Image
                 src={image.src}
-                alt={image.alt ?? image.name}
+                alt={image.alt ?? image.description ?? image.name}
                 fill
                 className="pointer-events-none object-cover"
                 sizes="(max-width: 768px) 50vw, 245px"

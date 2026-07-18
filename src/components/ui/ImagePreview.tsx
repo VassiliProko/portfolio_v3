@@ -12,11 +12,14 @@ export type ImagePreviewItem = {
   src: string;
   name: string;
   description: string;
+  /**
+   * Optional accessible label. Defaults to `description`, then `name`.
+   */
   alt?: string;
   width?: number;
   height?: number;
   /**
-   * `on-dark` — white chrome (caption + close icon) over dark artwork.
+   * `on-dark` — light close-button chrome over dark artwork.
    * Colors are fixed so they do not flip with the site theme.
    */
   captionTone?: 'default' | 'on-dark';
@@ -34,10 +37,12 @@ type ImagePreviewProps = {
   onClose: () => void;
 };
 
-/** Default page margin (20px) × 2 — keeps screen edges visible around the preview. */
+/** Top/bottom (and side) margin around the full preview stack. */
 const PREVIEW_INSET_PX = 40;
 /** Cap preview width on ultra-wide / 4K viewports. */
 const PREVIEW_MAX_WIDTH_PX = 2160;
+/** Matches `--spacing-xs` / `gap-xs` between image, caption, and carousel. */
+const PREVIEW_STACK_GAP_PX = 10;
 
 const slideEase = [0.22, 1, 0.36, 1] as const;
 
@@ -56,7 +61,13 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const [mounted, setMounted] = React.useState(false);
   const [direction, setDirection] = React.useState(0);
+  const [viewportSize, setViewportSize] = React.useState({
+    width: PREVIEW_MAX_WIDTH_PX,
+    height: 800,
+  });
+  const [chromeHeightPx, setChromeHeightPx] = React.useState(0);
   const closeButtonRef = React.useRef<HTMLButtonElement>(null);
+  const chromeRef = React.useRef<HTMLDivElement>(null);
 
   const gallery = items && items.length > 0 ? items : null;
   const isGallery = Boolean(gallery && gallery.length > 1);
@@ -122,6 +133,37 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
     };
   }, [open, onClose, isGallery, gallery, goToIndex, safeIndex]);
 
+  React.useLayoutEffect(() => {
+    if (!open) return;
+
+    const syncViewport = () => {
+      setViewportSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    syncViewport();
+    window.addEventListener('resize', syncViewport);
+    return () => window.removeEventListener('resize', syncViewport);
+  }, [open]);
+
+  React.useLayoutEffect(() => {
+    if (!open || !activeItem) return;
+
+    const chrome = chromeRef.current;
+    if (!chrome) return;
+
+    const syncChromeHeight = () => {
+      setChromeHeightPx(chrome.offsetHeight);
+    };
+
+    syncChromeHeight();
+    const observer = new ResizeObserver(syncChromeHeight);
+    observer.observe(chrome);
+    return () => observer.disconnect();
+  }, [open, activeItem, isGallery, safeIndex]);
+
   if (!mounted) return null;
 
   const enterTransition = prefersReducedMotion
@@ -143,8 +185,15 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
   const onDark = activeItem?.captionTone === 'on-dark';
   const chromeTextClass = onDark ? 'text-footer-console-text' : 'text-text';
 
-  const frameMaxHeight = `calc(100vh - ${PREVIEW_INSET_PX * 2}px - ${isGallery ? 36 : 0}px)`;
-  const frameWidth = `min(100%, ${PREVIEW_MAX_WIDTH_PX}px, calc(${frameMaxHeight} * ${aspect}))`;
+  // Fit image + caption (+ carousel) + top/bottom insets inside the viewport.
+  const availableHeightPx = Math.max(0, viewportSize.height - PREVIEW_INSET_PX * 2);
+  const availableWidthPx = Math.max(
+    0,
+    Math.min(viewportSize.width - PREVIEW_INSET_PX * 2, PREVIEW_MAX_WIDTH_PX),
+  );
+  const stackGapPx = chromeHeightPx > 0 ? PREVIEW_STACK_GAP_PX : 0;
+  const imageMaxHeightPx = Math.max(0, availableHeightPx - chromeHeightPx - stackGapPx);
+  const frameWidthPx = Math.max(0, Math.min(availableWidthPx, imageMaxHeightPx * aspect));
 
   return createPortal(
     <AnimatePresence>
@@ -176,210 +225,144 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
           />
 
           <motion.div
-            className="relative z-[1] flex h-full w-full items-center justify-center"
+            className="relative z-[1] box-border flex h-full w-full items-center justify-center"
+            style={{ padding: PREVIEW_INSET_PX }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: exitTransition }}
             transition={backdropTransition}
             onClick={onClose}
           >
-            <div
-              className="flex w-full flex-col items-center justify-center gap-xs"
-              style={{
-                padding: PREVIEW_INSET_PX,
-                maxWidth: PREVIEW_MAX_WIDTH_PX + PREVIEW_INSET_PX * 2,
-              }}
+            <motion.div
+              className="flex max-h-full max-w-full flex-col gap-xs"
+              style={{ width: frameWidthPx > 0 ? frameWidthPx : undefined }}
+              initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={
+                prefersReducedMotion
+                  ? undefined
+                  : { opacity: 0, scale: 0.98, transition: exitTransition }
+              }
+              transition={enterTransition}
+              onClick={(event) => event.stopPropagation()}
             >
-              <motion.div
-                className="max-w-full"
-                style={{ width: frameWidth }}
-                initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={
-                  prefersReducedMotion
-                    ? undefined
-                    : { opacity: 0, scale: 0.98, transition: exitTransition }
-                }
-                transition={enterTransition}
-                onClick={(event) => event.stopPropagation()}
+              <div
+                className="relative w-full shrink-0 overflow-hidden rounded-image-preview bg-surface-dark-3"
+                style={{
+                  aspectRatio: `${imageWidth} / ${imageHeight}`,
+                  maxHeight: imageMaxHeightPx,
+                  clipPath: 'inset(0 round var(--radius-image-preview))',
+                }}
               >
-                <div
-                  className="relative w-full overflow-hidden rounded-image-preview bg-surface-dark-3"
-                  style={{
-                    aspectRatio: `${imageWidth} / ${imageHeight}`,
-                    maxHeight: frameMaxHeight,
-                    clipPath: 'inset(0 round var(--radius-image-preview))',
-                  }}
-                >
-                  <AnimatePresence initial={false} custom={direction} mode="sync">
-                    <motion.div
-                      key={activeItem.src}
-                      className="absolute -inset-[2px]"
-                      custom={direction}
-                      initial={
-                        prefersReducedMotion
-                          ? { opacity: 0 }
-                          : {
-                              opacity: 0,
-                              x: direction * 28,
-                            }
-                      }
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={
-                        prefersReducedMotion
-                          ? { opacity: 0 }
-                          : {
-                              opacity: 0,
-                              x: direction * -28,
-                            }
-                      }
-                      transition={slideTransition}
-                    >
+                <AnimatePresence initial={false} custom={direction} mode="sync">
+                  <motion.div
+                    key={activeItem.src}
+                    className="absolute -inset-[2px]"
+                    custom={direction}
+                    initial={
+                      prefersReducedMotion
+                        ? { opacity: 0 }
+                        : {
+                            opacity: 0,
+                            x: direction * 28,
+                          }
+                    }
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={
+                      prefersReducedMotion
+                        ? { opacity: 0 }
+                        : {
+                            opacity: 0,
+                            x: direction * -28,
+                          }
+                    }
+                    transition={slideTransition}
+                  >
                       <Image
                         src={activeItem.src}
-                        alt={activeItem.alt ?? activeItem.name}
+                        alt={activeItem.alt ?? activeItem.description ?? activeItem.name}
                         fill
                         className="pointer-events-none select-none object-cover"
                         sizes={`(max-width: 768px) 100vw, min(100vw, ${PREVIEW_MAX_WIDTH_PX}px)`}
                         priority
                       />
+                  </motion.div>
+                </AnimatePresence>
+
+                <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-end p-md">
+                  <button
+                    ref={closeButtonRef}
+                    type="button"
+                    aria-label="Close preview"
+                    onClick={onClose}
+                    className={cn(
+                      'pointer-events-auto inline-flex size-9 items-center justify-center rounded-sm',
+                      'bg-overlay-uniform opacity-70 backdrop-blur-2xl backdrop-saturate-150',
+                      'transition-opacity duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
+                      'hover:opacity-100 focus-visible:opacity-100',
+                      'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
+                      chromeTextClass,
+                    )}
+                  >
+                    <X size={20} strokeWidth={2} aria-hidden />
+                  </button>
+                </div>
+              </div>
+
+              <div ref={chromeRef} className="flex w-full shrink-0 flex-col gap-xs">
+                <div className="relative w-full rounded-image-preview bg-surface-1 p-md">
+                  <AnimatePresence initial={false} mode="wait">
+                    <motion.div
+                      key={`${activeItem.src}-caption`}
+                      initial={prefersReducedMotion ? false : { opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={prefersReducedMotion ? undefined : { opacity: 0 }}
+                      transition={
+                        prefersReducedMotion
+                          ? { duration: 0 }
+                          : { duration: 0.2, ease: slideEase }
+                      }
+                    >
+                      <div className="w-full font-sans text-base font-normal leading-normal text-text-subtle">
+                        {activeItem.name}
+                      </div>
+                      <p className="m-0 mt-2xs w-full max-w-[80ch]">
+                        {activeItem.description}
+                      </p>
                     </motion.div>
                   </AnimatePresence>
+                </div>
 
-                  <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-end p-md">
-                    <button
-                      ref={closeButtonRef}
-                      type="button"
-                      aria-label="Close preview"
-                      onClick={onClose}
-                      className={cn(
-                        'pointer-events-auto inline-flex size-9 items-center justify-center rounded-sm',
-                        'bg-overlay-uniform opacity-70 backdrop-blur-2xl backdrop-saturate-150',
-                        'transition-opacity duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
-                        'hover:opacity-100 focus-visible:opacity-100',
-                        'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
-                        chromeTextClass,
-                      )}
-                    >
-                      <X size={20} strokeWidth={2} aria-hidden />
-                    </button>
-                  </div>
-
-                  {/* Overlay caption — desktop / wide viewports only */}
-                  <div className="absolute bottom-md left-md right-md z-10 hidden min-[787px]:block">
-                    <div
-                      className={cn(
-                        'relative w-fit max-w-full p-md',
-                        onDark && 'rounded-sm',
-                      )}
-                    >
-                      {onDark ? (
-                        <div
-                          aria-hidden
-                          className="pointer-events-none absolute inset-0 -z-[1] rounded-sm bg-gradient-to-tr from-overlay-backdrop via-overlay-uniform to-transparent backdrop-blur-md"
+                {isGallery && gallery ? (
+                  <div
+                    className="flex items-center justify-center gap-2xs"
+                    role="tablist"
+                    aria-label="Gallery images"
+                  >
+                    {gallery.map((galleryItem, index) => {
+                      const isActive = index === safeIndex;
+                      return (
+                        <button
+                          key={galleryItem.src}
+                          type="button"
+                          role="tab"
+                          aria-selected={isActive}
+                          aria-label={`Show ${galleryItem.name}`}
+                          onClick={() => goToIndex(index)}
+                          className={cn(
+                            'size-2 rounded-full transition-colors duration-[180ms] ease-move',
+                            'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
+                            isActive
+                              ? 'bg-footer-console-text'
+                              : 'bg-text-muted hover:bg-footer-console-text/60',
+                          )}
                         />
-                      ) : null}
-                      <AnimatePresence initial={false} mode="wait">
-                        <motion.div
-                          key={`${activeItem.src}-caption-overlay`}
-                          initial={prefersReducedMotion ? false : { opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={prefersReducedMotion ? undefined : { opacity: 0 }}
-                          transition={
-                            prefersReducedMotion
-                              ? { duration: 0 }
-                              : { duration: 0.2, ease: slideEase }
-                          }
-                        >
-                          <div
-                            className={cn(
-                              'font-sans text-sm font-medium leading-none',
-                              chromeTextClass,
-                            )}
-                          >
-                            {activeItem.name}
-                          </div>
-                          <p
-                            className={cn(
-                              'mt-2xs max-w-[80ch] font-sans text-sm leading-relaxed',
-                              chromeTextClass,
-                            )}
-                          >
-                            {activeItem.description}
-                          </p>
-                        </motion.div>
-                      </AnimatePresence>
-                    </div>
+                      );
+                    })}
                   </div>
-                </div>
-
-                {/* Below-image caption — small viewports (≤786px) */}
-                <div className="mt-xs w-full min-[787px]:hidden">
-                  <div className="relative w-full rounded-sm bg-surface-dark-1 p-md">
-                    <AnimatePresence initial={false} mode="wait">
-                      <motion.div
-                        key={`${activeItem.src}-caption-below`}
-                        initial={prefersReducedMotion ? false : { opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={prefersReducedMotion ? undefined : { opacity: 0 }}
-                        transition={
-                          prefersReducedMotion
-                            ? { duration: 0 }
-                            : { duration: 0.2, ease: slideEase }
-                        }
-                      >
-                        <div
-                          className={cn(
-                            'w-full font-sans text-sm font-medium leading-none',
-                            chromeTextClass,
-                          )}
-                        >
-                          {activeItem.name}
-                        </div>
-                        <p
-                          className={cn(
-                            'mt-2xs w-full max-w-[80ch] font-sans text-sm leading-relaxed',
-                            chromeTextClass,
-                          )}
-                        >
-                          {activeItem.description}
-                        </p>
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-                </div>
-              </motion.div>
-
-              {isGallery && gallery ? (
-                <div
-                  className="flex items-center justify-center gap-2xs"
-                  role="tablist"
-                  aria-label="Gallery images"
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  {gallery.map((galleryItem, index) => {
-                    const isActive = index === safeIndex;
-                    return (
-                      <button
-                        key={galleryItem.src}
-                        type="button"
-                        role="tab"
-                        aria-selected={isActive}
-                        aria-label={`Show ${galleryItem.name}`}
-                        onClick={() => goToIndex(index)}
-                        className={cn(
-                          'size-2 rounded-full transition-colors duration-[180ms] ease-move',
-                          'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
-                          isActive
-                            ? 'bg-footer-console-text'
-                            : 'bg-text-muted hover:bg-footer-console-text/60',
-                        )}
-                      />
-                    );
-                  })}
-                </div>
-              ) : null}
-            </div>
+                ) : null}
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       ) : null}
