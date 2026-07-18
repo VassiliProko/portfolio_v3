@@ -245,11 +245,7 @@ export const AboutSection: React.FC = () => {
               <p className="mb-0">&nbsp;</p>
               <p className="mb-0">
                 I design for a more curious, healthier, and prettier world. A place where people
-                feel that they belong and are loved.
-              </p>
-              <p className="mb-0">&nbsp;</p>
-              <p className="mb-0">
-                As a life-long creator, I have been drawn to different mediums to express my ideas.
+                feel that they belong and are loved. By bringing a deep level of care and thought, I believe that we can design a wonderful future.
               </p>
               <p className="mb-0">&nbsp;</p>
               <p>I also enjoy crispy tofu and dragon boat.</p>
