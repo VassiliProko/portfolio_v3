@@ -100,7 +100,7 @@
   --color-border-focus: rgba(0, 0, 0, 0.24);
 
   /* Image preview lightbox */
-  --radius-image-preview: 12px;
+  --radius-image-preview: 8px;
   /* Opaque matte behind rounded art — prevents light page bleed in corner AA */
   --color-image-preview-matte: #000000;
 

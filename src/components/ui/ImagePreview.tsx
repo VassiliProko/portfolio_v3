@@ -326,7 +326,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                       <div className="w-full font-sans text-base font-normal leading-normal text-text-subtle">
                         {activeItem.name}
                       </div>
-                      <p className="m-0 mt-2xs w-full max-w-[80ch]">
+                      <p className="m-0 mt-[4px] mb-[4px] w-full max-w-[80ch]">
                         {activeItem.description}
                       </p>
                     </motion.div>

@@ -51,9 +51,9 @@ const resumeButtonIconClass = cn(
 const SHOWCASE_IMAGES: ImagePreviewItem[] = [
   {
     src: '/images/optimized/about/dojo.jpg',
-    name: 'Internship @ General Learning',
+    name: 'Dojo Life',
     description:
-      'Kuala Lumpur, Malaysia General Learning Offsite',
+      'General Learning Malaysia Offsite',
     width: 992,
     height: 592,
     captionTone: 'on-dark',
