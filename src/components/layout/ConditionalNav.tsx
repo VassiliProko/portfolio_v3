@@ -2,14 +2,27 @@
 
 import React from 'react';
 import { HomeNavbar } from '@/src/components/layout/HomeNavbar';
+import { DuckIntroSplash } from '@/src/components/ui/duckIntro/DuckIntroSplash';
+import { useHomeEnterAnimation } from '@/src/contexts/HomeEnterAnimationContext';
 
 export const ConditionalNav: React.FC = () => {
+  const { duckIntroActive, duckIntroPlayground, completeDuckIntro } = useHomeEnterAnimation();
+
   return (
-    <nav
-      className="sticky top-0 z-50 overflow-visible"
-      aria-label="Primary"
-    >
-      <HomeNavbar />
-    </nav>
+    <>
+      <DuckIntroSplash
+        active={duckIntroActive}
+        playground={duckIntroPlayground}
+        onComplete={completeDuckIntro}
+      />
+      <nav
+        className="sticky top-0 z-50 overflow-visible"
+        aria-label="Primary"
+        hidden={duckIntroActive}
+        aria-hidden={duckIntroActive}
+      >
+        {!duckIntroActive ? <HomeNavbar /> : null}
+      </nav>
+    </>
   );
 };

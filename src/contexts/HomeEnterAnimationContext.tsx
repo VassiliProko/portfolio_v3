@@ -3,6 +3,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useReducedMotion } from 'motion/react';
+import { DUCK_INTRO_PLAYGROUND } from '@/src/components/ui/duckIntro/duckIntroSettings';
 
 type HomeEntryMode = 'full' | 'return' | null;
 
@@ -11,10 +12,15 @@ type HomeEnterAnimationContextValue = {
   mainContentVisible: boolean;
   enableNavbarEnter: boolean;
   readyForReveal: boolean;
+  /** Full-screen duck dither splash (first home entry) */
+  duckIntroActive: boolean;
+  /** Playground sidebar mode — home stays gated after play */
+  duckIntroPlayground: boolean;
   /** `full` = first site entry on home; `return` = already on site, navigating home */
   homeEntryMode: HomeEntryMode;
   isReturnHomeVisit: boolean;
   notifyNavbarPeak: () => void;
+  completeDuckIntro: () => void;
 };
 
 const HomeEnterAnimationContext = createContext<HomeEnterAnimationContextValue | null>(null);
@@ -29,17 +35,30 @@ let homeEntryConsumed = false;
 type HomeEnterState = {
   readyForReveal: boolean;
   navbarPeaked: boolean;
+  duckIntroComplete: boolean;
   introBlurReady: boolean;
   mainContentVisible: boolean;
 };
 
 type HomeEnterAction =
-  | { type: 'RESET'; readyForReveal: boolean; enableNavbarEnter: boolean }
-  | { type: 'PAGE_LOADED'; enableNavbarEnter: boolean }
-  | { type: 'NAVBAR_PEAK'; enableNavbarEnter: boolean };
+  | {
+      type: 'RESET';
+      readyForReveal: boolean;
+      enableNavbarEnter: boolean;
+      skipDuckIntro: boolean;
+    }
+  | { type: 'PAGE_LOADED'; enableNavbarEnter: boolean; skipDuckIntro: boolean }
+  | { type: 'NAVBAR_PEAK'; enableNavbarEnter: boolean; skipDuckIntro: boolean }
+  | { type: 'DUCK_INTRO_COMPLETE'; enableNavbarEnter: boolean; skipDuckIntro: boolean };
 
-function deriveVisibility(state: HomeEnterState, enableNavbarEnter: boolean): HomeEnterState {
-  const visible = !enableNavbarEnter || (state.navbarPeaked && state.readyForReveal);
+function deriveVisibility(
+  state: HomeEnterState,
+  enableNavbarEnter: boolean,
+  skipDuckIntro: boolean,
+): HomeEnterState {
+  const duckReady = skipDuckIntro || state.duckIntroComplete;
+  const visible =
+    !enableNavbarEnter || (duckReady && state.navbarPeaked && state.readyForReveal);
   return {
     ...state,
     introBlurReady: visible,
@@ -53,15 +72,30 @@ function homeEnterReducer(state: HomeEnterState, action: HomeEnterAction): HomeE
       const next = {
         readyForReveal: action.readyForReveal,
         navbarPeaked: false,
+        duckIntroComplete: action.skipDuckIntro,
         introBlurReady: !action.enableNavbarEnter,
         mainContentVisible: !action.enableNavbarEnter,
       };
-      return deriveVisibility(next, action.enableNavbarEnter);
+      return deriveVisibility(next, action.enableNavbarEnter, action.skipDuckIntro);
     }
     case 'PAGE_LOADED':
-      return deriveVisibility({ ...state, readyForReveal: true }, action.enableNavbarEnter);
+      return deriveVisibility(
+        { ...state, readyForReveal: true },
+        action.enableNavbarEnter,
+        action.skipDuckIntro,
+      );
     case 'NAVBAR_PEAK':
-      return deriveVisibility({ ...state, navbarPeaked: true }, action.enableNavbarEnter);
+      return deriveVisibility(
+        { ...state, navbarPeaked: true },
+        action.enableNavbarEnter,
+        action.skipDuckIntro,
+      );
+    case 'DUCK_INTRO_COMPLETE':
+      return deriveVisibility(
+        { ...state, duckIntroComplete: true },
+        action.enableNavbarEnter,
+        action.skipDuckIntro,
+      );
     default:
       return state;
   }
@@ -95,7 +129,6 @@ export function HomeEnterAnimationProvider({ children }: { children: React.React
   if (pathname !== trackedPathname) {
     setTrackedPathname(pathname);
     if (pathname !== '/') {
-      homeEntryConsumed = true;
       setHomeEntryMode(null);
     } else {
       setHomeEntryMode(resolveHomeEntryMode(true, prefersReducedMotion));
@@ -110,11 +143,14 @@ export function HomeEnterAnimationProvider({ children }: { children: React.React
   }, [isHomeRoute]);
 
   const enableNavbarEnter = homeEntryMode === 'full';
+  const duckIntroPlayground = enableNavbarEnter && DUCK_INTRO_PLAYGROUND;
+  const skipDuckIntro = !enableNavbarEnter || Boolean(prefersReducedMotion);
   const initialReady =
     !enableNavbarEnter || (typeof document !== 'undefined' && document.readyState === 'complete');
   const [state, dispatch] = useReducer(homeEnterReducer, {
     readyForReveal: initialReady,
     navbarPeaked: false,
+    duckIntroComplete: skipDuckIntro,
     introBlurReady: !enableNavbarEnter,
     mainContentVisible: !enableNavbarEnter,
   });
@@ -122,25 +158,41 @@ export function HomeEnterAnimationProvider({ children }: { children: React.React
   useEffect(() => {
     const readyNow =
       !enableNavbarEnter || (typeof document !== 'undefined' && document.readyState === 'complete');
-    dispatch({ type: 'RESET', readyForReveal: readyNow, enableNavbarEnter });
-  }, [enableNavbarEnter, pathname, homeEntryMode]);
+    dispatch({
+      type: 'RESET',
+      readyForReveal: readyNow,
+      enableNavbarEnter,
+      skipDuckIntro,
+    });
+  }, [enableNavbarEnter, pathname, homeEntryMode, skipDuckIntro]);
 
   useEffect(() => {
     if (!enableNavbarEnter || state.readyForReveal) {
       return;
     }
 
-    const handleLoad = () => dispatch({ type: 'PAGE_LOADED', enableNavbarEnter });
+    const handleLoad = () =>
+      dispatch({ type: 'PAGE_LOADED', enableNavbarEnter, skipDuckIntro });
     window.addEventListener('load', handleLoad, { once: true });
 
     return () => {
       window.removeEventListener('load', handleLoad);
     };
-  }, [enableNavbarEnter, state.readyForReveal]);
+  }, [enableNavbarEnter, skipDuckIntro, state.readyForReveal]);
 
   const notifyNavbarPeak = useCallback(() => {
-    dispatch({ type: 'NAVBAR_PEAK', enableNavbarEnter });
-  }, [enableNavbarEnter]);
+    dispatch({ type: 'NAVBAR_PEAK', enableNavbarEnter, skipDuckIntro });
+  }, [enableNavbarEnter, skipDuckIntro]);
+
+  const completeDuckIntro = useCallback(() => {
+    if (duckIntroPlayground) {
+      return;
+    }
+    dispatch({ type: 'DUCK_INTRO_COMPLETE', enableNavbarEnter, skipDuckIntro });
+  }, [duckIntroPlayground, enableNavbarEnter, skipDuckIntro]);
+
+  const duckIntroActive =
+    enableNavbarEnter && !skipDuckIntro && (duckIntroPlayground || !state.duckIntroComplete);
 
   const value = useMemo(
     () => ({
@@ -148,18 +200,24 @@ export function HomeEnterAnimationProvider({ children }: { children: React.React
       mainContentVisible: state.mainContentVisible,
       enableNavbarEnter,
       readyForReveal: state.readyForReveal,
+      duckIntroActive,
+      duckIntroPlayground,
       homeEntryMode,
       isReturnHomeVisit: homeEntryMode === 'return',
       notifyNavbarPeak,
+      completeDuckIntro,
     }),
     [
       state.introBlurReady,
       state.mainContentVisible,
       state.readyForReveal,
       enableNavbarEnter,
+      duckIntroActive,
+      duckIntroPlayground,
       homeEntryMode,
       notifyNavbarPeak,
-    ]
+      completeDuckIntro,
+    ],
   );
 
   return (

@@ -198,73 +198,76 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
 
   return (
     <footer className="w-full py-8 md:py-10">
-        {/* Upper section: console-style card — fluid trail reveals photo color */}
+        {/* Clip wrapper: border-radius alone won't clip WebGL/transformed layers */}
         <div
-          ref={imageCardRef}
-          className="relative overflow-hidden rounded-tl-md rounded-tr-md min-h-[432px] md:min-h-[528px] bg-surface-dark-1"
+          className="overflow-hidden rounded-sm"
+          style={{ clipPath: 'inset(0 round 4px)' }}
         >
+          {/* Upper section: console-style card — fluid trail reveals photo color */}
           <div
-            className="absolute inset-x-0 -inset-y-[16%]"
-            style={{
-              transform: prefersReducedMotion
-                ? 'translateY(0%)'
-                : `translateY(${(-12 + parallaxProgress * 24).toFixed(3)}%)`,
-            }}
+            ref={imageCardRef}
+            className="relative min-h-[432px] md:min-h-[528px] bg-surface-dark-1"
           >
-            <FooterFluidReveal
-              src="/images/optimized/home/footer-image.webp"
-              reducedMotion={prefersReducedMotion}
-              interactionRef={imageCardRef}
-              DENSITY_DISSIPATION={0.75}
-              VELOCITY_DISSIPATION={1.2}
-              CURL={5}
-              SPLAT_RADIUS={0.75}
-              SPLAT_FORCE={9000}
-            />
-            {/* Dark overlay for console text readability — kept lighter so color reveal reads */}
-            <div className="absolute inset-0 bg-surface-dark-1/55 pointer-events-none" aria-hidden />
-            {/* Black radial gradient from top-left, fading to transparent */}
             <div
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-x-0 -inset-y-[24%]"
               style={{
-                background: 'radial-gradient(ellipse 200% 150% at 0% 0%, var(--color-surface-dark-1) 0%, transparent 70%)',
+                transform: prefersReducedMotion
+                  ? 'translateY(0%)'
+                  : `translateY(${(-18 + parallaxProgress * 36).toFixed(3)}%)`,
               }}
-              aria-hidden
-            />
+            >
+              <FooterFluidReveal
+                src="/images/optimized/home/footer-image.webp"
+                reducedMotion={prefersReducedMotion}
+                interactionRef={imageCardRef}
+                DENSITY_DISSIPATION={0.75}
+                VELOCITY_DISSIPATION={1.2}
+                CURL={5}
+                SPLAT_RADIUS={0.75}
+                SPLAT_FORCE={9000}
+              />
+              {/* Dark overlay for console text readability — kept lighter so color reveal reads */}
+              <div className="absolute inset-0 bg-surface-dark-1/55 pointer-events-none" aria-hidden />
+              {/* Black radial gradient from top-left, fading to transparent */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: 'radial-gradient(ellipse 200% 150% at 0% 0%, var(--color-surface-dark-1) 0%, transparent 70%)',
+                }}
+                aria-hidden
+              />
+            </div>
+
+            {/* Console text content — scroll-triggered line-by-line reveal */}
+            <div
+              ref={consoleRef}
+              className="relative z-10 flex flex-col justify-between h-full min-h-[432px] md:min-h-[528px] p-5 md:p-6"
+            >
+              <pre className="font-mono text-sm md:text-base text-footer-console-text leading-relaxed flex flex-col gap-[5px] min-w-0 whitespace-pre-wrap break-words">
+                {CONSOLE_LINES.map((line, index) => (
+                  <span
+                    key={line.id}
+                    className="inline-block w-fit max-w-full rounded-sm px-[8px] py-[3px] backdrop-blur-md"
+                    style={{
+                      backgroundColor: 'color-mix(in srgb, var(--color-surface-dark-1) 50%, transparent)',
+                    }}
+                  >
+                    <span className="text-primary-base">&gt;</span>{' '}
+                    {renderConsoleLine(line, visibleCounts[index] ?? 0, { pathname, prefersReducedMotion })}
+                  </span>
+                ))}
+              </pre>
+            </div>
           </div>
-
-          {/* Console text content — scroll-triggered line-by-line reveal */}
-          <div
-            ref={consoleRef}
-            className="relative z-10 flex flex-col justify-between h-full min-h-[432px] md:min-h-[528px] p-5 md:p-6"
-          >
-            <pre className="font-mono text-sm md:text-base text-footer-console-text leading-relaxed flex flex-col gap-[5px] min-w-0 whitespace-pre-wrap break-words">
-              {CONSOLE_LINES.map((line, index) => (
-                <span
-                  key={line.id}
-                  className="inline-block w-fit max-w-full rounded-sm px-[8px] py-[3px] backdrop-blur-md"
-                  style={{
-                    backgroundColor: 'color-mix(in srgb, var(--color-surface-dark-1) 50%, transparent)',
-                  }}
-                >
-                  <span className="text-primary-base">&gt;</span>{' '}
-                  {renderConsoleLine(line, visibleCounts[index] ?? 0, { pathname, prefersReducedMotion })}
-                </span>
-              ))}
-            </pre>
-
-            {/* Color stripe */}
-            
+          <div className="flex h-2 w-full shrink-0">
+            <div className="flex-[3] bg-surface-dark-1" />
+            <div className="flex-[2] bg-surface-dark-2" />
+            <div className="flex-[2] bg-primary-base" />
+            <div className="flex-[1.5] bg-primary-darker" />
+            <div className="flex-[0.75] bg-accent-base" />
+            <div className="flex-[1] bg-footer-console-text" />
           </div>
         </div>
-        <div className="flex w-full h-2 rounded-bl-md rounded-br-md overflow-hidden shrink-0">
-              <div className="flex-[3] bg-surface-dark-1" />
-              <div className="flex-[2] bg-surface-dark-2" />
-              <div className="flex-[2] bg-primary-base" />
-              <div className="flex-[1.5] bg-primary-darker" />
-              <div className="flex-[0.75] bg-accent-base" />
-              <div className="flex-[1] bg-footer-console-text" />
-            </div>
         {/* Lower section: contact buttons + last updated (Figma 212-1039) */}
         <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mt-4 h-auto sm:h-12">
           <div className="flex items-start h-12">

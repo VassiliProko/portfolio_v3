@@ -15,10 +15,15 @@ type MainContentShellProps = {
 
 export const MainContentShell: React.FC<MainContentShellProps> = ({ children }) => {
   const pathname = usePathname();
-  const { mainContentVisible } = useHomeEnterAnimation();
+  const { mainContentVisible, duckIntroPlayground } = useHomeEnterAnimation();
   const prefersReducedMotion = useReducedMotion();
   const shouldUseHomeGate = pathname === '/';
   const isVisible = shouldUseHomeGate ? mainContentVisible : true;
+
+  // Playground keeps the duck overlay only — skip mounting home content/footer.
+  if (duckIntroPlayground) {
+    return <main className="flex-1 w-full" aria-hidden />;
+  }
 
   return (
     <motion.main
