@@ -1,6 +1,6 @@
 import type { DuckPixel } from '@/src/components/ui/duckIntro/duckPixels';
 
-export type RenderPixel = {
+type RenderPixel = {
   x: number;
   y: number;
   r: number;
@@ -9,7 +9,7 @@ export type RenderPixel = {
   a: number;
 };
 
-export type DitherFrameInput = {
+type DitherFrameInput = {
   pixels: DuckPixel[];
   progress: number;
   seed: number;

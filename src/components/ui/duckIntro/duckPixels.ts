@@ -7,7 +7,6 @@ export type DuckPixel = {
   g: number;
   b: number;
   a: number;
-  index: number;
 };
 
 let cachedPixels: DuckPixel[] | null = null;
@@ -32,7 +31,6 @@ function samplePixelsFromImageData(imageData: ImageData): DuckPixel[] {
         g: data[i + 1],
         b: data[i + 2],
         a,
-        index: pixels.length,
       });
     }
   }
