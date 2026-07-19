@@ -19,10 +19,10 @@ import {
 } from '@/src/components/ui/homeIntroMotion';
 
 const INTRO_TEXT_CLASS =
-  'relative max-w-full cursor-default text-left font-sans text-[32px] font-medium leading-normal text-text';
+  'type-title relative max-w-full cursor-default text-left text-text';
 
 const SUBTITLE_CLASS =
-  'relative z-20 flex max-w-full flex-wrap items-center gap-2xs text-left font-sans text-xl font-medium leading-normal text-text-muted';
+  'type-subtitle relative z-20 flex max-w-full flex-wrap items-center gap-2xs text-left text-text-muted';
 
 const GENERAL_LEARNING_HREF = 'https://www.generallearning.com/';
 

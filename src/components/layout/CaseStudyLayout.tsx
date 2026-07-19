@@ -18,11 +18,9 @@ import {
 export { CASE_STUDY_BODY_CLASS } from '@/src/constants/caseStudy';
 
 export interface CaseStudyLayoutProps {
-  /** Project or case study title */
+  /** Project title — used for accessibility labeling only (not rendered in the layout) */
   title: string;
-  /** Subtitle shown below title (home intro subtitle style) */
-  subtitle?: string;
-  /** Optional hero image src (displayed below title) */
+  /** Optional hero image src (first content under the navbar) */
   heroImageSrc?: string;
   /** Hero image alt text */
   heroImageAlt?: string;
@@ -58,18 +56,10 @@ export interface CaseStudyLayoutProps {
   className?: string;
 }
 
-const CASE_STUDY_TITLE_CLASS =
-  'font-sans text-[32px] font-medium leading-normal text-text';
+/** Overview field label — Role / Tools / Skills → type-label */
+const META_LABEL_CLASS = 'type-label text-text-subtle';
 
-const CASE_STUDY_SUBTITLE_CLASS =
-  'font-sans text-xl font-medium leading-normal text-text-muted';
-
-/** Overview field label — Role / Tools / Skills (not the page subtitle). */
-const META_LABEL_CLASS =
-  'font-sans text-base font-normal leading-normal text-text-subtle';
-
-const META_VALUE_CLASS =
-  'font-sans text-base font-medium leading-normal text-text';
+const META_VALUE_CLASS = 'type-paragraph text-text';
 
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
@@ -82,7 +72,7 @@ function MetaRow({ label, value }: { label: string; value: string }) {
 
 const caseStudyLinkClass = cn(
   'group inline-flex h-12 w-full items-center justify-between gap-2xs rounded-sm bg-surface-1 px-4',
-  'font-mono text-sm leading-6 text-text-muted',
+  'type-label text-text-muted',
   'transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)] hover:bg-surface-2',
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
 );
@@ -155,7 +145,6 @@ function CaseStudyHeroMedia({
 
 export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
   title,
-  subtitle,
   heroImageSrc,
   heroImageAlt = '',
   heroVideoSrc,
@@ -191,15 +180,8 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
       className={cn('min-h-screen bg-background', className)}
       aria-label={`Case study: ${title}`}
     >
-      <div className="flex w-full flex-col gap-lg pt-6">
-        <ScrollPopdownReveal delayMs={0}>
-          <header className="flex flex-col gap-3">
-            <h1 className={CASE_STUDY_TITLE_CLASS}>{title}</h1>
-            {subtitle ? <p className={CASE_STUDY_SUBTITLE_CLASS}>{subtitle}</p> : null}
-          </header>
-        </ScrollPopdownReveal>
-
-        {hasHero ? (
+      {hasHero ? (
+        <div className="w-full pt-6">
           <ScrollPopdownReveal delayMs={0}>
             {hero ?? (
               <CaseStudyHeroMedia
@@ -212,8 +194,8 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
               />
             )}
           </ScrollPopdownReveal>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
 
       <div className={cn(CASE_STUDY_CONTENT_CLASS, 'flex flex-col gap-showcase-illustration py-lg')}>
         <ScrollRevealGroup>
@@ -223,8 +205,11 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
               aria-label="Project overview"
             >
               <PopdownReveal reveal={revealed} delayMs={0}>
-                <div className={cn(CASE_STUDY_OVERVIEW_COLUMNS_CLASS, '[&_p]:m-0')}>
-                  {overview}
+                <div className="flex flex-col gap-2xs">
+                  <p className="type-label m-0 text-text-subtle">Overview</p>
+                  <div className={cn(CASE_STUDY_OVERVIEW_COLUMNS_CLASS, '[&_p]:m-0')}>
+                    {overview}
+                  </div>
                 </div>
               </PopdownReveal>
 

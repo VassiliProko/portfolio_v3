@@ -100,7 +100,7 @@ export const MobileNavMenuPanel: React.FC<MobileNavMenuPanelProps> = ({
                 className="absolute inset-0 bg-overlay-uniform opacity-100 transition-opacity delay-0 duration-[var(--motion-large)] ease-move group-hover:opacity-50 group-hover:delay-75 group-focus-visible:opacity-50 group-focus-visible:delay-75 motion-reduce:transition-none"
                 aria-hidden
               />
-              <span className="absolute inset-x-0 bottom-0 pb-sm text-center font-sans text-base font-medium text-footer-console-text">
+              <span className="type-navigation absolute inset-x-0 bottom-0 pb-sm text-center text-footer-console-text">
                 About
               </span>
             </Link>

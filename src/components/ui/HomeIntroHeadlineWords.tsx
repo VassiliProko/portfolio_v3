@@ -2,7 +2,6 @@
 
 import React, { useCallback, useRef, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
-import { cn } from '@/src/utils/cn';
 
 const DELIGHTFUL = 'delightful';
 const DELIGHTFUL_MAX_LIFT_PX = 12;
@@ -57,53 +56,6 @@ function hitBoxEdgeFalloff(
 
   return Math.min(Math.max(0, falloffX), Math.max(0, falloffY));
 }
-
-/** Negative skewX shears top edge left, bottom edge right (diagonal italic). */
-const YOUNG_SKEW_DEG = -10;
-const YOUNG_SCALE_Y = 0.98;
-const YOUNG_TRANSITION_MS = 180;
-const YOUNG_HIT_EXTEND_HORIZONTAL_PX = 24;
-const YOUNG_HIT_EXTEND_TOP_PX = 14;
-const YOUNG_HIT_EXTEND_BOTTOM_PX = 12;
-
-export const IntroYoungWord: React.FC = () => {
-  const [hovered, setHovered] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
-  const isSlanted = hovered && !prefersReducedMotion;
-
-  return (
-    <span
-      className="relative inline-block"
-      style={{
-        marginLeft: -YOUNG_HIT_EXTEND_HORIZONTAL_PX,
-        marginRight: -YOUNG_HIT_EXTEND_HORIZONTAL_PX,
-        marginTop: -YOUNG_HIT_EXTEND_TOP_PX,
-        marginBottom: -YOUNG_HIT_EXTEND_BOTTOM_PX,
-        paddingLeft: YOUNG_HIT_EXTEND_HORIZONTAL_PX,
-        paddingRight: YOUNG_HIT_EXTEND_HORIZONTAL_PX,
-        paddingTop: YOUNG_HIT_EXTEND_TOP_PX,
-        paddingBottom: YOUNG_HIT_EXTEND_BOTTOM_PX,
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <span
-        className={cn(
-          'inline-block origin-left font-sans transition-transform ease-move motion-reduce:transition-none',
-          !prefersReducedMotion && 'will-change-transform'
-        )}
-        style={{
-          transitionDuration: prefersReducedMotion ? undefined : `${YOUNG_TRANSITION_MS}ms`,
-          transform: isSlanted
-            ? `skewX(${YOUNG_SKEW_DEG}deg) scaleY(${YOUNG_SCALE_Y})`
-            : undefined,
-        }}
-      >
-        young{'\u00A0'}
-      </span>
-    </span>
-  );
-};
 
 export const IntroDelightfulWord: React.FC = () => {
   const prefersReducedMotion = useReducedMotion();
@@ -217,8 +169,8 @@ export const HOME_INTRO_HEADLINE_SEGMENTS = [
   { key: 'hi', content: 'hi,' },
   { key: 'im', content: 'im' },
   { key: 'a', content: 'a' },
-  { key: 'young', content: <IntroYoungWord />, className: 'relative z-10' },
-  { key: 'lad', content: 'lad', className: 'relative z-0', skipLeadingSpace: true },
+  { key: 'young', content: 'young' },
+  { key: 'lad', content: 'lad' },
   { key: 'busy', content: 'busy' },
   { key: 'munching', content: 'munching' },
   { key: 'and', content: '&' },

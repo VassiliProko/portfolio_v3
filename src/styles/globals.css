@@ -128,9 +128,37 @@
   --spacing-3xl: 80px;
   --spacing-4xl: 120px;
 
-  /* Typography */
+  /* Typography — families + semantic type scale (Figma 309:476) */
   --font-sans: "Satoshi Variable", system-ui, sans-serif;
   --font-mono: "Oxygen Mono", ui-monospace, monospace;
+
+  --type-title-size: 32px;
+  --type-title-weight: 500;
+  --type-title-tracking: 0;
+
+  --type-subtitle-size: 20px;
+  --type-subtitle-weight: 500;
+  --type-subtitle-tracking: 0;
+
+  --type-navigation-size: 16px;
+  --type-navigation-weight: 400;
+  --type-navigation-tracking: 0.08em;
+
+  --type-navigation-sm-size: 14px;
+  --type-navigation-sm-weight: 400;
+  --type-navigation-sm-tracking: 0.08em;
+
+  --type-label-size: 14px;
+  --type-label-weight: 400;
+  --type-label-tracking: 0.08em;
+
+  --type-paragraph-size: 16px;
+  --type-paragraph-weight: 500;
+  --type-paragraph-tracking: 0;
+
+  --type-paragraph-mono-size: 16px;
+  --type-paragraph-mono-weight: 400;
+  --type-paragraph-mono-tracking: 0;
 
   /* Motion */
   --motion-micro: 60ms;
@@ -140,18 +168,6 @@
   --motion-easing-enter: cubic-bezier(0,.9,.1,1);
   --motion-easing-exit: cubic-bezier(.4,0,1,1);
   --motion-easing-move: cubic-bezier(.4,0,.2,1);
-
-  /* RevisionDojo hero chip (hover expand / label fade) */
-  --rd-badge-expand-ms: 680ms;
-  --rd-badge-label-ms: 420ms;
-  --rd-badge-label-delay: 180ms;
-  --rd-badge-icon-ms: 900ms;
-  --rd-badge-icon-delay: 30ms;
-  --rd-badge-icon-shift: 0.6rem;
-  --rd-badge-label-shift: 0.5rem;
-  --rd-badge-expand-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --rd-badge-label-ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --rd-badge-icon-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Layout */
   --page-max-width: 1800px;
@@ -245,11 +261,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Default paragraph: case-study overview measure (Satoshi medium, text color) */
+/* Default paragraph → type-paragraph (Satoshi medium 16); line-height kept for measure */
 p {
   font-family: var(--font-sans);
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: var(--type-paragraph-size);
+  font-weight: var(--type-paragraph-weight);
+  letter-spacing: var(--type-paragraph-tracking);
   line-height: 1.5;
   color: var(--color-text);
 }
@@ -305,72 +322,6 @@ main:has([data-not-found]) footer {
   }
 }
 
-/*
- * Hero RevisionDojo pill: the global reduced-motion rule above uses
- * `transition-duration: 0.01ms !important` on *, which overrides Tailwind
- * `duration-*` on this control. When motion is allowed, restore long
- * transitions here (after the * rule) and use max-width (not grid tracks)
- * for smooth width interpolation.
- */
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes rd-badge-icon-engine {
-    0% {
-      transform: translateX(0) rotate(0deg);
-    }
-    46% {
-      transform: translateX(var(--rd-badge-icon-shift)) rotate(14deg);
-    }
-    76% {
-      transform: translateX(var(--rd-badge-icon-shift)) rotate(-7deg);
-    }
-    100% {
-      transform: translateX(var(--rd-badge-icon-shift)) rotate(0deg);
-    }
-  }
-
-  .rd-badge-shell {
-    transition:
-      max-width var(--rd-badge-expand-ms) var(--rd-badge-expand-ease),
-      padding var(--rd-badge-expand-ms) var(--rd-badge-expand-ease) !important;
-  }
-
-  .rd-badge-icon {
-    transform: translateX(0) rotate(0deg);
-    transition: transform calc(var(--rd-badge-icon-ms) * 0.55) var(--rd-badge-icon-ease)
-      var(--rd-badge-icon-delay) !important;
-    transform-origin: 50% 50%;
-    will-change: transform;
-  }
-
-  .rd-badge-label {
-    max-width: 0;
-    padding-left: 0;
-    padding-right: 0;
-    transform: translateX(var(--rd-badge-label-shift));
-    transition:
-      max-width var(--rd-badge-expand-ms) var(--rd-badge-expand-ease),
-      padding-left var(--rd-badge-expand-ms) var(--rd-badge-expand-ease),
-      padding-right var(--rd-badge-expand-ms) var(--rd-badge-expand-ease),
-      opacity var(--rd-badge-label-ms) var(--rd-badge-label-ease) var(--rd-badge-label-delay),
-      transform var(--rd-badge-label-ms) var(--rd-badge-label-ease) var(--rd-badge-label-delay) !important;
-  }
-
-  .group:hover .rd-badge-icon,
-  .group:focus-visible .rd-badge-icon {
-    animation: rd-badge-icon-engine var(--rd-badge-icon-ms) var(--rd-badge-icon-ease)
-      var(--rd-badge-icon-delay) both;
-  }
-
-  .group:hover .rd-badge-label,
-  .group:focus-visible .rd-badge-label {
-    max-width: 22rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 /* custom line-height overrides */
 @media (min-width: 1024px) {
   .lg\:text-4xl {
@@ -388,6 +339,59 @@ main:has([data-not-found]) footer {
 /* Utility Classes */
 .mono {
   font-family: var(--font-mono);
+}
+
+/* Semantic typography — family, size, weight, tracking (+ uppercase where Figma shows it) */
+.type-title {
+  font-family: var(--font-sans);
+  font-size: var(--type-title-size);
+  font-weight: var(--type-title-weight);
+  letter-spacing: var(--type-title-tracking);
+}
+
+.type-subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--type-subtitle-size);
+  font-weight: var(--type-subtitle-weight);
+  letter-spacing: var(--type-subtitle-tracking);
+}
+
+.type-navigation {
+  font-family: var(--font-mono);
+  font-size: var(--type-navigation-size);
+  font-weight: var(--type-navigation-weight);
+  letter-spacing: var(--type-navigation-tracking);
+  text-transform: uppercase;
+}
+
+.type-navigation-sm {
+  font-family: var(--font-mono);
+  font-size: var(--type-navigation-sm-size);
+  font-weight: var(--type-navigation-sm-weight);
+  letter-spacing: var(--type-navigation-sm-tracking);
+  text-transform: uppercase;
+}
+
+.type-label {
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  letter-spacing: var(--type-label-tracking);
+  text-transform: uppercase;
+}
+
+.type-paragraph {
+  font-family: var(--font-sans);
+  font-size: var(--type-paragraph-size);
+  font-weight: var(--type-paragraph-weight);
+  letter-spacing: var(--type-paragraph-tracking);
+}
+
+.type-paragraph-mono {
+  font-family: var(--font-mono);
+  font-size: var(--type-paragraph-mono-size);
+  font-weight: var(--type-paragraph-mono-weight);
+  letter-spacing: var(--type-paragraph-mono-tracking);
 }
 
 /* Focus ring: keyboard-only (visible when tabbing, not on click) */
@@ -436,18 +440,6 @@ main:has([data-not-found]) footer {
 @media (prefers-reduced-motion: reduce) {
   .showcase-cool-idea-glow {
     filter: blur(16px);
-  }
-}
-
-/* Hero stat: pulsing back dot (1s repeat) */
-@keyframes hero-stat-dot-pulse {
-  0%, 100% { transform: scale(0.9); }
-  50% { transform: scale(1.2); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  @keyframes hero-stat-dot-pulse {
-    0%, 100% { transform: scale(1); }
   }
 }
 

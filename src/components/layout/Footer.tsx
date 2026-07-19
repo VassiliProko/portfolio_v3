@@ -243,7 +243,7 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
               ref={consoleRef}
               className="relative z-10 flex flex-col justify-between h-full min-h-[432px] md:min-h-[528px] p-5 md:p-6"
             >
-              <pre className="font-mono text-sm md:text-base text-footer-console-text leading-relaxed flex flex-col gap-[5px] min-w-0 whitespace-pre-wrap break-words">
+              <pre className="type-paragraph-mono text-footer-console-text leading-relaxed flex flex-col gap-[5px] min-w-0 whitespace-pre-wrap break-words">
                 {CONSOLE_LINES.map((line, index) => (
                   <span
                     key={line.id}

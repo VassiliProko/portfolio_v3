@@ -25,7 +25,6 @@ export default function PrettifyMinervaCaseStudyPage() {
   return (
     <CaseStudyLayout
       title="Prettify Minerva"
-      subtitle="Browser Extension"
       heroImageSrc="/images/optimized/prettify-minerva/prettify-minerva-head.jpg"
       heroImageAlt="Prettify Minerva preview"
       overview={PRETTIFY_MINERVA_OVERVIEW}

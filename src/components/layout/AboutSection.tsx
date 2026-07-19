@@ -14,12 +14,10 @@ const ABOUT_HERO_IMAGE = '/images/optimized/about/about.jpg';
 const RESUME_PDF_HREF =
   'https://docs.google.com/document/d/1W0-QIjajoPcEnDEO99qnTczTWo3l3Wu7W1VPZ29Igfw/edit?usp=sharing';
 
-/** Same as case-study overview meta labels (Role / Tools / Skills). */
-const ABOUT_SECTION_HEADING_CLASS =
-  'font-sans text-base font-normal leading-normal text-text-subtle';
+const ABOUT_SECTION_HEADING_CLASS = 'type-label text-text-subtle';
 
 const resumeButtonClass = cn(
-  'group font-mono text-base inline-flex items-center h-12 px-4 rounded-sm',
+  'group type-paragraph-mono inline-flex items-center h-12 px-4 rounded-sm',
   'bg-footer-contact-bg text-footer-console-text',
   'hover:bg-footer-contact-bg-hover transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
@@ -174,13 +172,13 @@ const AboutRoleRow: React.FC<AboutRoleRowProps> = ({
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-base font-medium text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-[60ms] ease-snap"
+            className="type-paragraph text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-[60ms] ease-snap"
           >
             {title}
           </a>
-          <span className="shrink-0 font-sans text-base font-medium text-text-muted">{date}</span>
+          <span className="type-paragraph shrink-0 text-text-muted">{date}</span>
         </div>
-        <span className="font-sans text-base font-medium text-text-subtle">{subtitle}</span>
+        <span className="type-paragraph text-text-subtle">{subtitle}</span>
       </div>
     </div>
   );
@@ -233,18 +231,18 @@ export const AboutSection: React.FC = () => {
               About
             </h2>
             <div className="max-w-[672px]">
-              <p className="mb-0">
+              <p className="type-paragraph mb-0">
                 I&apos;m a multidisciplinary designer and business analytics student at McGill
                 University in Montreal.
               </p>
-              <p className="mb-0">&nbsp;</p>
-              <p className="mb-0">
+              <p className="type-paragraph mb-0">&nbsp;</p>
+              <p className="type-paragraph mb-0">
                 I design for a more curious, healthier, and prettier world. A place where people
                 feel that they belong and are loved. By bringing a deep level of care and thought, I
                 believe that we can design a wonderful future.
               </p>
-              <p className="mb-0">&nbsp;</p>
-              <p className="mb-0">I also enjoy crispy tofu and dragon boat.</p>
+              <p className="type-paragraph mb-0">&nbsp;</p>
+              <p className="type-paragraph mb-0">I also enjoy crispy tofu and dragon boat.</p>
             </div>
           </div>
         </ScrollPopdownReveal>

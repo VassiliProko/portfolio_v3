@@ -30,7 +30,7 @@ export const CaseStudyImage: React.FC<CaseStudyImageProps> = ({
         />
       </div>
       {caption && (
-        <figcaption className="mt-2 font-mono text-sm text-text-muted">
+        <figcaption className="type-label mt-2 text-text-muted">
           {caption}
         </figcaption>
       )}

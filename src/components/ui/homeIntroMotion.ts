@@ -10,7 +10,7 @@ export const HOME_INTRO_WAVE_DURATION_S = 0.39;
 
 export const HOME_INTRO_SUBTITLE_ENTER_OFFSET_PX = 28;
 
-/** RevisionDojo subtitle pill — shared with showcase cool-idea CTA */
+/** Intro subtitle pill — shared with showcase cool-idea CTA */
 export const HOME_INTRO_SUBTITLE_PILL_CLASS =
   'inline-flex rounded-full bg-intro-highlight-rest px-xs py-4xs transition-colors duration-[180ms] ease-move hover:bg-surface-2 hover:text-text motion-reduce:transition-none';
 

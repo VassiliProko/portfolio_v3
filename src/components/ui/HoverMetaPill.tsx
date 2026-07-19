@@ -131,7 +131,7 @@ export const HoverMetaPill: React.FC<HoverMetaPillProps> = ({ title = 'Project' 
         />
         <div
           className={[
-            'relative box-border overflow-hidden rounded-sm border border-transparent px-3 py-2 font-sans text-sm leading-none text-text backdrop-blur-2xl backdrop-saturate-150',
+            'type-paragraph relative box-border overflow-hidden rounded-sm border border-transparent px-3 py-2 leading-none text-text backdrop-blur-2xl backdrop-saturate-150',
           ].join(' ')}
           style={pillStyle}
         >

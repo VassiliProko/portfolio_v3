@@ -323,10 +323,10 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                           : { duration: 0.2, ease: slideEase }
                       }
                     >
-                      <div className="w-full font-sans text-base font-normal leading-normal text-text-subtle">
+                      <div className="type-label w-full text-text-subtle">
                         {activeItem.name}
                       </div>
-                      <p className="m-0 mt-[4px] mb-[4px] w-full max-w-[80ch]">
+                      <p className="type-paragraph m-0 mt-[4px] mb-[4px] w-full max-w-[80ch]">
                         {activeItem.description}
                       </p>
                     </motion.div>

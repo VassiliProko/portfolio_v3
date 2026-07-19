@@ -141,14 +141,14 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans font-medium text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-[60ms] ease-snap"
+            className="type-paragraph text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-[60ms] ease-snap"
             onClick={(e) => e.stopPropagation()}
           >
             {title}&nbsp;
           </Link>
-          <span className="font-sans text-text-muted"> / {subtitle}</span>
+          <span className="type-paragraph text-text-muted"> / {subtitle}</span>
         </div>
-        <span className="font-sans text-text-subtle shrink-0">{date}</span>
+        <span className="type-paragraph shrink-0 text-text-subtle">{date}</span>
       </div>
 
       {/* Mobile expanded image */}

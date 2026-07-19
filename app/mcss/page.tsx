@@ -62,7 +62,6 @@ export default function MCSSCaseStudyPage() {
   return (
     <CaseStudyLayout
       title="McGill Chinese Students' Society"
-      subtitle="Website & Graphics"
       heroVideoSrc="/other/mcss_video.webm"
       heroVideoTitle="MCSS website preview video"
       heroMediaStyle={{ background: 'var(--gradient-mcss)' }}
@@ -91,24 +90,26 @@ export default function MCSSCaseStudyPage() {
       </section>
       <McssMobileCarousel />
       <section
-        className="w-full py-8 md:py-12 font-sans text-md md:text-lg leading-relaxed"
+        className="w-full py-8 md:py-12"
         aria-labelledby="background-heading"
       >
-        <h2 id="background-heading" className="mb-4 text-xl md:text-2xl font-bold text-text">
+        <h2 id="background-heading" className="type-label mb-4 text-text">
           Background
         </h2>
         <div>
-          <p className={cn(CASE_STUDY_BODY_CLASS, 'mb-4 text-text-subtle')}>
+          <p className={cn(CASE_STUDY_BODY_CLASS, 'type-paragraph mb-4 text-text-subtle')}>
             {MCSS_BACKGROUND_INTRO}
           </p>
-          <p className={cn(CASE_STUDY_BODY_CLASS, 'text-text-subtle')}>{MCSS_BACKGROUND}</p>
+          <p className={cn(CASE_STUDY_BODY_CLASS, 'type-paragraph text-text-subtle')}>
+            {MCSS_BACKGROUND}
+          </p>
         </div>
       </section>
 
       {MCSS_BACKGROUND_PHASES.map((phase, index) => (
         <section
           key={phase.title}
-          className={`w-full pt-8 md:pt-12 font-sans text-md md:text-lg leading-relaxed ${
+          className={`w-full pt-8 md:pt-12 ${
             index === 2 ? 'pb-4 md:pb-6' : 'pb-8 md:pb-12'
           }`}
           aria-labelledby={`${phase.title.toLowerCase().replace(/\s+/g, '-')}-heading`}
@@ -117,13 +118,15 @@ export default function MCSSCaseStudyPage() {
             <div>
               <h3
                 id={`${phase.title.toLowerCase().replace(/\s+/g, '-')}-heading`}
-                className="mb-3 text-lg md:text-xl font-semibold text-text"
+                className="type-label mb-3 text-text"
               >
                 {phase.title}
               </h3>
-              <p className={cn(CASE_STUDY_BODY_CLASS, 'text-text-subtle')}>{phase.body}</p>
+              <p className={cn(CASE_STUDY_BODY_CLASS, 'type-paragraph text-text-subtle')}>
+                {phase.body}
+              </p>
               {phase.title === 'Structural Refresh' ? (
-                <p className={cn(CASE_STUDY_BODY_CLASS, 'mt-4 text-text-subtle')}>
+                <p className={cn(CASE_STUDY_BODY_CLASS, 'type-paragraph mt-4 text-text-subtle')}>
                   Yet, something still felt missing...
                 </p>
               ) : null}
@@ -175,18 +178,20 @@ export default function MCSSCaseStudyPage() {
         </div>
       </section>
 
-      <section className="w-full py-8 md:py-12 font-sans text-md md:text-lg leading-relaxed">
-        <h2 className="mb-4 text-xl md:text-2xl font-bold text-text">Capturing Culture and Vibes</h2>
-        <p className={cn(CASE_STUDY_BODY_CLASS, 'text-text-subtle')}>{MCSS_CULTURE_AND_VIBES}</p>
+      <section className="w-full py-8 md:py-12">
+        <h2 className="type-label mb-4 text-text">Capturing Culture and Vibes</h2>
+        <p className={cn(CASE_STUDY_BODY_CLASS, 'type-paragraph text-text-subtle')}>
+          {MCSS_CULTURE_AND_VIBES}
+        </p>
       </section>
 
-      <section className="w-full py-8 md:py-12 font-sans text-md md:text-lg leading-relaxed">
-        <h2 className="mb-4 text-xl md:text-2xl font-bold text-text">Implementation</h2>
+      <section className="w-full py-8 md:py-12">
+        <h2 className="type-label mb-4 text-text">Implementation</h2>
         <div>
-          <p className={cn(CASE_STUDY_BODY_CLASS, 'text-text-subtle')}>
+          <p className={cn(CASE_STUDY_BODY_CLASS, 'type-paragraph text-text-subtle')}>
             {MCSS_IMPLEMENTATION_PRIMARY}
           </p>
-          <p className={cn(CASE_STUDY_BODY_CLASS, 'mt-4 text-text-subtle')}>
+          <p className={cn(CASE_STUDY_BODY_CLASS, 'type-paragraph mt-4 text-text-subtle')}>
             {MCSS_IMPLEMENTATION_SECONDARY}
           </p>
         </div>
@@ -204,9 +209,11 @@ export default function MCSSCaseStudyPage() {
         </div>
       </section>
 
-      <section className="w-full py-8 md:py-12 font-sans text-md md:text-lg leading-relaxed">
-        <h2 className="mb-4 text-xl md:text-2xl font-bold text-text">Results</h2>
-        <p className={cn(CASE_STUDY_BODY_CLASS, 'text-text-subtle')}>{MCSS_RESULTS}</p>
+      <section className="w-full py-8 md:py-12">
+        <h2 className="type-label mb-4 text-text">Results</h2>
+        <p className={cn(CASE_STUDY_BODY_CLASS, 'type-paragraph text-text-subtle')}>
+          {MCSS_RESULTS}
+        </p>
       </section>
     </CaseStudyLayout>
   );

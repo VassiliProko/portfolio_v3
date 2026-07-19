@@ -295,7 +295,7 @@ export const HomeNavbar: React.FC = () => {
                 href="/about"
                 prefetch={false}
                 aria-current={isAboutPage ? 'page' : undefined}
-                className="block py-3 font-mono text-base uppercase text-text transition-colors duration-[60ms] ease-snap focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
+                className="type-navigation block py-3 text-text transition-colors duration-[60ms] ease-snap focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline"
               >
                 About
               </Link>

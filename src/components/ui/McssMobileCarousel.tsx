@@ -70,7 +70,7 @@ export const McssMobileCarousel: React.FC = () => {
 
       <div className="mt-4 rounded-lg bg-surface-dark-1 px-3 py-3 text-text-inverted-1">
         <div className="flex items-center justify-between gap-4">
-          <p className="text-sm font-mono text-text-inverted-1">Mobile Screenshots</p>
+          <p className="type-label text-text-inverted-1">Mobile Screenshots</p>
           <div className="flex items-center gap-2">
             <Button
               type="button"

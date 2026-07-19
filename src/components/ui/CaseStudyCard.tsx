@@ -93,14 +93,14 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
       </div>
       <div className="flex flex-col gap-1">
         <div className="mt-xs px-sm py-xs flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0 bg-surface-1 rounded-lg">
-          <h3 className="text-text font-sans font-medium text-lg leading-tight">
+          <h3 className="type-subtitle text-text">
             {title}
           </h3>
-          <span className="font-mono text-sm text-text-muted shrink-0">
+          <span className="type-label shrink-0 text-text-muted">
             {duration}
           </span>
         </div>
-        <p className="px-sm text-text-subtle font-sans text-md leading-relaxed mb-4">
+        <p className="type-paragraph mb-4 px-sm text-text-subtle">
           {description}
         </p>
       </div>

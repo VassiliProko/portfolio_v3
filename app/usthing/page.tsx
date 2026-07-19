@@ -47,7 +47,6 @@ export default function USThingCaseStudyPage() {
   return (
     <CaseStudyLayout
       title="USThing"
-      subtitle="App Feature"
       hero={USTHING_HERO}
       overview={USTHING_OVERVIEW}
       meta={{
