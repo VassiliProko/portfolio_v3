@@ -206,7 +206,7 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
           {/* Upper section: console-style card — fluid trail reveals photo color */}
           <div
             ref={imageCardRef}
-            className="relative min-h-[432px] md:min-h-[528px] bg-surface-dark-1"
+            className="relative overflow-hidden min-h-[432px] md:min-h-[528px] bg-surface-dark-1"
           >
             <div
               className="absolute inset-x-0 -inset-y-[24%]"
@@ -259,7 +259,8 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
               </pre>
             </div>
           </div>
-          <div className="flex h-2 w-full shrink-0">
+          {/* Color stripe */}
+          <div className="relative z-10 flex h-2 w-full shrink-0">
             <div className="flex-[3] bg-surface-dark-1" />
             <div className="flex-[2] bg-surface-dark-2" />
             <div className="flex-[2] bg-primary-base" />
