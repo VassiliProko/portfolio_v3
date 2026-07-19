@@ -4,6 +4,7 @@
  */
 
 export const layout = {
+  maxWidth: '1800px',
   pageMargin: {
     mobile: '20px',
     desktop: '32px',

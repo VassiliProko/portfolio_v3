@@ -154,6 +154,7 @@
   --rd-badge-icon-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Layout */
+  --page-max-width: 1800px;
   --page-margin: var(--spacing-md);
   --grid-gutter: 15px;
   --grid-margin: var(--spacing-md);
@@ -234,6 +235,8 @@ body {
   font-family: var(--font-sans);
   color: var(--color-text);
   background-color: var(--color-background);
+  max-width: var(--page-max-width);
+  margin-inline: auto;
   padding-inline: var(--page-margin);
   min-height: 100vh;
   display: flex;

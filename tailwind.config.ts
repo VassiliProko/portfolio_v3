@@ -139,6 +139,9 @@ const config: Config = {
   			'3xl': '80px',
   			'4xl': '120px'
   		},
+  		maxWidth: {
+  			page: 'var(--page-max-width)',
+  		},
   		borderRadius: {
   			sm: 'calc(var(--radius) - 4px)',
   			md: 'calc(var(--radius) - 2px)',
