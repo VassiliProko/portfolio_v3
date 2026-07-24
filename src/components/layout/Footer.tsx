@@ -36,7 +36,7 @@ function getLineLength(line: ConsoleLineConfig): number {
   return line.linkText.length + (line.suffix?.length ?? 0);
 }
 
-/** Syntax-tint typed console text: identifiers default, methods primary, strings dark text. */
+/** Syntax-tint typed console text: identifiers default, methods subtle, strings dark text. */
 function renderTypedConsoleText(text: string, visibleChars: number): React.ReactNode {
   const visible = text.slice(0, Math.min(visibleChars, text.length));
   if (!visible) return null;
@@ -63,7 +63,7 @@ function renderTypedConsoleText(text: string, visibleChars: number): React.React
       let end = i + 1;
       while (end < visible.length && /[a-zA-Z0-9_]/.test(visible[end]!)) end += 1;
       nodes.push(
-        <span key={key++} className="text-primary-base">
+        <span key={key++} className="text-text-subtle">
           {visible.slice(i, end)}
         </span>
       );

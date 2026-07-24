@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/src/utils/cn';
 import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
@@ -24,6 +25,10 @@ export interface CaseStudyLayoutProps {
   heroImageSrc?: string;
   /** Hero image alt text */
   heroImageAlt?: string;
+  /** Intrinsic width for Next Image CLS prevention */
+  heroImageWidth?: number;
+  /** Intrinsic height for Next Image CLS prevention */
+  heroImageHeight?: number;
   /** Optional local video src for hero (e.g. /other/mcss_video.webm) */
   heroVideoSrc?: string;
   /** Optional YouTube/Vimeo embed URL for hero video */
@@ -36,9 +41,9 @@ export interface CaseStudyLayoutProps {
   hero?: React.ReactNode;
   /** Overview paragraphs (editorial columns; stack on small viewports) */
   overview: React.ReactNode;
-  /** Optional meta: time, role, tools, skills (displayed under overview) */
+  /** Optional meta: duration, role, tools, skills (displayed under overview) */
   meta?: {
-    time?: string;
+    duration?: string;
     role?: string;
     tools?: string;
     skills?: string;
@@ -83,6 +88,8 @@ function CaseStudyHeroMedia({
   heroVideoTitle,
   heroImageSrc,
   heroImageAlt,
+  heroImageWidth = 1920,
+  heroImageHeight = 1080,
   heroMediaStyle,
 }: Pick<
   CaseStudyLayoutProps,
@@ -91,6 +98,8 @@ function CaseStudyHeroMedia({
   | 'heroVideoTitle'
   | 'heroImageSrc'
   | 'heroImageAlt'
+  | 'heroImageWidth'
+  | 'heroImageHeight'
   | 'heroMediaStyle'
 >) {
   if (heroVideoSrc || heroVideoEmbedUrl) {
@@ -132,12 +141,15 @@ function CaseStudyHeroMedia({
       className="w-full overflow-hidden rounded-[8px] bg-surface-2"
       style={heroMediaStyle}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={heroImageSrc}
         alt={heroImageAlt ?? ''}
+        width={heroImageWidth}
+        height={heroImageHeight}
         className="block h-auto w-full"
         sizes="100vw"
+        priority
+        fetchPriority="high"
       />
     </div>
   );
@@ -147,6 +159,8 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
   title,
   heroImageSrc,
   heroImageAlt = '',
+  heroImageWidth,
+  heroImageHeight,
   heroVideoSrc,
   heroVideoEmbedUrl,
   heroVideoTitle = 'Case study hero video',
@@ -161,16 +175,16 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
   children,
   className,
 }) => {
-  const hasMeta = meta && (meta.time ?? meta.role ?? meta.tools ?? meta.skills);
+  const hasMeta = meta && (meta.duration ?? meta.role ?? meta.tools ?? meta.skills);
   const hasDefaultHero = Boolean(heroVideoSrc || heroVideoEmbedUrl || heroImageSrc);
   const hasHero = Boolean(hero ?? hasDefaultHero);
   const hasLinks = Boolean(websiteUrl ?? githubUrl);
 
   const metaEntries = hasMeta
     ? ([
-        meta.time ? { label: 'Time', value: meta.time } : null,
         meta.role ? { label: 'Role', value: meta.role } : null,
         meta.tools ? { label: 'Tools', value: meta.tools } : null,
+        meta.duration ? { label: 'Duration', value: meta.duration } : null,
         meta.skills ? { label: 'Skills', value: meta.skills } : null,
       ].filter(Boolean) as { label: string; value: string }[])
     : [];
@@ -190,6 +204,8 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
                 heroVideoTitle={heroVideoTitle}
                 heroImageSrc={heroImageSrc}
                 heroImageAlt={heroImageAlt}
+                heroImageWidth={heroImageWidth}
+                heroImageHeight={heroImageHeight}
                 heroMediaStyle={heroMediaStyle}
               />
             )}
