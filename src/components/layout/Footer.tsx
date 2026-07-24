@@ -36,6 +36,56 @@ function getLineLength(line: ConsoleLineConfig): number {
   return line.linkText.length + (line.suffix?.length ?? 0);
 }
 
+/** Syntax-tint typed console text: identifiers default, methods primary, strings dark text. */
+function renderTypedConsoleText(text: string, visibleChars: number): React.ReactNode {
+  const visible = text.slice(0, Math.min(visibleChars, text.length));
+  if (!visible) return null;
+
+  const nodes: React.ReactNode[] = [];
+  let i = 0;
+  let key = 0;
+
+  while (i < visible.length) {
+    if (visible[i] === '"') {
+      const close = visible.indexOf('"', i + 1);
+      const end = close === -1 ? visible.length : close + 1;
+      nodes.push(
+        <span key={key++} className="text-text">
+          {visible.slice(i, end)}
+        </span>
+      );
+      i = end;
+      continue;
+    }
+
+    // Method / property after a dot
+    if (visible[i] === '.' && i + 1 < visible.length && /[a-zA-Z_]/.test(visible[i + 1]!)) {
+      let end = i + 1;
+      while (end < visible.length && /[a-zA-Z0-9_]/.test(visible[end]!)) end += 1;
+      nodes.push(
+        <span key={key++} className="text-primary-base">
+          {visible.slice(i, end)}
+        </span>
+      );
+      i = end;
+      continue;
+    }
+
+    // Plain chunk until next string or method
+    let end = i + 1;
+    while (end < visible.length) {
+      const ch = visible[end]!;
+      if (ch === '"') break;
+      if (ch === '.' && end + 1 < visible.length && /[a-zA-Z_]/.test(visible[end + 1]!)) break;
+      end += 1;
+    }
+    nodes.push(<span key={key++}>{visible.slice(i, end)}</span>);
+    i = end;
+  }
+
+  return <>{nodes}</>;
+}
+
 type ConsoleLineContext = { pathname: string; prefersReducedMotion: boolean };
 
 function renderConsoleLine(
@@ -48,7 +98,7 @@ function renderConsoleLine(
   if (n <= 0) return null;
 
   if (line.type === 'text') {
-    return <>{line.text.slice(0, n)}</>;
+    return renderTypedConsoleText(line.text, n);
   }
 
   const linkShow = Math.min(n, line.linkText.length);
@@ -77,7 +127,7 @@ function renderConsoleLine(
         <Link
           href={line.href}
           prefetch={false}
-          className={linkClass}
+          className={cn(linkClass, 'text-primary-base')}
           onClick={
             isHomeLink && isOnHome
               ? (e) => { e.preventDefault(); scrollToTop(); }
@@ -89,7 +139,7 @@ function renderConsoleLine(
           {line.linkText.slice(0, linkShow)}
         </Link>
       )}
-      {suffixShow}
+      {suffixShow && <span className="text-text-muted">{suffixShow}</span>}
     </>
   );
 }
@@ -243,19 +293,31 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
               ref={consoleRef}
               className="relative z-10 flex flex-col justify-between h-full min-h-[432px] md:min-h-[528px] p-5 md:p-6"
             >
-              <pre className="type-paragraph-mono text-footer-console-text leading-relaxed flex flex-col gap-[5px] min-w-0 whitespace-pre-wrap break-words">
-                {CONSOLE_LINES.map((line, index) => (
-                  <span
-                    key={line.id}
-                    className="inline-block w-fit max-w-full rounded-sm px-[8px] py-[3px] backdrop-blur-md"
-                    style={{
-                      backgroundColor: 'color-mix(in srgb, var(--color-surface-dark-1) 50%, transparent)',
-                    }}
-                  >
-                    <span className="text-primary-base">&gt;</span>{' '}
-                    {renderConsoleLine(line, visibleCounts[index] ?? 0, { pathname, prefersReducedMotion })}
-                  </span>
-                ))}
+              <pre
+                className="type-paragraph-mono text-footer-console-text leading-relaxed grid w-fit max-w-full min-w-0 whitespace-pre-wrap break-words rounded-sm px-[8px] py-[5px] backdrop-blur-sm"
+                style={{
+                  backgroundColor: 'color-mix(in srgb, var(--color-surface-dark-1) 28%, transparent)',
+                }}
+              >
+                {/* Invisible sizer keeps one stable blur panel while typewriter runs */}
+                <div className="invisible col-start-1 row-start-1 flex flex-col gap-[5px]" aria-hidden>
+                  {CONSOLE_LINES.map((line) => (
+                    <span key={line.id} className="block">
+                      &gt;{' '}
+                      {line.type === 'text'
+                        ? line.text
+                        : `${line.linkText}${line.suffix ?? ''}`}
+                    </span>
+                  ))}
+                </div>
+                <div className="col-start-1 row-start-1 flex flex-col gap-[5px]">
+                  {CONSOLE_LINES.map((line, index) => (
+                    <span key={line.id} className="block">
+                      <span className="text-primary-base">&gt;</span>{' '}
+                      {renderConsoleLine(line, visibleCounts[index] ?? 0, { pathname, prefersReducedMotion })}
+                    </span>
+                  ))}
+                </div>
               </pre>
             </div>
           </div>
