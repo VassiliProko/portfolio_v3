@@ -36,7 +36,36 @@ function getLineLength(line: ConsoleLineConfig): number {
   return line.linkText.length + (line.suffix?.length ?? 0);
 }
 
-/** Syntax-tint typed console text: identifiers default, methods subtle, strings dark text. */
+const CONSOLE_TEXT_CLASS = 'text-footer-console-text';
+const BEAUTY_WORD = 'beauty';
+
+/** Renders a quoted string slice; "beauty" uses the navbar name gradient when visible. */
+function renderQuotedString(quotedSlice: string, key: number): React.ReactNode {
+  const beautyIndex = quotedSlice.indexOf(BEAUTY_WORD);
+
+  if (beautyIndex === -1) {
+    return (
+      <span key={key} className={CONSOLE_TEXT_CLASS}>
+        {quotedSlice}
+      </span>
+    );
+  }
+
+  const before = quotedSlice.slice(0, beautyIndex);
+  const beautyEnd = beautyIndex + BEAUTY_WORD.length;
+  const beautyVisible = quotedSlice.slice(beautyIndex, Math.min(beautyEnd, quotedSlice.length));
+  const after = quotedSlice.slice(Math.min(beautyEnd, quotedSlice.length));
+
+  return (
+    <span key={key} className={CONSOLE_TEXT_CLASS}>
+      {before}
+      {beautyVisible ? <span className="text-name-gradient-light">{beautyVisible}</span> : null}
+      {after}
+    </span>
+  );
+}
+
+/** Typed console text — all white except "beauty" gradient inside the log string. */
 function renderTypedConsoleText(text: string, visibleChars: number): React.ReactNode {
   const visible = text.slice(0, Math.min(visibleChars, text.length));
   if (!visible) return null;
@@ -49,11 +78,7 @@ function renderTypedConsoleText(text: string, visibleChars: number): React.React
     if (visible[i] === '"') {
       const close = visible.indexOf('"', i + 1);
       const end = close === -1 ? visible.length : close + 1;
-      nodes.push(
-        <span key={key++} className="text-text">
-          {visible.slice(i, end)}
-        </span>
-      );
+      nodes.push(renderQuotedString(visible.slice(i, end), key++));
       i = end;
       continue;
     }
@@ -63,7 +88,7 @@ function renderTypedConsoleText(text: string, visibleChars: number): React.React
       let end = i + 1;
       while (end < visible.length && /[a-zA-Z0-9_]/.test(visible[end]!)) end += 1;
       nodes.push(
-        <span key={key++} className="text-text-subtle">
+        <span key={key++} className={CONSOLE_TEXT_CLASS}>
           {visible.slice(i, end)}
         </span>
       );
@@ -79,7 +104,11 @@ function renderTypedConsoleText(text: string, visibleChars: number): React.React
       if (ch === '.' && end + 1 < visible.length && /[a-zA-Z_]/.test(visible[end + 1]!)) break;
       end += 1;
     }
-    nodes.push(<span key={key++}>{visible.slice(i, end)}</span>);
+    nodes.push(
+      <span key={key++} className={CONSOLE_TEXT_CLASS}>
+        {visible.slice(i, end)}
+      </span>
+    );
     i = end;
   }
 
@@ -127,7 +156,7 @@ function renderConsoleLine(
         <Link
           href={line.href}
           prefetch={false}
-          className={cn(linkClass, 'text-primary-base')}
+          className={linkClass}
           onClick={
             isHomeLink && isOnHome
               ? (e) => { e.preventDefault(); scrollToTop(); }
@@ -139,7 +168,7 @@ function renderConsoleLine(
           {line.linkText.slice(0, linkShow)}
         </Link>
       )}
-      {suffixShow && <span className="text-text-muted">{suffixShow}</span>}
+      {suffixShow && <span className={CONSOLE_TEXT_CLASS}>{suffixShow}</span>}
     </>
   );
 }

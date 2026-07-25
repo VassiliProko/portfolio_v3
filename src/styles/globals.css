@@ -86,6 +86,7 @@
 
   /* Home navbar name + intro highlights */
   --gradient-name-text: linear-gradient(90deg, var(--color-primary-base) 0%, var(--color-accent-base) 100%);
+  --gradient-name-text-light: linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), var(--gradient-name-text);
   --color-intro-munching: #ffa303;
   --color-intro-cooking: #ff03b8;
   --color-intro-highlight-rest: #ededee;
@@ -421,6 +422,13 @@ main:has([data-not-found]) footer {
 
 .text-name-gradient {
   background-image: var(--gradient-name-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-name-gradient-light {
+  background-image: var(--gradient-name-text-light);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
