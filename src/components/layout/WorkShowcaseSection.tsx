@@ -8,6 +8,7 @@ import { useReducedMotion } from 'motion/react';
 import { HoverMetaPill, HoverSurfaceContext, usePointerWithinElement } from '@/src/components/ui/HoverMetaPill';
 import {
   ImagePreview,
+  IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
   type ImagePreviewItem,
 } from '@/src/components/ui/ImagePreview';
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
@@ -22,7 +23,7 @@ type WorkCardShellProps = {
   domId?: string;
   href?: string;
   externalHref?: string;
-  /** Opens a non-navigating action (e.g. image preview). Skips hover scale; uses zoom-in cursor. */
+  /** Opens a non-navigating action (e.g. image preview). Uses zoom-in cursor. */
   onActivate?: () => void;
   style?: React.CSSProperties;
   children: React.ReactNode;
@@ -43,6 +44,15 @@ const YINLIN_IMAGE_PREVIEW: ImagePreviewItem = {
   width: 1186,
   height: 661,
   captionTone: 'on-dark',
+};
+
+const DISCORD_SNOWSGIVING_IMAGE_PREVIEW: ImagePreviewItem = {
+  src: '/images/optimized/home/discord-snowsgiving-preview.jpg',
+  name: 'Discord Snowsgiving',
+  description:
+    'I won the Best Digital Art Prize (1 of 5 category winners) at Discord Snowsgiving for my "Draw a Wumpus" art submission. I recieved some cool Discord merch, including a cute Wumpus plushie.',
+  width: 1200,
+  height: 675,
 };
 type WorkShowcaseSectionProps = {
   visible?: boolean;
@@ -450,9 +460,11 @@ type IllustrationShowcaseCardProps = {
   ariaLabel: string;
   hoverTitle: string;
   background: string;
+  /** When set, opens ImagePreview (full-bleed art — no padded gradient). */
+  previewItem?: ImagePreviewItem;
 };
 
-/** Padded 16:9 illustration preview on a project gradient surface. */
+/** Padded 16:9 illustration on a project gradient surface. */
 const IllustrationShowcaseCard: React.FC<IllustrationShowcaseCardProps> = ({
   reveal = true,
   delayMs = 0,
@@ -460,30 +472,54 @@ const IllustrationShowcaseCard: React.FC<IllustrationShowcaseCardProps> = ({
   ariaLabel,
   hoverTitle,
   background,
+  previewItem,
 }) => {
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+  const opensPreview = Boolean(previewItem);
+
   return (
-    <WorkCardShell
-      className="relative"
-      ariaLabel={ariaLabel}
-      hoverTitle={hoverTitle}
-      reveal={reveal}
-      delayMs={delayMs}
-      fillSurface={false}
-      style={{ background }}
-    >
-      <div className="box-border flex w-full items-center justify-center p-showcase-illustration-sm sm:p-showcase-illustration">
-        <div className="relative aspect-[16/9] w-full overflow-hidden rounded">
-          <Image
-            src={src}
-            alt=""
-            fill
-            className="pointer-events-none select-none object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
-            priority={false}
-          />
+    <>
+      <WorkCardShell
+        className="relative"
+        ariaLabel={ariaLabel}
+        hoverTitle={hoverTitle}
+        reveal={reveal}
+        delayMs={delayMs}
+        fillSurface={false}
+        style={{ background }}
+        onActivate={opensPreview ? () => setPreviewOpen(true) : undefined}
+      >
+        <div className="box-border flex w-full items-center justify-center p-showcase-illustration-sm sm:p-showcase-illustration">
+          <div
+            className={cn(
+              'relative aspect-[16/9] w-full rounded',
+              // Preview triggers scale past the frame into the gradient pad (no edge crop).
+              opensPreview ? 'overflow-visible' : 'overflow-hidden',
+            )}
+          >
+            <Image
+              src={src}
+              alt=""
+              fill
+              className={cn(
+                'pointer-events-none select-none object-cover rounded',
+                opensPreview && IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
+                opensPreview && 'z-[1]',
+              )}
+              sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
+              priority={false}
+            />
+          </div>
         </div>
-      </div>
-    </WorkCardShell>
+      </WorkCardShell>
+      {previewItem ? (
+        <ImagePreview
+          item={previewItem}
+          open={previewOpen}
+          onClose={() => setPreviewOpen(false)}
+        />
+      ) : null}
+    </>
   );
 };
 
@@ -494,10 +530,11 @@ const DiscordSnowsgivingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
   <IllustrationShowcaseCard
     reveal={reveal}
     delayMs={delayMs}
-    src="/images/optimized/home/discord-snowsgiving-preview.jpg"
-    ariaLabel="Discord Snowsgiving illustration preview"
+    src={DISCORD_SNOWSGIVING_IMAGE_PREVIEW.src}
+    ariaLabel="Open Discord Snowsgiving illustration preview"
     hoverTitle="Discord Snowsgiving"
     background="var(--gradient-discord-snowsgiving-showcase)"
+    previewItem={DISCORD_SNOWSGIVING_IMAGE_PREVIEW}
   />
 );
 
@@ -524,7 +561,10 @@ const YinlinIllustrationCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
             src={YINLIN_IMAGE_PREVIEW.src}
             alt=""
             fill
-            className="pointer-events-none select-none object-cover"
+            className={cn(
+              'pointer-events-none select-none object-cover',
+              IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
+            )}
             sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
             priority={false}
           />

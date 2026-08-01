@@ -7,6 +7,7 @@ import { cn } from '@/src/utils/cn';
 import { ScrollPopdownReveal } from '@/src/components/ui/PopdownReveal';
 import {
   ImagePreview,
+  IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
   type ImagePreviewItem,
 } from '@/src/components/ui/ImagePreview';
 
@@ -44,7 +45,7 @@ const resumeButtonIconClass = cn(
 
 /**
  * About page gallery lightbox items — edit name / description here.
- * All use `captionTone: 'on-dark'` so the close control stays light over the photos.
+ * Gallery lightbox items for the about page.
  */
 const SHOWCASE_IMAGES: ImagePreviewItem[] = [
   {
@@ -255,7 +256,7 @@ export const AboutSection: React.FC = () => {
               onClick={() => setPreviewIndex(index)}
               aria-label={`Open ${image.name} image preview`}
               className={cn(
-                'relative aspect-[335/200] cursor-zoom-in overflow-hidden rounded-sm border-0 bg-surface-2 p-0',
+                'group relative aspect-[335/200] cursor-zoom-in overflow-hidden rounded-sm border-0 bg-surface-2 p-0',
                 'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
               )}
             >
@@ -263,7 +264,10 @@ export const AboutSection: React.FC = () => {
                 src={image.src}
                 alt={image.alt ?? image.description ?? image.name}
                 fill
-                className="pointer-events-none object-cover"
+                className={cn(
+                  'pointer-events-none object-cover',
+                  IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
+                )}
                 sizes="(max-width: 768px) 50vw, 245px"
               />
             </button>

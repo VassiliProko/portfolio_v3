@@ -112,8 +112,8 @@
 
   /* Image preview lightbox */
   --radius-image-preview: 8px;
-  /* Opaque matte behind rounded art — prevents light page bleed in corner AA */
-  --color-image-preview-matte: #000000;
+  /* Opaque matte behind rounded art — matches page background (light/dark) */
+  --color-image-preview-matte: var(--color-background);
 
   /* Compare image divider */
   --shadow-compare-divider: -6px 0 14px rgba(0, 0, 0, 0.18);

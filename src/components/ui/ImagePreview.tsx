@@ -18,12 +18,17 @@ export type ImagePreviewItem = {
   alt?: string;
   width?: number;
   height?: number;
-  /**
-   * `on-dark` — light close-button chrome over dark artwork.
-   * Colors are fixed so they do not flip with the site theme.
-   */
+  /** Unused — close control is always light. Kept for existing call sites. */
   captionTone?: 'default' | 'on-dark';
 };
+
+/**
+ * Hover zoom for media inside an ImagePreview trigger.
+ * Parent hit target must include `group`. Use `overflow-hidden` to crop in-frame,
+ * or `overflow-visible` so the media can break out of its frame.
+ */
+export const IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS =
+  'origin-center transform-gpu transition-transform duration-[280ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-[1.04] group-focus-visible:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-focus-visible:scale-100';
 
 type ImagePreviewProps = {
   /** Single-image mode (e.g. Yinlin). Ignored when `items` is provided. */
@@ -106,8 +111,18 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
   React.useEffect(() => {
     if (!open) return;
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const html = document.documentElement;
+    const body = document.body;
+    const previousHtmlOverflow = html.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+    const previousHtmlOverscroll = html.style.overscrollBehavior;
+    const previousBodyOverscroll = body.style.overscrollBehavior;
+
+    // Lock both roots — viewport scroll often lives on `html`, not only `body`.
+    html.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+    html.style.overscrollBehavior = 'none';
+    body.style.overscrollBehavior = 'none';
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -125,11 +140,23 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
       }
     };
 
+    // Block wheel/touch scroll from reaching the page behind the lightbox.
+    const preventScroll = (event: Event) => {
+      event.preventDefault();
+    };
+
     window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('wheel', preventScroll, { passive: false });
+    window.addEventListener('touchmove', preventScroll, { passive: false });
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      html.style.overflow = previousHtmlOverflow;
+      body.style.overflow = previousBodyOverflow;
+      html.style.overscrollBehavior = previousHtmlOverscroll;
+      body.style.overscrollBehavior = previousBodyOverscroll;
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('wheel', preventScroll);
+      window.removeEventListener('touchmove', preventScroll);
     };
   }, [open, onClose, isGallery, gallery, goToIndex, safeIndex]);
 
@@ -182,8 +209,6 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
   const imageWidth = activeItem?.width ?? 1200;
   const imageHeight = activeItem?.height ?? 675;
   const aspect = imageWidth / imageHeight;
-  const onDark = activeItem?.captionTone === 'on-dark';
-  const chromeTextClass = onDark ? 'text-footer-console-text' : 'text-text';
 
   // Fit image + caption (+ carousel) + top/bottom insets inside the viewport.
   const availableHeightPx = Math.max(0, viewportSize.height - PREVIEW_INSET_PX * 2);
@@ -207,7 +232,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
         >
           <motion.div
             aria-hidden
-            className="absolute inset-0 bg-surface-dark-3"
+            className="absolute inset-0 bg-background"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -216,7 +241,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
           <motion.button
             type="button"
             aria-label="Close image preview"
-            className="absolute inset-0 bg-overlay-backdrop"
+            className="absolute inset-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -247,7 +272,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
               onClick={(event) => event.stopPropagation()}
             >
               <div
-                className="relative w-full shrink-0 overflow-hidden rounded-image-preview bg-surface-dark-3"
+                className="relative w-full shrink-0 overflow-hidden rounded-image-preview bg-background"
                 style={{
                   aspectRatio: `${imageWidth} / ${imageHeight}`,
                   maxHeight: imageMaxHeightPx,
@@ -297,11 +322,10 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                     onClick={onClose}
                     className={cn(
                       'pointer-events-auto inline-flex size-9 items-center justify-center rounded-sm',
-                      'bg-overlay-uniform opacity-70 backdrop-blur-2xl backdrop-saturate-150',
+                      'bg-overlay-uniform text-footer-console-text opacity-70 backdrop-blur-2xl backdrop-saturate-150',
                       'transition-opacity duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
                       'hover:opacity-100 focus-visible:opacity-100',
                       'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
-                      chromeTextClass,
                     )}
                   >
                     <X size={20} strokeWidth={2} aria-hidden />
@@ -353,8 +377,8 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                             'size-2 rounded-full transition-colors duration-[180ms] ease-move',
                             'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
                             isActive
-                              ? 'bg-footer-console-text'
-                              : 'bg-text-muted hover:bg-footer-console-text/60',
+                              ? 'bg-text'
+                              : 'bg-surface-3 hover:bg-text-muted',
                           )}
                         />
                       );
