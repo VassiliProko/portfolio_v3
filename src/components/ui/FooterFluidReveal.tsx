@@ -34,7 +34,8 @@ type Pointer = {
 
 /**
  * Footer background: grayscale photo with SplashCursor-style fluid that reveals
- * the real image color along the pointer trail (no rainbow dye).
+ * full photo color along the pointer trail, with a brighter/saturated soft-light rim
+ * on the colored wave edge (not the gray fringe).
  */
 export function FooterFluidReveal({
   src,
@@ -344,7 +345,7 @@ export function FooterFluidReveal({
       `
     );
 
-    // Reveal real photo color where fluid density is present (mask, not rainbow dye)
+    // Full photo color reveal + brighter/saturated soft-light rim on the colored wave edge
     const displayShaderSource = `
       precision highp float;
       precision highp sampler2D;
@@ -368,6 +369,13 @@ export function FooterFluidReveal({
         return (uv - 0.5) * scale + 0.5;
       }
 
+      // Soft-light: brightens while preserving chroma better than screen/white mix
+      vec3 blendSoftLight(vec3 base, vec3 blend) {
+        vec3 low = 2.0 * base * blend + base * base * (1.0 - 2.0 * blend);
+        vec3 high = sqrt(max(base, vec3(0.0))) * (2.0 * blend - 1.0) + 2.0 * base * (1.0 - blend);
+        return mix(low, high, step(0.5, blend));
+      }
+
       void main () {
           vec2 imgUv = coverUV(vUv);
           vec3 photo = texture2D(uImage, imgUv).rgb;
@@ -376,10 +384,20 @@ export function FooterFluidReveal({
 
           vec3 dye = texture2D(uTexture, vUv).rgb;
           float density = max(dye.r, max(dye.g, dye.b));
-          float reveal = smoothstep(0.005, 0.18, density);
-          // Boost saturation slightly in revealed areas so color reads through the footer overlay
-          vec3 boosted = photo * 1.12;
-          vec3 color = mix(grayscale, boosted, clamp(reveal, 0.0, 1.0));
+
+          // Full color reveal in the trail body
+          float reveal = smoothstep(0.005, 0.14, density);
+          vec3 color = mix(grayscale, photo * 1.12, clamp(reveal, 0.0, 1.0));
+
+          // Rim sits on the outer edge OF the colored wave (not the gray fringe)
+          float rim = smoothstep(0.35, 0.6, reveal) * (1.0 - smoothstep(0.75, 0.98, reveal));
+          // Push saturation + brightness from the photo itself
+          vec3 satBright = clamp(mix(vec3(gray), photo, 2.1) * 1.55, 0.0, 1.0);
+          vec3 rimBlended = blendSoftLight(color, satBright);
+          // Bias toward the saturated photo so the edge stays clearly colored
+          rimBlended = mix(rimBlended, satBright, 0.45);
+          color = mix(color, rimBlended, rim);
+
           gl_FragColor = vec4(color, 1.0);
       }
     `;

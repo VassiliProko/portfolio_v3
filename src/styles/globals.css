@@ -181,6 +181,7 @@
   --color-footer-last-updated: #71717a;
   --color-footer-contact-bg: #27272a;
   --color-footer-contact-bg-hover: #52525b;
+  --type-footer-last-updated-size: 12px;
 }
 
 /*
@@ -391,6 +392,13 @@ main:has([data-not-found]) footer {
 .type-paragraph-mono {
   font-family: var(--font-mono);
   font-size: var(--type-paragraph-mono-size);
+  font-weight: var(--type-paragraph-mono-weight);
+  letter-spacing: var(--type-paragraph-mono-tracking);
+}
+
+.type-footer-last-updated {
+  font-family: var(--font-mono);
+  font-size: var(--type-footer-last-updated-size);
   font-weight: var(--type-paragraph-mono-weight);
   letter-spacing: var(--type-paragraph-mono-tracking);
 }

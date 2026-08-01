@@ -299,13 +299,13 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
                 src="/images/optimized/home/footer-image.webp"
                 reducedMotion={prefersReducedMotion}
                 interactionRef={imageCardRef}
-                DENSITY_DISSIPATION={0.75}
+                DENSITY_DISSIPATION={0.85}
                 VELOCITY_DISSIPATION={1.2}
-                CURL={5}
+                CURL={0}
                 SPLAT_RADIUS={0.75}
                 SPLAT_FORCE={9000}
               />
-              {/* Dark overlay for console text readability — kept lighter so color reveal reads */}
+              {/* Dark overlay for console text readability — kept lighter so wave sheen reads */}
               <div className="absolute inset-0 bg-surface-dark-1/55 pointer-events-none" aria-hidden />
               {/* Black radial gradient from top-left, fading to transparent */}
               <div
