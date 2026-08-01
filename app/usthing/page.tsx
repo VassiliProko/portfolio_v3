@@ -50,6 +50,7 @@ export default function USThingCaseStudyPage() {
       hero={USTHING_HERO}
       overview={USTHING_OVERVIEW}
       meta={{
+        role: 'Product Designer',
         tools: 'Cursor',
         skills: 'AI Prototyping',
       }}
