@@ -56,6 +56,11 @@ const config: Config = {
   			},
   			'navbar-dropdown': 'var(--color-navbar-dropdown-bg)',
   			'case-study-header-btn': 'var(--color-case-study-header-btn-bg)',
+  			'dojo-icons': {
+  				'canvas-dark': 'var(--color-dojo-icons-canvas-dark)',
+  				'plate-light': 'var(--color-dojo-icons-plate-light)',
+  				'plate-dark': 'var(--color-dojo-icons-plate-dark)',
+  			},
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
