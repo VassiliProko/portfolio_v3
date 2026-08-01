@@ -81,6 +81,16 @@
   /* Matches browser chrome in the preview — fills subpixel gaps at rounded-tl */
   --color-prettify-minerva-chrome: #e8e8e8;
 
+  /* Work showcase: MathsGenie animation card */
+  --color-mathsgenie-showcase-bg: #ffffff;
+
+  /* Case study: RevisionDojo icons preview boards (matches highlight reel palette) */
+  --gradient-dojo-icons-soft: linear-gradient(180deg, #F7E4EA 0%, #E4F2FC 100%);
+  --gradient-dojo-icons-mist: linear-gradient(165deg, #EEF6FB 0%, #F7EEF2 48%, #E8F4FC 100%);
+  --color-dojo-icons-canvas-dark: #12141a;
+  --color-dojo-icons-plate-light: #ffffff;
+  --color-dojo-icons-plate-dark: #1c1f27;
+
   /* Work showcase: illustration cards */
   --gradient-discord-snowsgiving-showcase: linear-gradient(180deg, #DCECF0 0%, #EEF2F3 22.39%, #C7EEF2 70.08%, #CAF0F4 100%);
 

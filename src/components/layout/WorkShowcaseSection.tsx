@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
+import { Alignment } from '@rive-app/react-canvas';
 import { useReducedMotion } from 'motion/react';
 import { HoverMetaPill, HoverSurfaceContext, usePointerWithinElement } from '@/src/components/ui/HoverMetaPill';
 import {
@@ -54,6 +55,7 @@ type ShowcaseCardKey =
   | 'dojo-icons'
   | 'usthing'
   | 'mcss'
+  | 'mathsgenie'
   | 'oneprep-pro-trial'
   | 'visual-explorations'
   | 'discord-snowsgiving'
@@ -258,8 +260,9 @@ const DojoIconsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
 }) => {
   return (
     <WorkCardShell
+      href="/dojo-icons"
       className="aspect-[2500/1536]"
-      ariaLabel="Dojo Icons project preview"
+      ariaLabel="Open RevisionDojo Icons case study"
       reveal={reveal}
       delayMs={delayMs}
       hoverTitle="RevisionDojo Icons"
@@ -272,6 +275,29 @@ const DojoIconsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
         className="h-full w-full object-cover"
         ariaLabel="Dojo Icons preview animation"
         loopDelayMs={1000}
+      />
+    </WorkCardShell>
+  );
+};
+
+const MathsGenieCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  return (
+    <WorkCardShell
+      className="aspect-[16/9]"
+      style={{ backgroundColor: 'var(--color-mathsgenie-showcase-bg)' }}
+      ariaLabel="MathsGenie animation preview"
+      reveal={reveal}
+      delayMs={delayMs}
+      hoverTitle="MathsGenie Animation"
+    >
+      <ShowcaseRivePreview
+        riveSrc="/other/genie-landing-page.riv"
+        ariaLabel="MathsGenie entry and loop animation"
+        playbackMode="entry-then-loop-once"
+        riveAlignment={Alignment.Center}
       />
     </WorkCardShell>
   );
@@ -557,14 +583,20 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     render: (props) => <McssFeaturedCaseStudy {...props} />,
   },
   {
-    key: 'oneprep-pro-trial',
+    key: 'mathsgenie',
     priority: 6,
+    delayMs: 175,
+    render: (props) => <MathsGenieCaseStudy {...props} />,
+  },
+  {
+    key: 'oneprep-pro-trial',
+    priority: 7,
     delayMs: 200,
     render: (props) => <OnePrepProTrialCaseStudy {...props} />,
   },
   {
     key: 'visual-explorations',
-    priority: 7,
+    priority: 8,
     delayMs: 225,
     render: (props) => <VisualExplorationsCaseStudy {...props} />,
   },
@@ -574,12 +606,12 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
     ['prettify-minerva', 'discord-snowsgiving', 'yinlin', 'usthing'],
-    ['dojo-icons', 'mcss', 'oneprep-pro-trial', 'visual-explorations'],
+    ['dojo-icons', 'mcss', 'mathsgenie', 'visual-explorations'],
   ],
   3: [
     ['prettify-minerva', 'discord-snowsgiving', 'yinlin'],
     ['dojo-icons', 'mcss', 'visual-explorations'],
-    ['usthing', 'oneprep-pro-trial'],
+    ['usthing', 'mathsgenie'],
   ],
 };
 

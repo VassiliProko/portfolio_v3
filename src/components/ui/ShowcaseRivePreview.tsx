@@ -1,13 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useReducedMotion } from 'motion/react';
 import {
   Alignment,
+  EventType,
   Fit,
   Layout,
   useRive,
+  type Event,
+  type LoopEvent,
   type Rive,
 } from '@rive-app/react-canvas';
 
@@ -20,14 +23,25 @@ type RivePlaybackTarget =
 type ResolvedRivePlayback = {
   target: RivePlaybackTarget;
   artboard?: string;
+  /** After the primary animation stops, play this once, then return to entry. */
+  followUpAnimation?: string;
+  /** Treat a looping follow-up as one-shot (one cycle), then restart entry. */
+  followUpOneShot?: boolean;
 };
+
+/**
+ * `entry-loop` — Entry+Loop / state machines (continuous).
+ * `entry-then-loop-once` — Entry → Loop (one cycle) → Entry… repeating.
+ */
+export type ShowcaseRivePlaybackMode = 'entry-loop' | 'entry-then-loop-once';
 
 type ShowcaseRivePreviewProps = {
   riveSrc: string;
-  backgroundSrc: string;
+  backgroundSrc?: string;
   backgroundScale?: number;
   ariaLabel: string;
   riveAlignment?: Alignment;
+  playbackMode?: ShowcaseRivePlaybackMode;
   className?: string;
 };
 
@@ -77,6 +91,64 @@ const resolveEntryLoopTarget = (rive: Rive): RivePlaybackTarget | null => {
   return null;
 };
 
+const resolveEntryThenLoopOnce = (rive: Rive): ResolvedRivePlayback | null => {
+  const animationNames = rive.animationNames;
+  const artboard = pickArtboardWithContent(rive);
+
+  const entryAnimation = animationNames.find(
+    (name) => /entry/i.test(name) && !/loop/i.test(name),
+  );
+  const loopAnimation = animationNames.find(
+    (name) => /loop/i.test(name) && !/entry/i.test(name),
+  );
+
+  if (entryAnimation && loopAnimation) {
+    return {
+      target: { kind: 'animation', name: entryAnimation },
+      artboard,
+      followUpAnimation: loopAnimation,
+      followUpOneShot: true,
+    };
+  }
+
+  if (entryAnimation) {
+    return {
+      target: { kind: 'animation', name: entryAnimation },
+      artboard,
+    };
+  }
+
+  const fallback = resolveEntryLoopTarget(rive);
+  if (!fallback) return null;
+
+  return { target: fallback, artboard };
+};
+
+const resolvePlayback = (
+  rive: Rive,
+  mode: ShowcaseRivePlaybackMode,
+): ResolvedRivePlayback | null => {
+  if (mode === 'entry-then-loop-once') {
+    return resolveEntryThenLoopOnce(rive);
+  }
+
+  const target = resolveEntryLoopTarget(rive);
+  if (!target) return null;
+
+  return {
+    target,
+    artboard: pickArtboardWithContent(rive),
+  };
+};
+
+const eventMentionsAnimation = (data: Event['data'], animationName: string) => {
+  return (
+    data == null ||
+    data === animationName ||
+    (Array.isArray(data) && data.includes(animationName))
+  );
+};
+
 type ShowcaseRiveCanvasProps = {
   riveSrc: string;
   playback: ResolvedRivePlayback;
@@ -95,7 +167,7 @@ const ShowcaseRiveCanvas: React.FC<ShowcaseRiveCanvasProps> = ({
       ? { stateMachines: playback.target.name }
       : { animations: playback.target.name };
 
-  const { RiveComponent } = useRive(
+  const { RiveComponent, rive } = useRive(
     {
       src: riveSrc,
       artboard: playback.artboard,
@@ -109,12 +181,94 @@ const ShowcaseRiveCanvas: React.FC<ShowcaseRiveCanvasProps> = ({
     { shouldResizeCanvasToContainer: true },
   );
 
+  useEffect(() => {
+    const followUp = playback.followUpAnimation;
+    if (
+      !rive ||
+      !autoplay ||
+      !followUp ||
+      playback.target.kind !== 'animation'
+    ) {
+      return;
+    }
+
+    const entryName = playback.target.name;
+    const followUpOneShot = Boolean(playback.followUpOneShot);
+    let active = true;
+    let phase: 'entry' | 'followUp' = 'entry';
+
+    const runSafe = (action: () => void) => {
+      queueMicrotask(() => {
+        if (!active) return;
+        try {
+          action();
+        } catch {
+          // Artboard may already be deleted during viewport/layout remounts.
+        }
+      });
+    };
+
+    const restartEntry = () => {
+      if (phase !== 'followUp') return;
+      phase = 'entry';
+      runSafe(() => {
+        rive.stop(followUp);
+        rive.play(entryName);
+      });
+    };
+
+    const handleStop = (event: Event) => {
+      if (!active) return;
+
+      if (phase === 'entry' && eventMentionsAnimation(event.data, entryName)) {
+        phase = 'followUp';
+        runSafe(() => {
+          rive.play(followUp);
+        });
+        return;
+      }
+
+      if (phase === 'followUp' && eventMentionsAnimation(event.data, followUp)) {
+        // Follow-up was already oneshot in the file — cycle back to entry.
+        restartEntry();
+      }
+    };
+
+    const handleLoop = (event: Event) => {
+      if (!active || !followUpOneShot) return;
+
+      const loopEvent = event.data as LoopEvent | undefined;
+      if (!loopEvent || typeof loopEvent !== 'object' || !('animation' in loopEvent)) {
+        return;
+      }
+
+      if (loopEvent.animation !== followUp) return;
+
+      // One full Loop cycle finished — return to Entry and repeat.
+      restartEntry();
+    };
+
+    rive.on(EventType.Stop, handleStop);
+    if (followUpOneShot) {
+      rive.on(EventType.Loop, handleLoop);
+    }
+
+    return () => {
+      active = false;
+      rive.off(EventType.Stop, handleStop);
+      if (followUpOneShot) {
+        rive.off(EventType.Loop, handleLoop);
+      }
+    };
+  }, [rive, autoplay, playback]);
+
   return <RiveComponent className="h-full w-full" />;
 };
 
 type ShowcaseRiveProbeProps = {
   riveSrc: string;
   artboard?: string;
+  playbackMode: ShowcaseRivePlaybackMode;
   onArtboardNeeded: (artboard: string) => void;
   onResolved: (playback: ResolvedRivePlayback | null) => void;
 };
@@ -122,6 +276,7 @@ type ShowcaseRiveProbeProps = {
 const ShowcaseRiveProbe: React.FC<ShowcaseRiveProbeProps> = ({
   riveSrc,
   artboard,
+  playbackMode,
   onArtboardNeeded,
   onResolved,
 }) => {
@@ -138,16 +293,16 @@ const ShowcaseRiveProbe: React.FC<ShowcaseRiveProbeProps> = ({
           return;
         }
 
-        const target = resolveEntryLoopTarget(rive);
+        const resolved = resolvePlayback(rive, playbackMode);
 
-        if (!target) {
+        if (!resolved) {
           onResolved(null);
           return;
         }
 
         onResolved({
-          target,
-          artboard: artboard ?? contentArtboard,
+          ...resolved,
+          artboard: artboard ?? resolved.artboard ?? contentArtboard,
         });
       },
     },
@@ -168,6 +323,7 @@ export const ShowcaseRivePreview: React.FC<ShowcaseRivePreviewProps> = ({
   backgroundScale = ONEPREP_BACKGROUND_SCALE,
   ariaLabel,
   riveAlignment = Alignment.BottomCenter,
+  playbackMode = 'entry-loop',
   className,
 }) => {
   const prefersReducedMotion = useReducedMotion();
@@ -184,23 +340,26 @@ export const ShowcaseRivePreview: React.FC<ShowcaseRivePreviewProps> = ({
           key={probeArtboard ?? 'initial-artboard'}
           riveSrc={riveSrc}
           artboard={probeArtboard}
+          playbackMode={playbackMode}
           onArtboardNeeded={setProbeArtboard}
           onResolved={setPlayback}
         />
       ) : null}
 
-      <div className="absolute inset-0 overflow-hidden" aria-hidden>
-        <Image
-          src={backgroundSrc}
-          alt=""
-          fill
-          className="pointer-events-none select-none object-cover object-center"
-          style={{ transform: `scale(${backgroundScale})` }}
-          sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
-          priority={false}
-          aria-hidden
-        />
-      </div>
+      {backgroundSrc ? (
+        <div className="absolute inset-0 overflow-hidden" aria-hidden>
+          <Image
+            src={backgroundSrc}
+            alt=""
+            fill
+            className="pointer-events-none select-none object-cover object-center"
+            style={{ transform: `scale(${backgroundScale})` }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
+            priority={false}
+            aria-hidden
+          />
+        </div>
+      ) : null}
 
       <div className="absolute inset-0 flex items-end justify-center">
         {playback ? (
