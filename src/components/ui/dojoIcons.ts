@@ -44,30 +44,4 @@ export function buildIconSet(
   return names.map((name) => ({ name, mode, tinted }));
 }
 
-export const LIGHT_SET = buildIconSet('light', false);
-export const DARK_SET = buildIconSet('dark', false);
-export const LIGHT_TINTED = buildIconSet('light', true);
 export const DARK_TINTED = buildIconSet('dark', true);
-
-/** Deterministic shuffle so count changes feel stable until shuffle is pressed. */
-export function pickIcons(pool: DojoIconRef[], count: number, seed: number): DojoIconRef[] {
-  const list = [...pool];
-  let s = seed || 1;
-  for (let i = list.length - 1; i > 0; i -= 1) {
-    s = (s * 1664525 + 1013904223) >>> 0;
-    const j = s % (i + 1);
-    [list[i], list[j]] = [list[j], list[i]];
-  }
-  return list.slice(0, Math.min(count, list.length));
-}
-
-export function mixedPool(): DojoIconRef[] {
-  const out: DojoIconRef[] = [];
-  DOJO_ICON_NAMES.forEach((name, index) => {
-    const lane = index % 5;
-    if (lane === 0 || lane === 1) out.push({ name, mode: 'light' });
-    else if (lane === 2) out.push({ name, mode: 'light', tinted: true });
-    else out.push({ name, mode: 'dark' });
-  });
-  return out;
-}

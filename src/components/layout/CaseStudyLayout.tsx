@@ -213,7 +213,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
         </div>
       ) : null}
 
-      <div className={cn(CASE_STUDY_CONTENT_CLASS, 'flex flex-col gap-showcase-illustration py-lg')}>
+      <div className={cn(CASE_STUDY_CONTENT_CLASS, 'flex flex-col gap-showcase-illustration pt-lg pb-2xl')}>
         <ScrollRevealGroup>
           {(revealed) => (
             <section
