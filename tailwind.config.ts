@@ -64,6 +64,11 @@ const config: Config = {
   			'prettify-minerva': {
   				'logo-bg': 'var(--color-prettify-minerva-logo-bg)',
   				'logo-text': 'var(--color-prettify-minerva-logo-text)',
+  				'chrome-toolbar-bg': 'var(--color-prettify-minerva-chrome-toolbar-bg)',
+  				'chrome-toolbar-surface': 'var(--color-prettify-minerva-chrome-toolbar-surface)',
+  				'chrome-toolbar-fg': 'var(--color-prettify-minerva-chrome-toolbar-fg)',
+  				'chrome-toolbar-muted': 'var(--color-prettify-minerva-chrome-toolbar-muted)',
+  				flash: 'var(--color-prettify-minerva-flash)',
   			},
   			card: {
   				DEFAULT: 'hsl(var(--card))',

@@ -13,6 +13,7 @@ import {
 } from '@/src/components/ui/PopdownReveal';
 import {
   CASE_STUDY_CONTENT_CLASS,
+  CASE_STUDY_EXTERNAL_LINK_CLASS,
   CASE_STUDY_OVERVIEW_COLUMNS_CLASS,
 } from '@/src/constants/caseStudy';
 
@@ -74,13 +75,6 @@ function MetaRow({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-
-const caseStudyLinkClass = cn(
-  'group inline-flex h-12 w-full items-center justify-between gap-2xs rounded-sm bg-surface-1 px-4',
-  'type-label text-text-muted',
-  'transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)] hover:bg-surface-2',
-  'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
-);
 
 function CaseStudyHeroMedia({
   heroVideoSrc,
@@ -255,7 +249,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
                         href={websiteUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={caseStudyLinkClass}
+                        className={CASE_STUDY_EXTERNAL_LINK_CLASS}
                       >
                         <span className="min-w-0 truncate">{websiteLabel}</span>
                         <ArrowUpRight className="size-5 shrink-0" strokeWidth={2} aria-hidden />
@@ -266,7 +260,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
                         href={githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={caseStudyLinkClass}
+                        className={CASE_STUDY_EXTERNAL_LINK_CLASS}
                       >
                         <span className="min-w-0 truncate">{githubLabel}</span>
                         <ArrowUpRight className="size-5 shrink-0" strokeWidth={2} aria-hidden />

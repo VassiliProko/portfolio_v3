@@ -80,6 +80,11 @@
   --spacing-prettify-minerva-showcase-offset: clamp(24px, 5vw, 48px);
   /* Matches browser chrome in the preview — fills subpixel gaps at rounded-tl */
   --color-prettify-minerva-chrome: #e8e8e8;
+  /* Chrome toolbar mock — light omnibox / chrome in light mode */
+  --color-prettify-minerva-chrome-toolbar-bg: #dee1e6;
+  --color-prettify-minerva-chrome-toolbar-surface: #ffffff;
+  --color-prettify-minerva-chrome-toolbar-fg: #3c4043;
+  --color-prettify-minerva-chrome-toolbar-muted: #5f6368;
   /* Logo lockup section (Figma node 316:480) — text stays light in both themes */
   --color-prettify-minerva-logo-bg: #2f2f2f;
   --color-prettify-minerva-logo-text: #fafafa;
@@ -87,6 +92,8 @@
   --gradient-prettify-minerva-vscode: linear-gradient(165deg, #E8EEF5 0%, #D5DDE8 50%, #C5CFDC 100%);
   /* Reddit comment callout — brand orange field */
   --gradient-prettify-minerva-reddit: linear-gradient(160deg, #FF8B60 0%, #FF4500 48%, #D93900 100%);
+  /* Extension demo — always-white flash between login states */
+  --color-prettify-minerva-flash: #ffffff;
 
   /* Work showcase: MathsGenie animation card */
   --color-mathsgenie-showcase-bg: #ffffff;
@@ -240,6 +247,12 @@
   --blur-showcase-cool-idea-glow: 40px;
 
   --gradient-prettify-minerva-vscode: linear-gradient(165deg, #2C3340 0%, #232833 50%, #1A1E26 100%);
+
+  /* Chrome toolbar mock — dark omnibox / chrome */
+  --color-prettify-minerva-chrome-toolbar-bg: #202124;
+  --color-prettify-minerva-chrome-toolbar-surface: #35363a;
+  --color-prettify-minerva-chrome-toolbar-fg: #e8eaed;
+  --color-prettify-minerva-chrome-toolbar-muted: #9aa0a6;
 }
 
 @media (min-width: 768px) {

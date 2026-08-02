@@ -3,6 +3,7 @@ import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { CASE_STUDY_OVERVIEW_COLUMNS_CLASS } from '@/src/constants/caseStudy';
 import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
 import { CompareImage } from '@/src/components/ui/CompareImage';
+import { PrettifyMinervaExtensionDemo } from '@/src/components/ui/PrettifyMinervaExtensionDemo';
 import { PrettifyMinervaLogoLockup } from '@/src/components/ui/PrettifyMinervaLogoLockup';
 import { PrettifyMinervaRedditComment } from '@/src/components/ui/PrettifyMinervaRedditComment';
 
@@ -11,6 +12,9 @@ export const metadata: Metadata = {
   description:
     "Improving the appearance of Minerva, McGill's central university portal.",
 };
+
+const CHROME_WEB_STORE_URL =
+  'https://chromewebstore.google.com/detail/gligldkmadhkgfbomifkomimankgljji?utm_source=item-share-cb';
 
 const PRETTIFY_MINERVA_OVERVIEW = (
   <p>
@@ -30,7 +34,7 @@ export default function PrettifyMinervaCaseStudyPage() {
         tools: 'Figma, Javascript, ChatGPT',
         skills: 'UI design, Browser Extension development',
       }}
-      websiteUrl="https://chromewebstore.google.com/detail/gligldkmadhkgfbomifkomimankgljji?utm_source=item-share-cb"
+      websiteUrl={CHROME_WEB_STORE_URL}
       websiteLabel="Chrome Web Store"
       githubUrl="https://github.com/VassiliProko/prettify_minerva"
       githubLabel="Github"
@@ -76,11 +80,9 @@ export default function PrettifyMinervaCaseStudyPage() {
         captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
         caption={
           <p>
-            I shared this concept of Minerva on the McGill subreddit which garnered over{' '}
-            <strong className="text-text">70k impressions</strong> with{' '}
-            <strong className="text-text">positive engagement</strong>. This dashboard style design
-            was inspired from other McGill sites like MyCourses, McGill’s learning management
-            system.
+            I shared this concept of Minerva on the McGill subreddit which garnered over 70k
+            impressions with positive engagement. This dashboard style design was inspired from
+            other McGill sites like MyCourses, McGill’s learning management system.
           </p>
         }
       />
@@ -99,23 +101,27 @@ export default function PrettifyMinervaCaseStudyPage() {
         captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
         caption={
           <p>
-            Using JavaScript to directly manipulate page content and HTML structure. I also
+            I used JavaScript to directly manipulate page content and HTML structure of the Minerva site. I also
             injected custom CSS to restyle Minerva’s interface, making the site cleaner and more
             visually appealing.
           </p>
         }
       />
-      <CaseStudyImage
-        src="/images/optimized/prettify-minerva/prettify-minerva-solution.webp"
-        alt="Browser extension before and after comparison"
-      />
-      <CaseStudyImage
-        src="/images/optimized/prettify-minerva/prettify-minerva-quicklinks.webp"
-        alt="Quick Links"
-      />
-      <CaseStudyImage
-        src="/images/optimized/prettify-minerva/prettify-minerva-result.webp"
-        alt="The Result"
+      <PrettifyMinervaExtensionDemo
+        captionLabel="Results"
+        captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
+        footerHref={CHROME_WEB_STORE_URL}
+        footerLabel="Chrome Web Store"
+        caption={
+          <p>
+            After facing a range of challenges like DOM quirks to styling messy table elements, I
+            published the extension on the chrome web store. The extension has gotten over 650+
+            installs and 200+ active users. It was incredibly rewarding to take an idea from an
+            initial design through development and ultimately launch a real, usable product. Along
+            the way, I deepened my understanding of front-end development using JavaScript, HTML,
+            and CSS.
+          </p>
+        }
       />
     </CaseStudyLayout>
   );
