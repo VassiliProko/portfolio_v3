@@ -63,6 +63,7 @@ const config: Config = {
   			},
   			'prettify-minerva': {
   				'logo-bg': 'var(--color-prettify-minerva-logo-bg)',
+  				'logo-text': 'var(--color-prettify-minerva-logo-text)',
   			},
   			card: {
   				DEFAULT: 'hsl(var(--card))',

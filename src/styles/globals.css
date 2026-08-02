@@ -80,8 +80,9 @@
   --spacing-prettify-minerva-showcase-offset: clamp(24px, 5vw, 48px);
   /* Matches browser chrome in the preview — fills subpixel gaps at rounded-tl */
   --color-prettify-minerva-chrome: #e8e8e8;
-  /* Logo lockup section (Figma node 316:480) */
+  /* Logo lockup section (Figma node 316:480) — text stays light in both themes */
   --color-prettify-minerva-logo-bg: #2f2f2f;
+  --color-prettify-minerva-logo-text: #fafafa;
 
   /* Work showcase: MathsGenie animation card */
   --color-mathsgenie-showcase-bg: #ffffff;

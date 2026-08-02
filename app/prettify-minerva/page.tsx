@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
+import { CASE_STUDY_OVERVIEW_COLUMNS_CLASS } from '@/src/constants/caseStudy';
 import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
 import { CompareImage } from '@/src/components/ui/CompareImage';
 import { PrettifyMinervaLogoLockup } from '@/src/components/ui/PrettifyMinervaLogoLockup';
@@ -45,12 +46,25 @@ export default function PrettifyMinervaCaseStudyPage() {
       />
       <PrettifyMinervaLogoLockup />
       <CaseStudyImage
-        src="/images/optimized/prettify-minerva/prettify-minerva-problem.webp"
-        alt="The Problem"
-      />
-      <CaseStudyImage
-        src="/images/optimized/prettify-minerva/prettify-minerva-goal.webp"
-        alt="The Goal"
+        src="/images/optimized/prettify-minerva/minerva-wayback-machine.png"
+        alt="Archived Minerva login page via the Wayback Machine"
+        width={2880}
+        height={1314}
+        mediaBar
+        captionLabel="The Problem"
+        captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
+        caption={
+          <>
+            <p>
+              According to the Wayback Machine, Minerva has remained largely unchanged since
+              the 2010s. Through my own experience using the platform and conversations with
+              classmates, I saw an opportunity to reimagine Minerva. The goal was to redesign Minerva to enhance its clarity, usability, and visual
+              appeal. The original interface displays dense information with limited spacing,
+              small typography, and a cluttered layout, creating cognitive overload and
+              hindering navigation, particularly for new users.
+            </p>
+          </>
+        }
       />
       <CaseStudyImage
         src="/images/optimized/prettify-minerva/prettify-minerva-initial.webp"

@@ -28,7 +28,19 @@ export interface CaseStudyImageProps {
    * Subtitle paragraph under the image(s).
    * Use for a short description of the visual above.
    */
-  caption?: string;
+  caption?: React.ReactNode;
+  /**
+   * Optional label above the caption (same pattern as case study Overview).
+   * Rendered with `type-label` + `gap-2xs` before the subtitle.
+   */
+  captionLabel?: string;
+  /** Extra classes for the caption body (e.g. overview two-column measure). */
+  captionClassName?: string;
+  /**
+   * Full-width dark contrast bar (16px) flush under the media.
+   * Image + bar share one rounded frame.
+   */
+  mediaBar?: boolean;
   /** Intrinsic width for a single Next Image (defaults to 1920) */
   width?: number;
   /** Intrinsic height for a single Next Image (defaults to 1080) */
@@ -44,6 +56,7 @@ function CaseStudyMediaFrame({
   height = 1080,
   priority = false,
   sizes,
+  mediaBar = false,
 }: {
   src: string;
   alt: string;
@@ -51,6 +64,7 @@ function CaseStudyMediaFrame({
   height?: number;
   priority?: boolean;
   sizes: string;
+  mediaBar?: boolean;
 }) {
   return (
     <div className="relative w-full overflow-hidden rounded-[8px] bg-surface-2">
@@ -63,6 +77,9 @@ function CaseStudyMediaFrame({
         sizes={sizes}
         priority={priority}
       />
+      {mediaBar ? (
+        <div className="h-4 w-full bg-surface-dark-2" aria-hidden />
+      ) : null}
     </div>
   );
 }
@@ -76,15 +93,26 @@ export const CaseStudyImage: React.FC<CaseStudyImageProps> = ({
   alt = '',
   images,
   caption,
+  captionLabel,
+  captionClassName,
+  mediaBar = false,
   width = 1920,
   height = 1080,
   priority = false,
   className,
 }) => {
   const isRow = Boolean(images && images.length > 0);
+  const hasCaption = Boolean(caption || captionLabel);
 
   return (
-    <figure className={cn('flex w-full flex-col gap-2xs', className)}>
+    <figure
+      className={cn(
+        'flex w-full flex-col',
+        // Labeled captions sit further from the media (overview-like section rhythm).
+        captionLabel ? 'gap-md' : 'gap-2xs',
+        className
+      )}
+    >
       {isRow ? (
         <div className={cn('grid grid-cols-1 md:grid-cols-2', CASE_STUDY_MEDIA_GAP_CLASS)}>
           {images!.map((item) => (
@@ -107,10 +135,25 @@ export const CaseStudyImage: React.FC<CaseStudyImageProps> = ({
           height={height}
           priority={priority}
           sizes="(max-width: 768px) 100vw, min(100vw, 1200px)"
+          mediaBar={mediaBar}
         />
       ) : null}
-      {caption ? (
-        <figcaption className="type-paragraph m-0 text-text-subtle">{caption}</figcaption>
+      {hasCaption ? (
+        <figcaption className="flex w-full flex-col gap-2xs">
+          {captionLabel ? (
+            <p className="type-label m-0 text-text-subtle">{captionLabel}</p>
+          ) : null}
+          {caption ? (
+            <div
+              className={cn(
+                'type-paragraph m-0 text-text-subtle [&_p]:m-0',
+                captionClassName
+              )}
+            >
+              {caption}
+            </div>
+          ) : null}
+        </figcaption>
       ) : null}
     </figure>
   );

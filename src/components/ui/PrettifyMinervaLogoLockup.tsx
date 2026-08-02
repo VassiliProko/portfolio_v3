@@ -32,7 +32,7 @@ export const PrettifyMinervaLogoLockup: React.FC<PrettifyMinervaLogoLockupProps>
         />
         <p
           className={cn(
-            'm-0 whitespace-nowrap font-mono uppercase text-text-inverted-1',
+            'm-0 whitespace-nowrap font-mono uppercase text-prettify-minerva-logo-text',
             'text-[length:var(--type-subtitle-size)] font-normal tracking-[0.08em]',
             'md:text-[length:var(--type-title-size)]'
           )}
