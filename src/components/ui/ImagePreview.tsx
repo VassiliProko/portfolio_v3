@@ -4,8 +4,22 @@ import Image from 'next/image';
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { Alignment } from '@rive-app/react-canvas';
 import { X } from 'lucide-react';
+import {
+  ShowcaseRivePreview,
+  type ShowcaseRivePlaybackMode,
+} from '@/src/components/ui/ShowcaseRivePreview';
 import { cn } from '@/src/utils/cn';
+
+/** Optional Rive media — when set, preview plays this instead of a static `src` image. */
+export type ImagePreviewRive = {
+  src: string;
+  playbackMode?: ShowcaseRivePlaybackMode;
+  alignment?: Alignment;
+  /** Surface behind the canvas (matches showcase card). */
+  backgroundColor?: string;
+};
 
 /** Metadata attached to any image that can open in the preview lightbox. */
 export type ImagePreviewItem = {
@@ -20,6 +34,8 @@ export type ImagePreviewItem = {
   height?: number;
   /** Unused — close control is always light. Kept for existing call sites. */
   captionTone?: 'default' | 'on-dark';
+  /** When set, lightbox media is this Rive animation (same as work showcase). */
+  rive?: ImagePreviewRive;
 };
 
 /**
@@ -277,11 +293,12 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                   aspectRatio: `${imageWidth} / ${imageHeight}`,
                   maxHeight: imageMaxHeightPx,
                   clipPath: 'inset(0 round var(--radius-image-preview))',
+                  backgroundColor: activeItem.rive?.backgroundColor,
                 }}
               >
                 <AnimatePresence initial={false} custom={direction} mode="sync">
                   <motion.div
-                    key={activeItem.src}
+                    key={activeItem.rive?.src ?? activeItem.src}
                     className="absolute -inset-[2px]"
                     custom={direction}
                     initial={
@@ -303,6 +320,16 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                     }
                     transition={slideTransition}
                   >
+                    {activeItem.rive ? (
+                      <ShowcaseRivePreview
+                        riveSrc={activeItem.rive.src}
+                        ariaLabel={
+                          activeItem.alt ?? activeItem.description ?? activeItem.name
+                        }
+                        playbackMode={activeItem.rive.playbackMode}
+                        riveAlignment={activeItem.rive.alignment}
+                      />
+                    ) : (
                       <Image
                         src={activeItem.src}
                         alt={activeItem.alt ?? activeItem.description ?? activeItem.name}
@@ -311,6 +338,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                         sizes={`(max-width: 768px) 100vw, min(100vw, ${PREVIEW_MAX_WIDTH_PX}px)`}
                         priority
                       />
+                    )}
                   </motion.div>
                 </AnimatePresence>
 

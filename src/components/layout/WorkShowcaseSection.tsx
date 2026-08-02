@@ -50,9 +50,24 @@ const DISCORD_SNOWSGIVING_IMAGE_PREVIEW: ImagePreviewItem = {
   src: '/images/optimized/home/discord-snowsgiving-preview.jpg',
   name: 'Discord Snowsgiving',
   description:
-    'I won the Best Digital Art Prize (1 of 5 category winners) at Discord Snowsgiving for my "Draw a Wumpus" art submission. I recieved some cool Discord merch, including a cute Wumpus plushie.',
+    'I won the Best Digital Art Prize (1 of 5 category winners) at Discord Snowsgiving for the "Draw a Wumpus" theme. I recieved some cool Discord merch, including a cute Wumpus plushie.',
   width: 1200,
   height: 675,
+};
+
+const MATHSGENIE_IMAGE_PREVIEW: ImagePreviewItem = {
+  src: '/other/genie-landing-page.riv',
+  name: 'MathsGenie Animation',
+  description:
+    'A Rive animation made for MathsGenie, the GCSE and A Level maths revision resource used by 1M+ students.',
+  width: 16,
+  height: 9,
+  rive: {
+    src: '/other/genie-landing-page.riv',
+    playbackMode: 'entry-then-loop-once',
+    alignment: Alignment.Center,
+    backgroundColor: 'var(--color-mathsgenie-showcase-bg)',
+  },
 };
 type WorkShowcaseSectionProps = {
   visible?: boolean;
@@ -294,22 +309,32 @@ const MathsGenieCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   reveal = true,
   delayMs = 0,
 }) => {
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+
   return (
-    <WorkCardShell
-      className="aspect-[16/9]"
-      style={{ backgroundColor: 'var(--color-mathsgenie-showcase-bg)' }}
-      ariaLabel="MathsGenie animation preview"
-      reveal={reveal}
-      delayMs={delayMs}
-      hoverTitle="MathsGenie Animation"
-    >
-      <ShowcaseRivePreview
-        riveSrc="/other/genie-landing-page.riv"
-        ariaLabel="MathsGenie entry and loop animation"
-        playbackMode="entry-then-loop-once"
-        riveAlignment={Alignment.Center}
+    <>
+      <WorkCardShell
+        className="aspect-[16/9]"
+        style={{ backgroundColor: 'var(--color-mathsgenie-showcase-bg)' }}
+        ariaLabel="Open MathsGenie animation preview"
+        reveal={reveal}
+        delayMs={delayMs}
+        hoverTitle="MathsGenie Animation"
+        onActivate={() => setPreviewOpen(true)}
+      >
+        <ShowcaseRivePreview
+          riveSrc="/other/genie-landing-page.riv"
+          ariaLabel="MathsGenie entry and loop animation"
+          playbackMode="entry-then-loop-once"
+          riveAlignment={Alignment.Center}
+        />
+      </WorkCardShell>
+      <ImagePreview
+        item={MATHSGENIE_IMAGE_PREVIEW}
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
       />
-    </WorkCardShell>
+    </>
   );
 };
 
