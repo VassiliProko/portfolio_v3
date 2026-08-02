@@ -1,0 +1,11 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="11.907" fill="white"/>
+  <path d="M50.5 23.8154V34.7627L42.5 42.7627H38.5L30.5 34.7627H42.5V23.8154H29.4473V54.1318H21.4473V15.8154H42.5L50.5 23.8154Z" fill="url(#prettifyMinervaIconGrad)"/>
+  <path d="M47.5527 20.8682V31.8154L39.5527 39.8154H35.5527L27.5527 31.8154H39.5527V20.8682H26.5V51.1846H18.5V12.8682H39.5527L47.5527 20.8682Z" fill="#ED1B2F"/>
+  <defs>
+    <linearGradient id="prettifyMinervaIconGrad" x1="35.9736" y1="15.8154" x2="35.9736" y2="54.1318" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFA340"/>
+      <stop offset="1" stop-color="#F064E4"/>
+    </linearGradient>
+  </defs>
+</svg>

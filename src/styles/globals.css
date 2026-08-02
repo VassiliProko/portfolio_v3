@@ -80,6 +80,8 @@
   --spacing-prettify-minerva-showcase-offset: clamp(24px, 5vw, 48px);
   /* Matches browser chrome in the preview — fills subpixel gaps at rounded-tl */
   --color-prettify-minerva-chrome: #e8e8e8;
+  /* Logo lockup section (Figma node 316:480) */
+  --color-prettify-minerva-logo-bg: #2f2f2f;
 
   /* Work showcase: MathsGenie animation card */
   --color-mathsgenie-showcase-bg: #ffffff;
@@ -115,8 +117,6 @@
   /* Opaque matte behind rounded art — matches page background (light/dark) */
   --color-image-preview-matte: var(--color-background);
 
-  /* Compare image divider */
-  --shadow-compare-divider: -6px 0 14px rgba(0, 0, 0, 0.18);
   --shadow-mcss-phase-image-glow: 0 0 28px rgba(39, 229, 239, 0.24);
   --shadow-highlight-reel-inset: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
   --shadow-highlight-reel-video-outer: 0 0 0 4px rgba(255, 255, 255, 0.4);

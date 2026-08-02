@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
 import { CompareImage } from '@/src/components/ui/CompareImage';
+import { PrettifyMinervaLogoLockup } from '@/src/components/ui/PrettifyMinervaLogoLockup';
 
 export const metadata: Metadata = {
   title: 'Prettify Minerva',
@@ -11,13 +12,7 @@ export const metadata: Metadata = {
 
 const PRETTIFY_MINERVA_OVERVIEW = (
   <p>
-    I improved the appearance of Minerva, McGill&apos;s central university portal, with a javascript
-    browser extension. After being frustrated with Minerva’s outdated interface and hearing similar
-    complaints from other students, I decided to see if I could reshape the platform. I initially
-    made a Figma dashboard concept that I shared on Reddit which received a comment on how a browser
-    extension solution may be viable. I took this idea and went on to build a browser extension which
-    applies custom styling and layout improvements directly to the live Minerva site. Currently the
-    extension is published on the chrome web store and has over 200 active users.
+    Minerva is McGill University’s central information system, known for its outdated interface. To fix this, I redesigned the UI in Figma and turned the concept into a JavaScript browser extension that applies custom styling to the live site. What started as a Reddit post now lives on the Chrome Web Store with over 200 active users.
   </p>
 );
 
@@ -43,15 +38,12 @@ export default function PrettifyMinervaCaseStudyPage() {
         alt="Prettify Minerva case study — overview"
       />
       <CompareImage
-        beforeSrc="/images/optimized/prettify-minerva/prettify-minerva-before.webp"
-        afterSrc="/images/optimized/prettify-minerva/prettify-minerva-after.webp"
+        beforeSrc="/images/optimized/prettify-minerva/prettify-minerva-before.jpg"
+        afterSrc="/images/optimized/prettify-minerva/prettify-minerva-after.jpg"
         beforeAlt="Minerva before Prettify extension"
         afterAlt="Minerva after Prettify extension"
       />
-      <CaseStudyImage
-        src="/images/optimized/prettify-minerva/prettify-minerva-logo.webp"
-        alt="Prettify Minerva case study — logo"
-      />
+      <PrettifyMinervaLogoLockup />
       <CaseStudyImage
         src="/images/optimized/prettify-minerva/prettify-minerva-problem.webp"
         alt="The Problem"
