@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { CASE_STUDY_MEDIA_INSET_CLASS } from '@/src/constants/caseStudy';
 import { cn } from '@/src/utils/cn';
 import { GripVertical } from 'lucide-react';
 
@@ -277,10 +278,10 @@ export const CompareImage: React.FC<CompareImageProps> = ({
         className="relative w-full overflow-hidden rounded-[8px] bg-surface-dark-2 select-none touch-none"
       >
         {/* Images inset so dark section background shows on left / right / top */}
-        <div className="px-6 pt-6 md:px-10 md:pt-10">
+        <div className={CASE_STUDY_MEDIA_INSET_CLASS}>
           <div
             ref={stageRef}
-            className="relative w-full overflow-hidden rounded-t-[8px]"
+            className="relative w-full overflow-hidden rounded-t-[8px] shadow-prettify-minerva-showcase-frame"
           >
             {/* Base layer: "after" image — in flow so stage height matches image */}
             {/* eslint-disable-next-line @next/next/no-img-element */}

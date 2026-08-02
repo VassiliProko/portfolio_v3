@@ -14,6 +14,8 @@ type ShowcaseLoopingVideoProps = {
   ariaLabel: string;
   /** Pause before replay; 0 uses native seamless loop. */
   loopDelayMs?: number;
+  /** When false, keep the video paused (e.g. while a lightbox is open). */
+  shouldPlay?: boolean;
 };
 
 export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
@@ -22,11 +24,12 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
   className,
   ariaLabel,
   loopDelayMs = 0,
+  shouldPlay = true,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const useDelayedLoop = loopDelayMs > 0;
 
-  useBackgroundSafeVideo(videoRef, { enabled: true, shouldPlay: true });
+  useBackgroundSafeVideo(videoRef, { enabled: true, shouldPlay });
 
   useEffect(() => {
     if (!useDelayedLoop) {

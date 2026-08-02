@@ -69,6 +69,25 @@ const MATHSGENIE_IMAGE_PREVIEW: ImagePreviewItem = {
     backgroundColor: 'var(--color-mathsgenie-showcase-bg)',
   },
 };
+
+const HEART_ANIMATION_VIDEO_SOURCES = [
+  { src: '/other/heart.webm', type: 'video/webm' },
+  { src: '/other/heart.mp4', type: 'video/mp4' },
+] as const;
+
+const HEART_ANIMATION_IMAGE_PREVIEW: ImagePreviewItem = {
+  src: '/other/heart.webm',
+  name: 'A Cute Heart Animation',
+  description:
+    'An animated digital painting exploring the submission of our lives on a heartbeat.',
+  // Wide frame so the square video can fill height, stay centered, and show the gradient.
+  width: 16,
+  height: 9,
+  mediaBackground: 'var(--gradient-heart-animation-preview)',
+  video: {
+    sources: [...HEART_ANIMATION_VIDEO_SOURCES],
+  },
+};
 type WorkShowcaseSectionProps = {
   visible?: boolean;
   /** Animate the whole grid once (return home visit) instead of staggering cards */
@@ -364,23 +383,31 @@ const VisualExplorationsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
   reveal = true,
   delayMs = 0,
 }) => {
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+
   return (
-    <WorkCardShell
-      className="aspect-square"
-      ariaLabel="Visual Explorations preview"
-      reveal={reveal}
-      delayMs={delayMs}
-      hoverTitle="A Cute Heart Animation"
-    >
-      <ShowcaseLoopingVideo
-        sources={[
-          { src: '/other/heart.webm', type: 'video/webm' },
-          { src: '/other/heart.mp4', type: 'video/mp4' },
-        ]}
-        className="h-full w-full object-cover"
-        ariaLabel="Visual Explorations preview animation"
+    <>
+      <WorkCardShell
+        className="aspect-square"
+        ariaLabel="Open heart animation preview"
+        reveal={reveal}
+        delayMs={delayMs}
+        hoverTitle="A Cute Heart Animation"
+        onActivate={() => setPreviewOpen(true)}
+      >
+        <ShowcaseLoopingVideo
+          sources={[...HEART_ANIMATION_VIDEO_SOURCES]}
+          shouldPlay={!previewOpen}
+          className="h-full w-full object-cover"
+          ariaLabel="Visual Explorations preview animation"
+        />
+      </WorkCardShell>
+      <ImagePreview
+        item={HEART_ANIMATION_IMAGE_PREVIEW}
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
       />
-    </WorkCardShell>
+    </>
   );
 };
 

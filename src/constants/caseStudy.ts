@@ -19,3 +19,6 @@ export const CASE_STUDY_OVERVIEW_COLUMNS_CLASS =
  * Overview uses CSS `columns` instead — pass a single unbroken `<p>`.
  */
 export const CASE_STUDY_BODY_CLASS = 'max-w-[clamp(12rem,40ch,100%)]';
+
+/** Inset media frame: pad left / right / top, flush bottom (CompareImage + CaseStudyImage). */
+export const CASE_STUDY_MEDIA_INSET_CLASS = 'px-6 pt-6 md:px-10 md:pt-10';

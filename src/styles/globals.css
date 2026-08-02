@@ -83,9 +83,16 @@
   /* Logo lockup section (Figma node 316:480) — text stays light in both themes */
   --color-prettify-minerva-logo-bg: #2f2f2f;
   --color-prettify-minerva-logo-text: #fafafa;
+  /* VS Code extension frame (soft cool slate) */
+  --gradient-prettify-minerva-vscode: linear-gradient(165deg, #E8EEF5 0%, #D5DDE8 50%, #C5CFDC 100%);
+  /* Reddit comment callout — brand orange field */
+  --gradient-prettify-minerva-reddit: linear-gradient(160deg, #FF8B60 0%, #FF4500 48%, #D93900 100%);
 
   /* Work showcase: MathsGenie animation card */
   --color-mathsgenie-showcase-bg: #ffffff;
+
+  /* Work showcase / preview: heart animation (rose → magenta → purple) */
+  --gradient-heart-animation-preview: linear-gradient(180deg, #7A1F3D 0%, #D63A72 48%, #3F1A58 100%);
 
   /* Case study: RevisionDojo icons preview boards (matches highlight reel palette) */
   --gradient-dojo-icons-soft: linear-gradient(180deg, #F7E4EA 0%, #E4F2FC 100%);
@@ -231,6 +238,8 @@
   --gradient-showcase-cool-idea: linear-gradient(165deg, #1A3539 0%, #222638 48%, #2D2619 100%);
   --opacity-showcase-cool-idea-glow: 0.16;
   --blur-showcase-cool-idea-glow: 40px;
+
+  --gradient-prettify-minerva-vscode: linear-gradient(165deg, #2C3340 0%, #232833 50%, #1A1E26 100%);
 }
 
 @media (min-width: 768px) {

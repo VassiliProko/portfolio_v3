@@ -10,6 +10,7 @@ import {
   ShowcaseRivePreview,
   type ShowcaseRivePlaybackMode,
 } from '@/src/components/ui/ShowcaseRivePreview';
+import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
 import { cn } from '@/src/utils/cn';
 
 /** Optional Rive media — when set, preview plays this instead of a static `src` image. */
@@ -19,6 +20,11 @@ export type ImagePreviewRive = {
   alignment?: Alignment;
   /** Surface behind the canvas (matches showcase card). */
   backgroundColor?: string;
+};
+
+/** Optional looping video media for the lightbox. */
+export type ImagePreviewVideo = {
+  sources: Array<{ src: string; type: string }>;
 };
 
 /** Metadata attached to any image that can open in the preview lightbox. */
@@ -36,6 +42,10 @@ export type ImagePreviewItem = {
   captionTone?: 'default' | 'on-dark';
   /** When set, lightbox media is this Rive animation (same as work showcase). */
   rive?: ImagePreviewRive;
+  /** When set, lightbox media is this looping video (takes precedence over image). */
+  video?: ImagePreviewVideo;
+  /** CSS background for the media frame (color or gradient). */
+  mediaBackground?: string;
 };
 
 /**
@@ -293,12 +303,17 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                   aspectRatio: `${imageWidth} / ${imageHeight}`,
                   maxHeight: imageMaxHeightPx,
                   clipPath: 'inset(0 round var(--radius-image-preview))',
-                  backgroundColor: activeItem.rive?.backgroundColor,
+                  background:
+                    activeItem.mediaBackground ?? activeItem.rive?.backgroundColor,
                 }}
               >
                 <AnimatePresence initial={false} custom={direction} mode="sync">
                   <motion.div
-                    key={activeItem.rive?.src ?? activeItem.src}
+                    key={
+                      activeItem.video?.sources[0]?.src ??
+                      activeItem.rive?.src ??
+                      activeItem.src
+                    }
                     className="absolute -inset-[2px]"
                     custom={direction}
                     initial={
@@ -320,7 +335,19 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                     }
                     transition={slideTransition}
                   >
-                    {activeItem.rive ? (
+                    {activeItem.video ? (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <ShowcaseLoopingVideo
+                          sources={activeItem.video.sources}
+                          className="pointer-events-none h-full w-auto max-w-full select-none object-contain"
+                          ariaLabel={
+                            activeItem.alt ??
+                            activeItem.description ??
+                            activeItem.name
+                          }
+                        />
+                      </div>
+                    ) : activeItem.rive ? (
                       <ShowcaseRivePreview
                         riveSrc={activeItem.rive.src}
                         ariaLabel={

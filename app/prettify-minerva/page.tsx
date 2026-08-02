@@ -4,6 +4,7 @@ import { CASE_STUDY_OVERVIEW_COLUMNS_CLASS } from '@/src/constants/caseStudy';
 import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
 import { CompareImage } from '@/src/components/ui/CompareImage';
 import { PrettifyMinervaLogoLockup } from '@/src/components/ui/PrettifyMinervaLogoLockup';
+import { PrettifyMinervaRedditComment } from '@/src/components/ui/PrettifyMinervaRedditComment';
 
 export const metadata: Metadata = {
   title: 'Prettify Minerva',
@@ -68,19 +69,45 @@ export default function PrettifyMinervaCaseStudyPage() {
       />
       <CaseStudyImage
         src="/images/optimized/prettify-minerva/prettify-minerva-initial.webp"
-        alt="Initial Design"
+        alt="Initial Minerva redesign concept with sidebar navigation"
+        width={2320}
+        height={1274}
+        captionLabel="Community Response"
+        captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
+        caption={
+          <p>
+            I shared this concept of Minerva on the McGill subreddit which garnered over{' '}
+            <strong className="text-text">70k impressions</strong> with{' '}
+            <strong className="text-text">positive engagement</strong>. This dashboard style design
+            was inspired from other McGill sites like MyCourses, McGill’s learning management
+            system.
+          </p>
+        }
+      />
+      <PrettifyMinervaRedditComment
+        quote="“Could this be developed into a Chrome extension? This is a million times better than the current interface.”"
+        subtitle="A highly upvoted comment suggesting a potential browser extension solution sparked further exploration and curiosity..."
       />
       <CaseStudyImage
-        src="/images/optimized/prettify-minerva/prettify-minerva-community.webp"
-        alt="Community Feedback"
-      />
-      <CaseStudyImage
-        src="/images/optimized/prettify-minerva/prettify-minerva-vscode.webp"
+        src="/images/optimized/prettify-minerva/prettify-minerva-vscode.jpg"
         alt="VSCode Extension"
+        width={2184}
+        height={1207}
+        mediaInset
+        mediaBackground="var(--gradient-prettify-minerva-vscode)"
+        captionLabel="Browser Extension Solution"
+        captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
+        caption={
+          <p>
+            Using JavaScript to directly manipulate page content and HTML structure. I also
+            injected custom CSS to restyle Minerva’s interface, making the site cleaner and more
+            visually appealing.
+          </p>
+        }
       />
       <CaseStudyImage
         src="/images/optimized/prettify-minerva/prettify-minerva-solution.webp"
-        alt="The Solution"
+        alt="Browser extension before and after comparison"
       />
       <CaseStudyImage
         src="/images/optimized/prettify-minerva/prettify-minerva-quicklinks.webp"

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { CASE_STUDY_MEDIA_INSET_CLASS } from '@/src/constants/caseStudy';
 import { cn } from '@/src/utils/cn';
 
 /** Half of CaseStudyLayout children spacing (`gap-4 md:gap-8` → `gap-2 md:gap-4`). */
@@ -41,6 +42,10 @@ export interface CaseStudyImageProps {
    * Image + bar share one rounded frame.
    */
   mediaBar?: boolean;
+  /** Inset media like CompareImage (padding on left / right / top). */
+  mediaInset?: boolean;
+  /** CSS background for the media frame (color or gradient token). */
+  mediaBackground?: string;
   /** Intrinsic width for a single Next Image (defaults to 1920) */
   width?: number;
   /** Intrinsic height for a single Next Image (defaults to 1080) */
@@ -57,6 +62,8 @@ function CaseStudyMediaFrame({
   priority = false,
   sizes,
   mediaBar = false,
+  mediaInset = false,
+  mediaBackground,
 }: {
   src: string;
   alt: string;
@@ -65,15 +72,24 @@ function CaseStudyMediaFrame({
   priority?: boolean;
   sizes: string;
   mediaBar?: boolean;
+  mediaInset?: boolean;
+  mediaBackground?: string;
 }) {
   return (
-    <div className="relative w-full overflow-hidden rounded-[8px] bg-surface-2">
+    <div
+      className={cn(
+        'relative w-full overflow-hidden rounded-[8px]',
+        !mediaBackground && 'bg-surface-2',
+        mediaInset && CASE_STUDY_MEDIA_INSET_CLASS
+      )}
+      style={mediaBackground ? { background: mediaBackground } : undefined}
+    >
       <Image
         src={src}
         alt={alt}
         width={width}
         height={height}
-        className="block h-auto w-full"
+        className={cn('block h-auto w-full', mediaInset && 'rounded-t-[8px]')}
         sizes={sizes}
         priority={priority}
       />
@@ -96,6 +112,8 @@ export const CaseStudyImage: React.FC<CaseStudyImageProps> = ({
   captionLabel,
   captionClassName,
   mediaBar = false,
+  mediaInset = false,
+  mediaBackground,
   width = 1920,
   height = 1080,
   priority = false,
@@ -136,17 +154,25 @@ export const CaseStudyImage: React.FC<CaseStudyImageProps> = ({
           priority={priority}
           sizes="(max-width: 768px) 100vw, min(100vw, 1200px)"
           mediaBar={mediaBar}
+          mediaInset={mediaInset}
+          mediaBackground={mediaBackground}
         />
       ) : null}
       {hasCaption ? (
-        <figcaption className="flex w-full flex-col gap-2xs">
+        <figcaption
+          className={cn(
+            'flex w-full flex-col gap-2xs',
+            // Extra space before the next case-study child for labeled detail blocks.
+            captionLabel && 'mb-lg md:mb-xl'
+          )}
+        >
           {captionLabel ? (
             <p className="type-label m-0 text-text-subtle">{captionLabel}</p>
           ) : null}
           {caption ? (
             <div
               className={cn(
-                'type-paragraph m-0 text-text-subtle [&_p]:m-0',
+                'type-paragraph m-0 text-text [&_p]:m-0',
                 captionClassName
               )}
             >
