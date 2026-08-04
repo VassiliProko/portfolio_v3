@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { useReducedMotion } from 'motion/react';
 import { PrettifyMinervaChromeToolbar } from '@/src/components/ui/PrettifyMinervaChromeToolbar';
@@ -12,6 +13,11 @@ const FADE_MS = 500;
 const HOLD_MS = 3500;
 const LOOP_PAUSE_MS = 2850;
 const FADE_EASE = motion.easing.move;
+
+const LOGIN_OLD_SRC = '/images/optimized/prettify-minerva/minerva-login-old.jpg';
+const LOGIN_NEW_SRC = '/images/optimized/prettify-minerva/minerva-login-new.jpg';
+const LOGIN_WIDTH = 2400;
+const LOGIN_HEIGHT = 1354;
 
 type Layer = 'old' | 'new';
 
@@ -41,8 +47,11 @@ export const PrettifyMinervaExtensionDemo: React.FC<PrettifyMinervaExtensionDemo
   const oldLayerRef = useRef<HTMLDivElement>(null);
   const newLayerRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
+  const [oldImageReady, setOldImageReady] = useState(false);
+  const [newImageReady, setNewImageReady] = useState(false);
   /** Visible result layer for a11y + toolbar (imperative z/opacity during morph). */
   const [visibleLayer, setVisibleLayer] = useState<Layer>('old');
+  const imagesReady = oldImageReady && newImageReady;
 
   useEffect(() => {
     const el = rootRef.current;
@@ -53,6 +62,19 @@ export const PrettifyMinervaExtensionDemo: React.FC<PrettifyMinervaExtensionDemo
     );
     observer.observe(el);
     return () => observer.disconnect();
+  }, []);
+
+  // Cached images can skip `onLoad`; mark ready from the decoded element.
+  useEffect(() => {
+    const markIfComplete = (
+      layer: HTMLDivElement | null,
+      setReady: (ready: boolean) => void
+    ) => {
+      const img = layer?.querySelector('img');
+      if (img?.complete && img.naturalWidth > 0) setReady(true);
+    };
+    markIfComplete(oldLayerRef.current, setOldImageReady);
+    markIfComplete(newLayerRef.current, setNewImageReady);
   }, []);
 
   useEffect(() => {
@@ -83,7 +105,7 @@ export const PrettifyMinervaExtensionDemo: React.FC<PrettifyMinervaExtensionDemo
       return;
     }
 
-    if (!inView) return;
+    if (!inView || !imagesReady) return;
 
     let cancelled = false;
 
@@ -132,7 +154,7 @@ export const PrettifyMinervaExtensionDemo: React.FC<PrettifyMinervaExtensionDemo
       for (const id of timeouts) window.clearTimeout(id);
       timeouts.clear();
     };
-  }, [inView, prefersReducedMotion]);
+  }, [inView, imagesReady, prefersReducedMotion]);
 
   const hasCaption = Boolean(caption || captionLabel || footerHref);
 
@@ -155,16 +177,16 @@ export const PrettifyMinervaExtensionDemo: React.FC<PrettifyMinervaExtensionDemo
             style={{ opacity: 1, zIndex: 2 }}
             aria-hidden={visibleLayer !== 'old'}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/optimized/prettify-minerva/minerva-login-old.jpg"
+            <Image
+              src={LOGIN_OLD_SRC}
               alt="Minerva login before Prettify"
-              width={2400}
-              height={1354}
+              width={LOGIN_WIDTH}
+              height={LOGIN_HEIGHT}
               className="block h-full w-full object-cover"
-              loading="lazy"
-              decoding="async"
+              sizes="(max-width: 1200px) 100vw, 1200px"
+              priority
               draggable={false}
+              onLoad={() => setOldImageReady(true)}
             />
           </div>
 
@@ -174,16 +196,16 @@ export const PrettifyMinervaExtensionDemo: React.FC<PrettifyMinervaExtensionDemo
             style={{ opacity: 0, zIndex: 1 }}
             aria-hidden={visibleLayer !== 'new'}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/optimized/prettify-minerva/minerva-login-new.jpg"
+            <Image
+              src={LOGIN_NEW_SRC}
               alt="Minerva login after Prettify"
-              width={2400}
-              height={1354}
+              width={LOGIN_WIDTH}
+              height={LOGIN_HEIGHT}
               className="block h-full w-full object-cover"
-              loading="lazy"
-              decoding="async"
+              sizes="(max-width: 1200px) 100vw, 1200px"
+              priority
               draggable={false}
+              onLoad={() => setNewImageReady(true)}
             />
           </div>
         </div>

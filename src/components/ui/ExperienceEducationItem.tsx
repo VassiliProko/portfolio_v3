@@ -114,7 +114,7 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
     <li
       ref={rowRef}
       className={cn(
-        'group relative border-b border-border-divider last:border-b-0 transition-colors duration-[60ms] ease-snap md:hover:bg-surface-2',
+        'group relative border-b border-border-divider last:border-b-0 transition-colors duration-micro ease-snap md:hover:bg-surface-2',
         className
       )}
       onMouseEnter={handleMouseEnter}
@@ -124,7 +124,7 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
       <span
         aria-hidden="true"
         className={cn(
-          'absolute inset-y-0 left-0 w-4xs transition-colors duration-[60ms] ease-snap',
+          'absolute inset-y-0 left-0 w-4xs transition-colors duration-micro ease-snap',
           barClassName
         )}
       />
@@ -141,7 +141,7 @@ export const ExperienceEducationItem: React.FC<ExperienceEducationItemProps> = (
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="type-paragraph text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-[60ms] ease-snap"
+            className="type-paragraph text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-micro ease-snap"
             onClick={(e) => e.stopPropagation()}
           >
             {title}&nbsp;

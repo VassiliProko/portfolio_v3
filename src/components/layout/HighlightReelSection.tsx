@@ -134,7 +134,7 @@ export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
               aria-label={isPaused ? 'Play highlight reel video' : 'Pause highlight reel video'}
               className={cn(
                 'absolute left-1/2 top-1/2 z-10 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-sm bg-surface-dark-1 text-text-inverted-1',
-                'opacity-0 transition-all duration-[60ms] ease-snap hover:bg-surface-dark-2',
+                'opacity-0 transition-all duration-micro ease-snap hover:bg-surface-dark-2',
                 'group-hover:opacity-100 group-focus-within:opacity-100',
                 isPaused && 'opacity-100',
                 'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline'

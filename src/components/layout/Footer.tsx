@@ -1,10 +1,15 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/src/utils/cn';
-import { FooterFluidReveal } from '@/src/components/ui/FooterFluidReveal';
+
+/** WebGL fluid footer is large — keep it out of the critical home compile graph. */
+const FooterFluidReveal = dynamic(() =>
+  import('@/src/components/ui/FooterFluidReveal').then((mod) => mod.FooterFluidReveal),
+);
 
 type FooterProps = {
   lastUpdated: React.ReactNode;
@@ -16,7 +21,7 @@ const linkClass =
 const contactLinkClass = cn(
   'font-mono text-base inline-flex items-center justify-center h-12 px-4',
   'bg-footer-contact-bg text-footer-console-text',
-  'hover:bg-footer-contact-bg-hover transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
+  'hover:bg-footer-contact-bg-hover transition-colors duration-micro ease-snap',
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline'
 );
 

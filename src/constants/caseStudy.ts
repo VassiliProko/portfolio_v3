@@ -25,4 +25,4 @@ export const CASE_STUDY_MEDIA_INSET_CLASS = 'px-6 pt-6 md:px-10 md:pt-10';
 
 /** External case-study link row (Chrome Web Store, GitHub, etc.). */
 export const CASE_STUDY_EXTERNAL_LINK_CLASS =
-  'group inline-flex h-12 w-full items-center justify-between gap-2xs rounded-sm bg-surface-1 px-4 type-label text-text-muted transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)] hover:bg-surface-2 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline';
+  'group inline-flex h-12 w-full items-center justify-between gap-2xs rounded-sm bg-surface-1 px-4 type-label text-text-muted transition-colors duration-micro ease-snap hover:bg-surface-2 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline';

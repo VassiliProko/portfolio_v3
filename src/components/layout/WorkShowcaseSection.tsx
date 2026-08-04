@@ -189,7 +189,7 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
     !hasCustomSurfaceBackground && 'bg-surface-dark-1',
     isLinked &&
       !prefersReducedMotion &&
-      'origin-center transform-gpu transition-transform duration-[280ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-[0.98] group-focus-visible:scale-[0.98]',
+      'origin-center transform-gpu transition-transform duration-hover ease-soft will-change-transform group-hover:scale-[0.98] group-focus-visible:scale-[0.98]',
   );
   const layoutStyle: React.CSSProperties = prefersReducedMotion
     ? {

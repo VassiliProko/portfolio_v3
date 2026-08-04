@@ -26,7 +26,8 @@ const nextConfig = {
   },
   reactStrictMode: true,
   experimental: {
-    optimizePackageImports: ['lucide-react'],
+    // Tree-shake heavy barrel packages during dev compile.
+    optimizePackageImports: ['lucide-react', 'motion', '@rive-app/react-canvas'],
   },
   images: {
     // Assets in `public/images/optimized` are already compressed, so skip

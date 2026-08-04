@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const homeLinkClassName = cn(
   'type-navigation-sm inline-flex items-center justify-center py-2 px-5 rounded-md',
   'bg-surface-dark-2 text-text-inverted-1',
-  'hover:bg-text-subtle focus-visible:bg-text-subtle transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
+  'hover:bg-text-subtle focus-visible:bg-text-subtle transition-colors duration-micro ease-snap',
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline'
 );
 

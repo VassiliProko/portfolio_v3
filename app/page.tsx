@@ -1,10 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { HomeIntroSection } from '@/src/components/ui/HomeIntroSection';
-import { WorkShowcaseSection } from '@/src/components/layout/WorkShowcaseSection';
 import { useHomeEnterAnimation } from '@/src/contexts/HomeEnterAnimationContext';
 import { useMountPopdownReveal } from '@/src/components/ui/PopdownReveal';
+
+const WorkShowcaseSection = dynamic(
+  () =>
+    import('@/src/components/layout/WorkShowcaseSection').then(
+      (mod) => mod.WorkShowcaseSection,
+    ),
+);
 
 export default function HomePage() {
   const { isReturnHomeVisit } = useHomeEnterAnimation();

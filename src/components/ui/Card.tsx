@@ -12,7 +12,7 @@ export const Card: React.FC<CardProps> = ({
   children,
   ...props
 }) => {
-  const baseStyles = 'bg-card border border-border-base rounded-none transition-all duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)] hover:border-border-hover hover:-translate-y-[1px] active:scale-[0.99]';
+  const baseStyles = 'bg-card border border-border-base rounded-none transition-all duration-micro ease-snap hover:border-border-hover hover:-translate-y-[1px] active:scale-[0.99]';
   
   const variantStyles = {
     default: 'p-[15px]',

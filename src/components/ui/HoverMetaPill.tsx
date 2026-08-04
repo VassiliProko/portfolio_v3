@@ -115,7 +115,7 @@ export const HoverMetaPill: React.FC<HoverMetaPillProps> = ({ title = 'Project' 
     <div className="pointer-events-none absolute inset-x-0 bottom-3 z-10 flex items-center justify-start px-3">
       <div
         className={[
-          'relative inline-flex max-w-full transition-all duration-[360ms] ease-move will-change-[transform,opacity,filter]',
+          'relative inline-flex max-w-full transition-all duration-pill ease-move will-change-[transform,opacity,filter]',
           visibleClass,
           'origin-bottom-left group-focus-visible:translate-y-0 group-focus-visible:scale-100 group-focus-visible:opacity-100 group-focus-visible:blur-0',
           'motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:blur-0 motion-reduce:transition-none',
@@ -124,7 +124,7 @@ export const HoverMetaPill: React.FC<HoverMetaPillProps> = ({ title = 'Project' 
         <div
           aria-hidden
           className={[
-            'absolute inset-0 rounded-sm bg-background transition-opacity duration-[360ms] ease-move',
+            'absolute inset-0 rounded-sm bg-background transition-opacity duration-pill ease-move',
             'motion-reduce:transition-none',
           ].join(' ')}
           style={{ opacity: FROST_UNDERLAY_OPACITY }}

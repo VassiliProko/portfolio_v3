@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import { Oxygen_Mono, Satisfy } from 'next/font/google';
 import '@/src/styles/globals.css';
 import { ConditionalNav } from '@/src/components/layout/ConditionalNav';
 import { Footer } from '@/src/components/layout/Footer';
@@ -9,8 +8,7 @@ import { MainContentShell } from '@/src/components/layout/MainContentShell';
 import { ThemeProvider } from '@/src/components/ThemeProvider';
 import { ThemeScript } from '@/src/components/ThemeScript';
 import { HomeEnterAnimationProvider } from '@/src/contexts/HomeEnterAnimationContext';
-import { Analytics } from "@vercel/analytics/next"
-
+import { Analytics } from "@vercel/analytics/next";
 
 const satoshiVariable = localFont({
   src: '../public/fonts/Satoshi-Variable.ttf',
@@ -20,18 +18,21 @@ const satoshiVariable = localFont({
   fallback: ['system-ui', 'sans-serif'],
 });
 
-const oxygenMono = Oxygen_Mono({
-  weight: ['400'],
-  subsets: ['latin'],
+/** Local files avoid next/font/google network fetches that can stall cold compiles. */
+const oxygenMono = localFont({
+  src: '../public/fonts/OxygenMono-Regular.woff2',
   variable: '--font-oxygen-mono',
   display: 'swap',
+  weight: '400',
+  fallback: ['ui-monospace', 'monospace'],
 });
 
-const satisfy = Satisfy({
-  weight: ['400'],
-  subsets: ['latin'],
+const satisfy = localFont({
+  src: '../public/fonts/Satisfy-Regular.woff2',
   variable: '--font-satisfy',
   display: 'swap',
+  weight: '400',
+  fallback: ['cursive'],
 });
 
 export const metadata: Metadata = {

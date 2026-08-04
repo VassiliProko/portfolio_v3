@@ -20,13 +20,13 @@ const ABOUT_SECTION_HEADING_CLASS = 'type-label text-text-subtle';
 const resumeButtonClass = cn(
   'group type-paragraph-mono inline-flex items-center h-12 px-4 rounded-sm',
   'bg-footer-contact-bg text-footer-console-text',
-  'hover:bg-footer-contact-bg-hover transition-colors duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
+  'hover:bg-footer-contact-bg-hover transition-colors duration-micro ease-snap',
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
 );
 
 const resumeButtonIconSlotClass = cn(
   'inline-flex overflow-hidden max-w-0',
-  'transition-[max-width,margin-left] duration-[180ms] ease-move motion-reduce:transition-none',
+  'transition-[max-width,margin-left] duration-medium ease-move motion-reduce:transition-none',
   'group-hover:ml-2xs group-hover:max-w-5',
   'group-focus-visible:ml-2xs group-focus-visible:max-w-5',
   'motion-reduce:ml-2xs motion-reduce:max-w-5',
@@ -173,7 +173,7 @@ const AboutRoleRow: React.FC<AboutRoleRowProps> = ({
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="type-paragraph text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-[60ms] ease-snap"
+            className="type-paragraph text-text hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm transition-all duration-micro ease-snap"
           >
             {title}
           </a>

@@ -33,7 +33,7 @@ export const MobileNavMenuToggle: React.FC<MobileNavMenuToggleProps> = ({
       aria-label={isOpen ? 'Close menu' : 'Open menu'}
       className={cn(
         'flex size-9 shrink-0 items-center justify-center text-text',
-        'transition-colors duration-[60ms] ease-snap',
+        'transition-colors duration-micro ease-snap',
         'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
         className,
       )}
@@ -97,7 +97,7 @@ export const MobileNavMenuPanel: React.FC<MobileNavMenuPanelProps> = ({
                 priority={false}
               />
               <div
-                className="absolute inset-0 bg-overlay-uniform opacity-100 transition-opacity delay-0 duration-[var(--motion-large)] ease-move group-hover:opacity-50 group-hover:delay-75 group-focus-visible:opacity-50 group-focus-visible:delay-75 motion-reduce:transition-none"
+                className="absolute inset-0 bg-overlay-uniform opacity-100 transition-opacity delay-0 duration-large ease-move group-hover:opacity-50 group-hover:delay-75 group-focus-visible:opacity-50 group-focus-visible:delay-75 motion-reduce:transition-none"
                 aria-hidden
               />
               <span className="type-navigation absolute inset-x-0 bottom-0 pb-sm text-center text-footer-console-text">
@@ -105,7 +105,7 @@ export const MobileNavMenuPanel: React.FC<MobileNavMenuPanelProps> = ({
               </span>
             </Link>
 
-            <div className="aspect-square w-1/3 shrink-0 rounded-lg bg-surface-1 transition-colors delay-0 duration-[var(--motion-large)] ease-move hover:bg-surface-2 hover:delay-75 motion-reduce:transition-none">
+            <div className="aspect-square w-1/3 shrink-0 rounded-lg bg-surface-1 transition-colors delay-0 duration-large ease-move hover:bg-surface-2 hover:delay-75 motion-reduce:transition-none">
               <ThemeToggle className="size-full py-0 hover:opacity-100" />
             </div>
           </div>

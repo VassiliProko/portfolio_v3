@@ -162,10 +162,21 @@ const config: Config = {
   			lg: 'var(--radius)',
   			'image-preview': 'var(--radius-image-preview)',
   		},
+  		transitionDuration: {
+  			micro: 'var(--motion-micro)',
+  			base: 'var(--motion-base)',
+  			medium: 'var(--motion-medium)',
+  			large: 'var(--motion-large)',
+  			/** Hover scale / pill settles used by showcase + preview */
+  			hover: '280ms',
+  			pill: '360ms',
+  		},
   		transitionTimingFunction: {
   			snap: 'cubic-bezier(0,.9,.1,1)',
   			exit: 'cubic-bezier(.4,0,1,1)',
-  			move: 'cubic-bezier(.4,0,.2,1)'
+  			move: 'cubic-bezier(.4,0,.2,1)',
+  			/** Soft overshoot used by media hover scales */
+  			soft: 'cubic-bezier(0.22,1,0.36,1)',
   		},
   		boxShadow: {
   			'highlight-reel-inset': 'var(--shadow-highlight-reel-inset)',

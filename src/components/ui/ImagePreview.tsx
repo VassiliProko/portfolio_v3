@@ -54,7 +54,7 @@ export type ImagePreviewItem = {
  * or `overflow-visible` so the media can break out of its frame.
  */
 export const IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS =
-  'origin-center transform-gpu transition-transform duration-[280ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-[1.04] group-focus-visible:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-focus-visible:scale-100';
+  'origin-center transform-gpu transition-transform duration-hover ease-soft will-change-transform group-hover:scale-[1.04] group-focus-visible:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-focus-visible:scale-100';
 
 type ImagePreviewProps = {
   /** Single-image mode (e.g. Yinlin). Ignored when `items` is provided. */
@@ -378,7 +378,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                     className={cn(
                       'pointer-events-auto inline-flex size-9 items-center justify-center rounded-sm',
                       'bg-overlay-uniform text-footer-console-text opacity-70 backdrop-blur-2xl backdrop-saturate-150',
-                      'transition-opacity duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
+                      'transition-opacity duration-micro ease-snap',
                       'hover:opacity-100 focus-visible:opacity-100',
                       'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
                     )}
@@ -429,7 +429,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                           aria-label={`Show ${galleryItem.name}`}
                           onClick={() => goToIndex(index)}
                           className={cn(
-                            'size-2 rounded-full transition-colors duration-[180ms] ease-move',
+                            'size-2 rounded-full transition-colors duration-medium ease-move',
                             'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
                             isActive
                               ? 'bg-text'

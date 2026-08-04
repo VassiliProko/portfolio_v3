@@ -71,7 +71,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
         {hasCoverImage && coverImageSrc && (
           <div
             className={cn(
-              'overflow-hidden transition-transform duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)] group-hover:scale-105',
+              'overflow-hidden transition-transform duration-micro ease-snap group-hover:scale-105',
               coverFullBleed ? 'absolute inset-0' : 'w-full rounded-[4px]'
             )}
           >
@@ -109,7 +109,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
 
   const cardClasses = cn(
     'group flex flex-col overflow-hidden bg-background',
-    'transition-all duration-[60ms] ease-[cubic-bezier(0,.9,.1,1)]',
+    'transition-all duration-micro ease-snap',
     href && 'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
     className
   );

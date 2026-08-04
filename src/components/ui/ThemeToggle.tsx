@@ -29,7 +29,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
       onClick={toggleTheme}
       aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
       className={cn(
-        'flex items-center justify-center py-3 text-text opacity-100 transition-opacity duration-[180ms] ease-move hover:opacity-60 motion-reduce:transition-none focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
+        'flex items-center justify-center py-3 text-text opacity-100 transition-opacity duration-medium ease-move hover:opacity-60 motion-reduce:transition-none focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
         className,
       )}
     >
