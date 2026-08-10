@@ -346,6 +346,7 @@ const MathsGenieCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
           ariaLabel="MathsGenie entry and loop animation"
           playbackMode="entry-then-loop-once"
           riveAlignment={Alignment.Center}
+          className={IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS}
         />
       </WorkCardShell>
       <ImagePreview
@@ -398,7 +399,10 @@ const VisualExplorationsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
         <ShowcaseLoopingVideo
           sources={[...HEART_ANIMATION_VIDEO_SOURCES]}
           shouldPlay={!previewOpen}
-          className="h-full w-full object-cover"
+          className={cn(
+            'h-full w-full object-cover',
+            IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
+          )}
           ariaLabel="Visual Explorations preview animation"
         />
       </WorkCardShell>
