@@ -97,6 +97,7 @@ type ShowcaseColumnCount = 2 | 3;
 type ShowcaseCardKey =
   | 'prettify-minerva'
   | 'dojo-icons'
+  | 'jetpacks'
   | 'usthing'
   | 'mcss'
   | 'mathsgenie'
@@ -415,6 +416,35 @@ const VisualExplorationsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
   );
 };
 
+const JetpacksCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  return (
+    <WorkCardShell
+      href="/jetpacks"
+      className="aspect-[451/183]"
+      ariaLabel="Open Jetpacks case study"
+      hoverTitle="Edtech Branding"
+      style={{ backgroundColor: 'var(--color-jetpacks-media-bg)' }}
+      reveal={reveal}
+      delayMs={delayMs}
+    >
+      <div className="flex h-full w-full items-center justify-center px-md py-sm">
+        <Image
+          src="/images/optimized/jetpacks/jetpacks-logo-dark-mode.svg"
+          alt=""
+          width={770}
+          height={240}
+          className="pointer-events-none h-auto w-[88%] max-w-[360px] select-none object-contain"
+          sizes="(max-width: 768px) 70vw, (max-width: 1279px) 40vw, 280px"
+          priority={false}
+        />
+      </div>
+    </WorkCardShell>
+  );
+};
+
 const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   reveal = true,
   delayMs = 0,
@@ -667,32 +697,38 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     render: (props) => <DojoIconsCaseStudy {...props} />,
   },
   {
-    key: 'usthing',
+    key: 'jetpacks',
     priority: 4,
+    delayMs: 75,
+    render: (props) => <JetpacksCaseStudy {...props} />,
+  },
+  {
+    key: 'usthing',
+    priority: 5,
     delayMs: 100,
     render: (props) => <UsthingCaseStudy {...props} />,
   },
   {
     key: 'mcss',
-    priority: 5,
+    priority: 6,
     delayMs: 150,
     render: (props) => <McssFeaturedCaseStudy {...props} />,
   },
   {
     key: 'mathsgenie',
-    priority: 6,
+    priority: 7,
     delayMs: 175,
     render: (props) => <MathsGenieCaseStudy {...props} />,
   },
   {
     key: 'oneprep-pro-trial',
-    priority: 7,
+    priority: 8,
     delayMs: 200,
     render: (props) => <OnePrepProTrialCaseStudy {...props} />,
   },
   {
     key: 'visual-explorations',
-    priority: 8,
+    priority: 9,
     delayMs: 225,
     render: (props) => <VisualExplorationsCaseStudy {...props} />,
   },
@@ -701,13 +737,13 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 /** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
-    ['prettify-minerva', 'discord-snowsgiving', 'yinlin', 'usthing'],
+    ['prettify-minerva', 'discord-snowsgiving', 'yinlin', 'jetpacks', 'usthing'],
     ['dojo-icons', 'mcss', 'mathsgenie', 'visual-explorations'],
   ],
   3: [
     ['prettify-minerva', 'discord-snowsgiving', 'yinlin'],
     ['dojo-icons', 'mcss', 'visual-explorations'],
-    ['usthing', 'mathsgenie'],
+    ['jetpacks', 'usthing', 'mathsgenie'],
   ],
 };
 

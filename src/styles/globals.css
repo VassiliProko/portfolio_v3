@@ -98,6 +98,9 @@
   /* Work showcase: MathsGenie animation card */
   --color-mathsgenie-showcase-bg: #ffffff;
 
+  /* Case study: Jetpacks media boards (darker than dark-mode page bg) */
+  --color-jetpacks-media-bg: #0e0e11;
+
   /* Work showcase / preview: heart animation (rose → magenta → purple) */
   --gradient-heart-animation-preview: linear-gradient(180deg, #7A1F3D 0%, #D63A72 48%, #3F1A58 100%);
 

@@ -61,6 +61,9 @@ const config: Config = {
   				'plate-light': 'var(--color-dojo-icons-plate-light)',
   				'plate-dark': 'var(--color-dojo-icons-plate-dark)',
   			},
+  			jetpacks: {
+  				media: 'var(--color-jetpacks-media-bg)',
+  			},
   			'prettify-minerva': {
   				'logo-bg': 'var(--color-prettify-minerva-logo-bg)',
   				'logo-text': 'var(--color-prettify-minerva-logo-text)',
