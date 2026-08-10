@@ -1,63 +1,63 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
+import { JetpacksLoadingAnimation } from '@/src/components/ui/JetpacksLoadingAnimation';
+import { JetpacksLogoBoard } from '@/src/components/ui/JetpacksLogoBoard';
+import { JetpacksCastBoard, JetpacksHomeBoard } from '@/src/components/ui/JetpacksMascotSections';
 
 export const metadata: Metadata = {
   title: 'Jetpacks',
   description:
-    'Brand design for Jetpacks, an AI study tool — including the chicken-with-jetpacks mascot and supporting graphics.',
+    'Brand design for Jetpacks, an AI-powered study workspace — including the chicken-with-jetpacks mascot and supporting graphics.',
 };
 
-const JETPACKS_LINK_CLASS =
-  'text-text underline underline-offset-2 transition-colors duration-micro ease-snap hover:text-text-muted focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm';
+const META_LINK_CLASS =
+  'text-inherit no-underline transition-all duration-micro ease-snap hover:underline hover:underline-offset-2 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline rounded-sm';
 
 const JETPACKS_OVERVIEW = (
   <p>
-    Led the brand design for Jetpacks, an AI study tool. Created the chicken-with-jetpacks mascot,
-    logo lockup, and supporting graphics that give the product a playful, memorable identity. More
-    at{' '}
-    <a
-      href="https://jetpacks.com"
-      target="_blank"
-      rel="noopener noreferrer"
-      className={JETPACKS_LINK_CLASS}
-    >
-      jetpacks.com
-    </a>
-    .
+    I led the brand design for Jetpacks, an AI-powered study workspace. I created the
+    chicken-with-jetpacks mascot, and supporting graphics + animations that give the product a
+    playful, memorable identity.
   </p>
 );
 
-const JETPACKS_HERO = (
-  <section
-    className="flex w-full items-center justify-center rounded-[8px] bg-surface-dark-1 px-md py-xl md:px-xl md:py-2xl"
-    aria-label="Jetpacks brand logo"
-  >
-    <Image
-      src="/images/optimized/jetpacks/jetpacks-logo.svg"
-      alt="Jetpacks logo — chicken mascot with jetpack next to the Jetpacks wordmark"
-      width={451}
-      height={141}
-      className="pointer-events-none h-auto w-full max-w-[520px] select-none object-contain"
-      sizes="(max-width: 768px) 90vw, 520px"
-      priority={false}
-    />
-  </section>
+const JETPACKS_TEAM = (
+  <div className="flex flex-col gap-4xs">
+    <span>Designer - Me</span>
+    <span>
+      Dev -{' '}
+      <a
+        href="https://www.linkedin.com/in/jasonjonarto/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={META_LINK_CLASS}
+      >
+        Jason Jonarto
+      </a>
+    </span>
+  </div>
 );
 
 export default function JetpacksCaseStudyPage() {
   return (
     <CaseStudyLayout
       title="Jetpacks"
-      hero={JETPACKS_HERO}
+      heroImageSrc="/images/optimized/jetpacks/jetpacks-head.jpg"
+      heroImageAlt="Jetpacks brand showcase"
+      heroImageWidth={2752}
+      heroImageHeight={1464}
       overview={JETPACKS_OVERVIEW}
       meta={{
-        role: 'Brand Designer',
-        tools: 'Figma',
-        skills: 'Brand Design, Mascot, Graphics',
+        team: JETPACKS_TEAM,
+        tools: 'Figma, Rive',
       }}
       websiteUrl="https://jetpacks.com"
       websiteLabel="Jetpacks"
-    />
+    >
+      <JetpacksLogoBoard />
+      <JetpacksLoadingAnimation />
+      <JetpacksCastBoard />
+      <JetpacksHomeBoard />
+    </CaseStudyLayout>
   );
 }

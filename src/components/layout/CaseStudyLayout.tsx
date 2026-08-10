@@ -42,12 +42,14 @@ export interface CaseStudyLayoutProps {
   hero?: React.ReactNode;
   /** Overview paragraphs (editorial columns; stack on small viewports) */
   overview: React.ReactNode;
-  /** Optional meta: duration, role, tools, skills (displayed under overview) */
+  /** Optional meta: duration, role, tools, skills, team (displayed under overview) */
   meta?: {
     duration?: string;
     role?: string;
     tools?: string;
     skills?: string;
+    /** Supports links / multi-line team credits */
+    team?: React.ReactNode;
   };
   /** Optional "View website" link (external) */
   websiteUrl?: string;
@@ -67,11 +69,11 @@ const META_LABEL_CLASS = 'type-label text-text-subtle';
 
 const META_VALUE_CLASS = 'type-paragraph text-text';
 
-function MetaRow({ label, value }: { label: string; value: string }) {
+function MetaRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex min-w-0 flex-col gap-2xs pr-about-role-icon">
       <span className={META_LABEL_CLASS}>{label}</span>
-      <span className={META_VALUE_CLASS}>{value}</span>
+      <div className={META_VALUE_CLASS}>{value}</div>
     </div>
   );
 }
@@ -169,7 +171,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
   children,
   className,
 }) => {
-  const hasMeta = meta && (meta.duration ?? meta.role ?? meta.tools ?? meta.skills);
+  const hasMeta = meta && (meta.duration ?? meta.role ?? meta.tools ?? meta.skills ?? meta.team);
   const hasDefaultHero = Boolean(heroVideoSrc || heroVideoEmbedUrl || heroImageSrc);
   const hasHero = Boolean(hero ?? hasDefaultHero);
   const hasLinks = Boolean(websiteUrl ?? githubUrl);
@@ -177,10 +179,11 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
   const metaEntries = hasMeta
     ? ([
         meta.role ? { label: 'Role', value: meta.role } : null,
+        meta.team ? { label: 'Team', value: meta.team } : null,
         meta.tools ? { label: 'Tools', value: meta.tools } : null,
         meta.duration ? { label: 'Duration', value: meta.duration } : null,
         meta.skills ? { label: 'Skills', value: meta.skills } : null,
-      ].filter(Boolean) as { label: string; value: string }[])
+      ].filter(Boolean) as { label: string; value: React.ReactNode }[])
     : [];
 
   return (

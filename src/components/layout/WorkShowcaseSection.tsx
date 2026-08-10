@@ -422,15 +422,16 @@ const JetpacksCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       className="aspect-[451/183]"
       ariaLabel="Open Jetpacks case study"
       hoverTitle="Edtech Branding"
+      style={{ backgroundColor: 'var(--color-jetpacks-media-bg)' }}
       reveal={reveal}
       delayMs={delayMs}
     >
       <div className="flex h-full w-full items-center justify-center px-md py-sm">
         <Image
-          src="/images/optimized/jetpacks/jetpacks-logo.svg"
+          src="/images/optimized/jetpacks/jetpacks-logo-dark-mode.svg"
           alt=""
-          width={451}
-          height={141}
+          width={770}
+          height={240}
           className="pointer-events-none h-auto w-[88%] max-w-[360px] select-none object-contain"
           sizes="(max-width: 768px) 70vw, (max-width: 1279px) 40vw, 280px"
           priority={false}
