@@ -25,6 +25,10 @@ const nextConfig = {
     NEXT_PUBLIC_LAST_UPDATED: getLastUpdatedFromMain(),
   },
   reactStrictMode: true,
+  // Pin the Turbopack workspace root so Next doesn't treat `app/` as the project dir.
+  turbopack: {
+    root: __dirname,
+  },
   experimental: {
     // Tree-shake heavy barrel packages during dev compile.
     optimizePackageImports: ['lucide-react', 'motion', '@rive-app/react-canvas'],
