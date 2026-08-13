@@ -506,7 +506,7 @@ const PrettifyMinervaCardContent: React.FC = () => {
           style={{ backgroundColor: 'var(--color-prettify-minerva-chrome)' }}
         >
           <Image
-            src="/images/optimized/prettify-minerva/minerva-preview.png"
+            src="/images/optimized/prettify-minerva/minerva-preview-card.jpg"
             alt=""
             fill
             className="pointer-events-none select-none object-cover object-left-top"
