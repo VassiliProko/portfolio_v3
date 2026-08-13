@@ -3,8 +3,8 @@ import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { CASE_STUDY_OVERVIEW_COLUMNS_CLASS } from '@/src/constants/caseStudy';
 import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
 import { CompareImage } from '@/src/components/ui/CompareImage';
-import { PrettifyMinervaExtensionDemo } from '@/src/components/ui/PrettifyMinervaExtensionDemo';
 import { PrettifyMinervaLogoLockup } from '@/src/components/ui/PrettifyMinervaLogoLockup';
+import { PrettifyMinervaQuickLinksLogo } from '@/src/components/ui/PrettifyMinervaQuickLinksLogo';
 import { PrettifyMinervaRedditComment } from '@/src/components/ui/PrettifyMinervaRedditComment';
 
 export const metadata: Metadata = {
@@ -39,10 +39,6 @@ export default function PrettifyMinervaCaseStudyPage() {
       githubUrl="https://github.com/VassiliProko/prettify_minerva"
       githubLabel="Github"
     >
-      <CaseStudyImage
-        src="/images/optimized/prettify-minerva/prettify-minerva-mock.webp"
-        alt="Prettify Minerva case study — overview"
-      />
       <CompareImage
         beforeSrc="/images/optimized/prettify-minerva/prettify-minerva-before.jpg"
         afterSrc="/images/optimized/prettify-minerva/prettify-minerva-after.jpg"
@@ -107,11 +103,14 @@ export default function PrettifyMinervaCaseStudyPage() {
           </p>
         }
       />
-      <PrettifyMinervaExtensionDemo
+      <PrettifyMinervaQuickLinksLogo />
+      <CaseStudyImage
+        src="/images/optimized/prettify-minerva/minerva-login-highlight.jpg"
+        alt="Redesigned Minerva login with McGill header, student and guest login, and campus building"
+        width={1620}
+        height={1140}
         captionLabel="Results"
         captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
-        footerHref={CHROME_WEB_STORE_URL}
-        footerLabel="Chrome Web Store"
         caption={
           <p>
             After facing a range of challenges like DOM quirks to styling messy table elements, I

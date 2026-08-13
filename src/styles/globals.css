@@ -88,6 +88,8 @@
   /* Logo lockup section (Figma node 316:480) — text stays light in both themes */
   --color-prettify-minerva-logo-bg: #2f2f2f;
   --color-prettify-minerva-logo-text: #fafafa;
+  /* Highlight-row logo field — fixed in both themes */
+  --color-prettify-minerva-logo-highlight-bg: #ebebeb;
   /* VS Code extension frame (soft cool slate) */
   --gradient-prettify-minerva-vscode: linear-gradient(165deg, #E8EEF5 0%, #D5DDE8 50%, #C5CFDC 100%);
   /* Reddit comment callout — brand orange field */

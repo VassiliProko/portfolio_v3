@@ -64,9 +64,10 @@ const config: Config = {
   			jetpacks: {
   				media: 'var(--color-jetpacks-media-bg)',
   			},
-  			'prettify-minerva': {
-  				'logo-bg': 'var(--color-prettify-minerva-logo-bg)',
-  				'logo-text': 'var(--color-prettify-minerva-logo-text)',
+			'prettify-minerva': {
+				'logo-bg': 'var(--color-prettify-minerva-logo-bg)',
+				'logo-text': 'var(--color-prettify-minerva-logo-text)',
+				'logo-highlight-bg': 'var(--color-prettify-minerva-logo-highlight-bg)',
   				'chrome-toolbar-bg': 'var(--color-prettify-minerva-chrome-toolbar-bg)',
   				'chrome-toolbar-surface': 'var(--color-prettify-minerva-chrome-toolbar-surface)',
   				'chrome-toolbar-fg': 'var(--color-prettify-minerva-chrome-toolbar-fg)',
