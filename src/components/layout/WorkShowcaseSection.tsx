@@ -55,6 +55,15 @@ const DISCORD_SNOWSGIVING_IMAGE_PREVIEW: ImagePreviewItem = {
   height: 675,
 };
 
+const OASIS_IMAGE_PREVIEW: ImagePreviewItem = {
+  src: '/images/optimized/home/oasis-preview.jpg',
+  name: 'macOS visual workspace',
+  description:
+    'A visual workspace that renders markdown files for displaying design and art inspiration',
+  width: 1920,
+  height: 1080,
+};
+
 const MATHSGENIE_IMAGE_PREVIEW: ImagePreviewItem = {
   src: '/other/genie-landing-page.riv',
   name: 'MathsGenie Animation',
@@ -104,6 +113,7 @@ type ShowcaseCardKey =
   | 'oneprep-pro-trial'
   | 'visual-explorations'
   | 'discord-snowsgiving'
+  | 'oasis-visual-workspace'
   | 'yinlin';
 type ShowcaseCardProps = { reveal?: boolean; delayMs?: number };
 type ShowcaseCardConfig = {
@@ -624,6 +634,46 @@ const DiscordSnowsgivingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
   />
 );
 
+const OasisVisualWorkspaceCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+
+  return (
+    <>
+      <WorkCardShell
+        className="relative"
+        ariaLabel="Open macOS visual workspace preview"
+        hoverTitle="macOS visual workspace"
+        reveal={reveal}
+        delayMs={delayMs}
+        fillSurface={false}
+        onActivate={() => setPreviewOpen(true)}
+      >
+        <div className="relative aspect-[16/9] w-full overflow-hidden">
+          <Image
+            src={OASIS_IMAGE_PREVIEW.src}
+            alt=""
+            fill
+            className={cn(
+              'pointer-events-none select-none object-cover',
+              IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
+            )}
+            sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
+            priority={false}
+          />
+        </div>
+      </WorkCardShell>
+      <ImagePreview
+        item={OASIS_IMAGE_PREVIEW}
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+      />
+    </>
+  );
+};
+
 /** Full-bleed illustration — image fills the card at its native aspect ratio. */
 const YinlinIllustrationCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   reveal = true,
@@ -685,50 +735,56 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     render: (props) => <DiscordSnowsgivingCaseStudy {...props} />,
   },
   {
-    key: 'yinlin',
+    key: 'oasis-visual-workspace',
     priority: 2,
+    delayMs: 35,
+    render: (props) => <OasisVisualWorkspaceCaseStudy {...props} />,
+  },
+  {
+    key: 'yinlin',
+    priority: 3,
     delayMs: 45,
     render: (props) => <YinlinIllustrationCaseStudy {...props} />,
   },
   {
     key: 'dojo-icons',
-    priority: 3,
+    priority: 4,
     delayMs: 50,
     render: (props) => <DojoIconsCaseStudy {...props} />,
   },
   {
     key: 'jetpacks',
-    priority: 4,
+    priority: 5,
     delayMs: 75,
     render: (props) => <JetpacksCaseStudy {...props} />,
   },
   {
     key: 'usthing',
-    priority: 5,
+    priority: 6,
     delayMs: 100,
     render: (props) => <UsthingCaseStudy {...props} />,
   },
   {
     key: 'mcss',
-    priority: 6,
+    priority: 7,
     delayMs: 150,
     render: (props) => <McssFeaturedCaseStudy {...props} />,
   },
   {
     key: 'mathsgenie',
-    priority: 7,
+    priority: 8,
     delayMs: 175,
     render: (props) => <MathsGenieCaseStudy {...props} />,
   },
   {
     key: 'oneprep-pro-trial',
-    priority: 8,
+    priority: 9,
     delayMs: 200,
     render: (props) => <OnePrepProTrialCaseStudy {...props} />,
   },
   {
     key: 'visual-explorations',
-    priority: 9,
+    priority: 10,
     delayMs: 225,
     render: (props) => <VisualExplorationsCaseStudy {...props} />,
   },
@@ -737,11 +793,11 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 /** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
-    ['prettify-minerva', 'discord-snowsgiving', 'yinlin', 'jetpacks', 'usthing'],
+    ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'yinlin', 'jetpacks', 'usthing'],
     ['dojo-icons', 'mcss', 'mathsgenie', 'visual-explorations'],
   ],
   3: [
-    ['prettify-minerva', 'discord-snowsgiving', 'yinlin'],
+    ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'yinlin'],
     ['dojo-icons', 'mcss', 'visual-explorations'],
     ['jetpacks', 'usthing', 'mathsgenie'],
   ],

@@ -49,6 +49,12 @@ export default function MCSSCaseStudyPage() {
         </div>
       </section>
       <CaseStudyImage
+        src="/images/optimized/mcss/mcss-sponsors-preview.jpg"
+        alt="MCSS sponsors page preview"
+        width={1920}
+        height={1080}
+      />
+      <CaseStudyImage
         src="/images/optimized/mcss/membership-card.webp"
         alt="MCSS joint student society membership card"
         caption="Joint student society membership card offering exclusive restaurant discounts"
