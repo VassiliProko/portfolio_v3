@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from '@phosphor-icons/react';
 import { useReducedMotion } from 'motion/react';
 import { PrettifyMinervaChromeToolbar } from '@/src/components/ui/PrettifyMinervaChromeToolbar';
 import { CASE_STUDY_EXTERNAL_LINK_CLASS } from '@/src/constants/caseStudy';
@@ -239,7 +239,7 @@ export const PrettifyMinervaExtensionDemo: React.FC<PrettifyMinervaExtensionDemo
               className={cn(CASE_STUDY_EXTERNAL_LINK_CLASS, 'mt-md md:w-1/2')}
             >
               <span className="min-w-0 truncate">{footerLabel}</span>
-              <ArrowUpRight className="size-5 shrink-0" strokeWidth={2} aria-hidden />
+              <ArrowUpRight className="size-5 shrink-0" size={20} aria-hidden />
             </a>
           ) : null}
         </figcaption>

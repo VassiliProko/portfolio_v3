@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { EllipsisVertical, Puzzle } from 'lucide-react';
+import { DotsThreeVertical, PuzzlePiece } from '@phosphor-icons/react';
 import { useReducedMotion } from 'motion/react';
 import { motion } from '@/src/tokens/motion';
 import { cn } from '@/src/utils/cn';
@@ -56,16 +56,16 @@ export const PrettifyMinervaChromeToolbar: React.FC<PrettifyMinervaChromeToolbar
           />
         </div>
 
-        <Puzzle
+        <PuzzlePiece
           className="size-5 shrink-0 text-prettify-minerva-chrome-toolbar-fg"
-          strokeWidth={2}
+          size={20}
         />
 
         <span className="h-5 w-px shrink-0 bg-prettify-minerva-chrome-toolbar-muted opacity-50" />
 
-        <EllipsisVertical
+        <DotsThreeVertical
           className="size-5 shrink-0 text-prettify-minerva-chrome-toolbar-fg"
-          strokeWidth={2}
+          size={20}
         />
       </div>
     </div>

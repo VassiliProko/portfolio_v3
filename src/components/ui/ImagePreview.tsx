@@ -5,7 +5,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { Alignment } from '@rive-app/react-canvas';
-import { X } from 'lucide-react';
+import { X } from '@phosphor-icons/react';
 import {
   ShowcaseRivePreview,
   type ShowcaseRivePlaybackMode,
@@ -383,7 +383,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                       'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
                     )}
                   >
-                    <X size={20} strokeWidth={2} aria-hidden />
+                    <X size={20} aria-hidden />
                   </button>
                 </div>
               </div>

@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 import { Button } from '@/src/components/ui/Button';
 
 const MOBILE_SCREENSHOTS = [
@@ -81,7 +81,7 @@ export const McssMobileCarousel: React.FC = () => {
               aria-label="Previous mobile screenshot"
               className={arrowButtonClass}
             >
-              <ChevronLeft size={18} aria-hidden />
+              <CaretLeft size={18} aria-hidden />
             </Button>
             <Button
               type="button"
@@ -92,7 +92,7 @@ export const McssMobileCarousel: React.FC = () => {
               aria-label="Next mobile screenshot"
               className={arrowButtonClass}
             >
-              <ChevronRight size={18} aria-hidden />
+              <CaretRight size={18} aria-hidden />
             </Button>
           </div>
         </div>

@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
+import { List, X } from '@phosphor-icons/react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ThemeToggle } from '@/src/components/ui/ThemeToggle';
 import { cn } from '@/src/utils/cn';
@@ -39,9 +39,9 @@ export const MobileNavMenuToggle: React.FC<MobileNavMenuToggleProps> = ({
       )}
     >
       {isOpen ? (
-        <X size={20} strokeWidth={2} aria-hidden />
+        <X size={20} aria-hidden />
       ) : (
-        <Menu size={20} strokeWidth={2} aria-hidden />
+        <List size={20} aria-hidden />
       )}
     </button>
   );

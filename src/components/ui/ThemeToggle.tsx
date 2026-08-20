@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useSyncExternalStore } from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun } from '@phosphor-icons/react';
 import { cn } from '@/src/utils/cn';
 import {
   getServerThemeSnapshot,
@@ -34,9 +34,9 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
       )}
     >
       {theme === 'dark' ? (
-        <Sun size={24} strokeWidth={2} aria-hidden />
+        <Sun size={24} aria-hidden />
       ) : (
-        <Moon size={24} strokeWidth={2} aria-hidden />
+        <Moon size={24} aria-hidden />
       )}
     </button>
   );

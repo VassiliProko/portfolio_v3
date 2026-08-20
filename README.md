@@ -7,7 +7,7 @@ A production-quality Creative Portfolio website built with React, TypeScript, an
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + CSS Modules
-- **Icons**: Lucide React
+- **Icons**: Phosphor Icons
 - **Fonts**: Satoshi Variable (local), Oxygen Mono (Google Fonts)
 
 ## Project Structure

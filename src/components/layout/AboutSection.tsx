@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from '@phosphor-icons/react';
 import { cn } from '@/src/utils/cn';
 import { ScrollPopdownReveal } from '@/src/components/ui/PopdownReveal';
 import {
@@ -292,7 +292,7 @@ export const AboutSection: React.FC = () => {
           >
             PDF Resume
             <span className={resumeButtonIconSlotClass} aria-hidden>
-              <ArrowUpRight className={resumeButtonIconClass} strokeWidth={2} />
+              <ArrowUpRight className={resumeButtonIconClass} size={20} />
             </span>
           </a>
         </ScrollPopdownReveal>

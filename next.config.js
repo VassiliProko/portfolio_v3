@@ -31,7 +31,7 @@ const nextConfig = {
   },
   experimental: {
     // Tree-shake heavy barrel packages during dev compile.
-    optimizePackageImports: ['lucide-react', 'motion', '@rive-app/react-canvas'],
+    optimizePackageImports: ['@phosphor-icons/react', 'motion', '@rive-app/react-canvas'],
   },
   images: {
     // Assets in `public/images/optimized` are already compressed, so skip

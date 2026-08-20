@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from '@phosphor-icons/react';
 import { cn } from '@/src/utils/cn';
 import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
 import {
@@ -255,7 +255,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
                         className={CASE_STUDY_EXTERNAL_LINK_CLASS}
                       >
                         <span className="min-w-0 truncate">{websiteLabel}</span>
-                        <ArrowUpRight className="size-5 shrink-0" strokeWidth={2} aria-hidden />
+                        <ArrowUpRight className="size-5 shrink-0" size={20} aria-hidden />
                       </a>
                     )}
                     {githubUrl && (
@@ -266,7 +266,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
                         className={CASE_STUDY_EXTERNAL_LINK_CLASS}
                       >
                         <span className="min-w-0 truncate">{githubLabel}</span>
-                        <ArrowUpRight className="size-5 shrink-0" strokeWidth={2} aria-hidden />
+                        <ArrowUpRight className="size-5 shrink-0" size={20} aria-hidden />
                       </a>
                     )}
                   </div>

@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import Image from 'next/image';
-import { Pause, Play } from 'lucide-react';
+import { Pause, Play } from '@phosphor-icons/react';
 import { cn } from '@/src/utils/cn';
 import { useBackgroundSafeVideo } from '@/src/hooks/useBackgroundSafeVideo';
 import { playVideoSafely } from '@/src/utils/playVideoSafely';
@@ -141,9 +141,9 @@ export const HighlightReelSection: React.FC<HighlightReelSectionProps> = ({
               )}
             >
               {isPaused ? (
-                <Play size={20} strokeWidth={2} aria-hidden />
+                <Play size={20} aria-hidden />
               ) : (
-                <Pause size={20} strokeWidth={2} aria-hidden />
+                <Pause size={20} aria-hidden />
               )}
             </button>
           </div>

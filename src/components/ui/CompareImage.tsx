@@ -3,7 +3,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { CASE_STUDY_MEDIA_INSET_CLASS } from '@/src/constants/caseStudy';
 import { cn } from '@/src/utils/cn';
-import { GripVertical } from 'lucide-react';
+import { DotsSixVertical } from '@phosphor-icons/react';
 
 export interface CompareImageProps {
   /** Image shown on the left side of the slider */
@@ -341,9 +341,9 @@ export const CompareImage: React.FC<CompareImageProps> = ({
               onBlur={handleSliderBlur}
             >
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-background">
-                <GripVertical
+                <DotsSixVertical
                   className="pointer-events-none h-5 w-5 text-text-muted"
-                  strokeWidth={2}
+                  size={20}
                   aria-hidden
                 />
               </span>

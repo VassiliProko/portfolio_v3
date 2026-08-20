@@ -88,7 +88,7 @@ Use only the values defined in tokens. Do not introduce new values.
 
 - **Buttons**: Use `Button` from `src/components/ui/Button.tsx`. Variants: primary, secondary, ghost.
 - **Cards**: Use `Card` from `src/components/ui/Card.tsx`. Variants: default, cover, top-image, inset, horizontal.
-- **Icons**: Lucide React (`lucide-react`), 20px default, stroke-width 2.
+- **Icons**: Phosphor (`@phosphor-icons/react`), 20px default, weight regular.
 - **Interactive states**: Implement hover, focus-visible (keyboard-only focus ring), active, disabled for all interactive elements.
 
 ---
