@@ -79,6 +79,20 @@ const MATHSGENIE_IMAGE_PREVIEW: ImagePreviewItem = {
   },
 };
 
+const COURSEWORK_GRADER_IMAGE_PREVIEW: ImagePreviewItem = {
+  src: '/other/icon-full-report.riv',
+  name: 'Coursework Grader',
+  description: 'Coursework full report animation for RevisionDojo',
+  width: 16,
+  height: 9,
+  rive: {
+    src: '/other/icon-full-report.riv',
+    playbackMode: 'entry-then-loop-once',
+    alignment: Alignment.Center,
+    backgroundColor: 'var(--color-coursework-grader-showcase-bg)',
+  },
+};
+
 const HEART_ANIMATION_VIDEO_SOURCES = [
   { src: '/other/heart.webm', type: 'video/webm' },
   { src: '/other/heart.mp4', type: 'video/mp4' },
@@ -109,6 +123,7 @@ type ShowcaseCardKey =
   | 'jetpacks'
   | 'usthing'
   | 'mcss'
+  | 'coursework-grader'
   | 'mathsgenie'
   | 'oneprep-pro-trial'
   | 'visual-explorations'
@@ -369,6 +384,40 @@ const MathsGenieCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   );
 };
 
+const CourseworkGraderCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+
+  return (
+    <>
+      <WorkCardShell
+        className="aspect-[16/9]"
+        style={{ backgroundColor: 'var(--color-coursework-grader-showcase-bg)' }}
+        ariaLabel="Open Coursework Grader animation preview"
+        reveal={reveal}
+        delayMs={delayMs}
+        hoverTitle="Coursework Grader"
+        onActivate={() => setPreviewOpen(true)}
+      >
+        <ShowcaseRivePreview
+          riveSrc="/other/icon-full-report.riv"
+          ariaLabel="Coursework full report animation"
+          playbackMode="entry-then-loop-once"
+          riveAlignment={Alignment.Center}
+          className={IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS}
+        />
+      </WorkCardShell>
+      <ImagePreview
+        item={COURSEWORK_GRADER_IMAGE_PREVIEW}
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+      />
+    </>
+  );
+};
+
 const OnePrepProTrialCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   reveal = true,
   delayMs = 0,
@@ -436,7 +485,7 @@ const JetpacksCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       className="aspect-[451/183]"
       ariaLabel="Open Jetpacks case study"
       hoverTitle="Edtech Branding"
-      style={{ backgroundColor: 'var(--color-jetpacks-media-bg)' }}
+      style={{ backgroundColor: 'var(--color-jetpacks-showcase-bg)' }}
       reveal={reveal}
       delayMs={delayMs}
     >
@@ -771,20 +820,26 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     render: (props) => <McssFeaturedCaseStudy {...props} />,
   },
   {
-    key: 'mathsgenie',
+    key: 'coursework-grader',
     priority: 8,
+    delayMs: 163,
+    render: (props) => <CourseworkGraderCaseStudy {...props} />,
+  },
+  {
+    key: 'mathsgenie',
+    priority: 9,
     delayMs: 175,
     render: (props) => <MathsGenieCaseStudy {...props} />,
   },
   {
     key: 'oneprep-pro-trial',
-    priority: 9,
+    priority: 10,
     delayMs: 200,
     render: (props) => <OnePrepProTrialCaseStudy {...props} />,
   },
   {
     key: 'visual-explorations',
-    priority: 10,
+    priority: 11,
     delayMs: 225,
     render: (props) => <VisualExplorationsCaseStudy {...props} />,
   },
@@ -794,11 +849,11 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
     ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'yinlin', 'jetpacks', 'usthing'],
-    ['dojo-icons', 'mcss', 'mathsgenie', 'visual-explorations'],
+    ['dojo-icons', 'mcss', 'coursework-grader', 'mathsgenie', 'visual-explorations'],
   ],
   3: [
     ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'yinlin'],
-    ['dojo-icons', 'mcss', 'visual-explorations'],
+    ['dojo-icons', 'mcss', 'coursework-grader', 'visual-explorations'],
     ['jetpacks', 'usthing', 'mathsgenie'],
   ],
 };

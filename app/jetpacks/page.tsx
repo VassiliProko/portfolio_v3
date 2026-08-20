@@ -3,6 +3,7 @@ import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { JetpacksLoadingAnimation } from '@/src/components/ui/JetpacksLoadingAnimation';
 import { JetpacksLogoBoard } from '@/src/components/ui/JetpacksLogoBoard';
 import { JetpacksCastBoard, JetpacksHomeBoard } from '@/src/components/ui/JetpacksMascotSections';
+import { JetpacksWavingAnimation } from '@/src/components/ui/JetpacksWavingAnimation';
 
 export const metadata: Metadata = {
   title: 'Jetpacks',
@@ -57,6 +58,7 @@ export default function JetpacksCaseStudyPage() {
       <JetpacksLogoBoard />
       <JetpacksLoadingAnimation />
       <JetpacksCastBoard />
+      <JetpacksWavingAnimation />
       <JetpacksHomeBoard />
     </CaseStudyLayout>
   );

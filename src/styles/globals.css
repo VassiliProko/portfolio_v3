@@ -99,9 +99,12 @@
 
   /* Work showcase: MathsGenie animation card */
   --color-mathsgenie-showcase-bg: #ffffff;
+  --color-coursework-grader-showcase-bg: #261A3B;
 
   /* Case study: Jetpacks media boards (darker than dark-mode page bg) */
   --color-jetpacks-media-bg: #0e0e11;
+  /* Work showcase: Jetpacks logo card */
+  --color-jetpacks-showcase-bg: #0e0e11;
 
   /* Work showcase / preview: heart animation (rose → magenta → purple) */
   --gradient-heart-animation-preview: linear-gradient(180deg, #7A1F3D 0%, #D63A72 48%, #3F1A58 100%);
@@ -245,6 +248,8 @@
 
   --shadow-highlight-reel-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   --shadow-highlight-reel-video-outer: 0 0 0 4px rgba(255, 255, 255, 0.12);
+
+  --color-jetpacks-showcase-bg: #242424;
 
   /* Work showcase: Cool idea CTA card — dark, same hue story as light variant */
   --gradient-showcase-cool-idea: linear-gradient(165deg, #1A3539 0%, #222638 48%, #2D2619 100%);

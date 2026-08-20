@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { Alignment, Fit, Layout, useRive } from '@rive-app/react-canvas';
 
-const RIVE_SRC = '/images/optimized/jetpacks/rive/jetpacks-loading-flying.riv';
+const RIVE_SRC = '/images/optimized/jetpacks/rive/jetpacks-waving.riv';
 
-export function JetpacksLoadingAnimation() {
+export function JetpacksWavingAnimation() {
   const prefersReducedMotion = useReducedMotion();
   const { RiveComponent, rive } = useRive({
     src: RIVE_SRC,
@@ -36,9 +36,9 @@ export function JetpacksLoadingAnimation() {
     <figure className="m-0 flex w-full flex-col gap-2xs">
       <div
         className="flex w-full items-center justify-center overflow-hidden rounded-[8px] bg-surface-1 px-md py-xl dark:bg-jetpacks-media md:py-2xl"
-        aria-label="Jetpacks page loading animation"
+        aria-label="Jetpacks waving animation"
       >
-        <div className="relative aspect-square w-full max-w-[264px] sm:max-w-[312px] md:max-w-[360px]">
+        <div className="relative aspect-square w-full max-w-[185px] sm:max-w-[218px] md:max-w-[252px]">
           <RiveComponent className="h-full w-full" />
         </div>
       </div>
