@@ -27,28 +27,28 @@ function ChickImage({ chick, className }: { chick: Chick; className?: string }) 
 
 const CAST: Chick[] = [
   {
-    src: `${ASSETS}/jetpacks-professor.svg`,
-    alt: 'Jetpacks professor chick',
-    width: 155,
-    height: 161,
+    src: `${ASSETS}/jetpacks-level-1.svg`,
+    alt: 'Jetpacks chick, level 1',
+    width: 164,
+    height: 164,
   },
   {
-    src: `${ASSETS}/jetpacks-student-grad.svg`,
-    alt: 'Jetpacks graduating student chick',
-    width: 155,
-    height: 182,
+    src: `${ASSETS}/jetpacks-level-3.svg`,
+    alt: 'Jetpacks chick, level 3',
+    width: 164,
+    height: 164,
   },
   {
-    src: `${ASSETS}/jetpacks-goofy.svg`,
-    alt: 'Jetpacks goofy chick',
-    width: 155,
-    height: 161,
+    src: `${ASSETS}/jetpacks-level-4.svg`,
+    alt: 'Jetpacks chick, level 4',
+    width: 164,
+    height: 164,
   },
   {
-    src: `${ASSETS}/jetpacks-baby-chick.svg`,
-    alt: 'Jetpacks baby chick',
-    width: 155,
-    height: 138,
+    src: `${ASSETS}/jetpacks-level-5.svg`,
+    alt: 'Jetpacks chick, level 5',
+    width: 164,
+    height: 164,
   },
 ];
 
