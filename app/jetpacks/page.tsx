@@ -58,7 +58,7 @@ export default function JetpacksCaseStudyPage() {
       <JetpacksLogoBoard />
       <JetpacksLoadingAnimation />
       <JetpacksCastBoard />
-      <JetpacksWavingAnimation />
+      <JetpacksWavingAnimation caption="heyyy" />
       <JetpacksHomeBoard />
     </CaseStudyLayout>
   );

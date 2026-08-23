@@ -3,10 +3,16 @@
 import { useEffect } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { Alignment, Fit, Layout, useRive } from '@rive-app/react-canvas';
+import { cn } from '@/src/utils/cn';
 
 const RIVE_SRC = '/images/optimized/jetpacks/rive/jetpacks-waving.riv';
 
-export function JetpacksWavingAnimation() {
+type JetpacksWavingAnimationProps = {
+  /** Subtitle paragraph under the animation. */
+  caption?: React.ReactNode;
+};
+
+export function JetpacksWavingAnimation({ caption }: JetpacksWavingAnimationProps) {
   const prefersReducedMotion = useReducedMotion();
   const { RiveComponent, rive } = useRive({
     src: RIVE_SRC,
@@ -33,7 +39,7 @@ export function JetpacksWavingAnimation() {
   }, [rive, prefersReducedMotion]);
 
   return (
-    <figure className="m-0 flex w-full flex-col gap-2xs">
+    <figure className={cn('m-0 flex w-full flex-col', caption ? 'gap-2xs' : 'gap-0')}>
       <div
         className="flex w-full items-center justify-center overflow-hidden rounded-[8px] bg-surface-1 px-md py-xl dark:bg-jetpacks-media md:py-2xl"
         aria-label="Jetpacks waving animation"
@@ -42,6 +48,11 @@ export function JetpacksWavingAnimation() {
           <RiveComponent className="h-full w-full" />
         </div>
       </div>
+      {caption ? (
+        <figcaption className="flex w-full flex-col gap-2xs">
+          <div className="type-paragraph m-0 text-text [&_p]:m-0">{caption}</div>
+        </figcaption>
+      ) : null}
     </figure>
   );
 }
