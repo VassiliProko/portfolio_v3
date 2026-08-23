@@ -11,6 +11,7 @@ import {
   IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
   type ImagePreviewItem,
 } from '@/src/components/ui/ImagePreview';
+import { JetpacksShowcaseLockup } from '@/src/components/ui/JetpacksShowcaseLockup';
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
 import { ShowcaseRivePreview } from '@/src/components/ui/ShowcaseRivePreview';
 import { getPopdownRevealProps } from '@/src/components/ui/PopdownReveal';
@@ -489,17 +490,7 @@ const JetpacksCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       reveal={reveal}
       delayMs={delayMs}
     >
-      <div className="flex h-full w-full items-center justify-center px-md py-sm">
-        <Image
-          src="/images/optimized/jetpacks/jetpacks-logo-dark-mode.svg"
-          alt=""
-          width={770}
-          height={240}
-          className="pointer-events-none h-auto w-[88%] max-w-[360px] select-none object-contain"
-          sizes="(max-width: 768px) 70vw, (max-width: 1279px) 40vw, 280px"
-          priority={false}
-        />
-      </div>
+      <JetpacksShowcaseLockup />
     </WorkCardShell>
   );
 };
