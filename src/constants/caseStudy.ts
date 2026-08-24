@@ -14,6 +14,39 @@ export const CASE_STUDY_CONTENT_CLASS =
 export const CASE_STUDY_OVERVIEW_COLUMNS_CLASS =
   'md:columns-2 md:[column-gap:calc(var(--spacing-about-role-icon)+var(--spacing-2xs))]';
 
+/** Caption rhythm — compact for 1–2 lines; section for labels or editorial blocks. */
+export type CaseStudyCaptionLayout = 'compact' | 'section';
+
+export const CASE_STUDY_CAPTION_FIGURE_GAP_COMPACT = 'gap-2xs';
+export const CASE_STUDY_CAPTION_FIGURE_GAP_SECTION = 'gap-md';
+export const CASE_STUDY_CAPTION_FOOTER_CLASS = 'mb-lg md:mb-xl';
+
+export function resolveCaseStudyCaptionLayout({
+  captionLabel,
+  captionClassName,
+  captionLayout,
+  hasSectionFooter,
+}: {
+  captionLabel?: string;
+  captionClassName?: string;
+  captionLayout?: CaseStudyCaptionLayout;
+  /** Chrome Web Store row, etc. — uses section spacing like a label block. */
+  hasSectionFooter?: boolean;
+}): CaseStudyCaptionLayout {
+  if (captionLayout) return captionLayout;
+  if (captionLabel || hasSectionFooter) return 'section';
+  if (captionClassName?.includes('md:columns-2')) return 'section';
+  return 'compact';
+}
+
+export function caseStudyCaptionFigureGapClass(
+  layout: CaseStudyCaptionLayout
+): string {
+  return layout === 'section'
+    ? CASE_STUDY_CAPTION_FIGURE_GAP_SECTION
+    : CASE_STUDY_CAPTION_FIGURE_GAP_COMPACT;
+}
+
 /**
  * Single-column body measure (~65 character editorial line).
  * Overview uses CSS `columns` instead — pass a single unbroken `<p>`.

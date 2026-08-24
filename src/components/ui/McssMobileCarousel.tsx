@@ -42,10 +42,14 @@ export const McssMobileCarousel: React.FC = () => {
     };
   }, [emblaApi, updateScrollButtons]);
 
-  const arrowButtonClass = 'h-9 w-9 rounded-[8px] border-none bg-surface-dark-2 p-0 text-text-inverted-1 hover:bg-surface-dark-1 focus-visible:bg-surface-dark-1';
+  const arrowButtonClass =
+    'h-9 w-9 rounded-[8px] border-none bg-surface-dark-2 p-0 text-footer-console-text hover:bg-surface-dark-1 focus-visible:bg-surface-dark-1';
 
   return (
-    <section className="w-full rounded-[8px] bg-surface-2 p-3 md:p-5" aria-label="MCSS mobile screens carousel">
+    <section
+      className="w-full rounded-[8px] bg-surface-2 p-3 dark:bg-surface-dark-2 md:p-5"
+      aria-label="MCSS mobile screens carousel"
+    >
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex touch-pan-y gap-3 md:gap-4">
           {MOBILE_SCREENSHOTS.map((item) => (
@@ -53,7 +57,7 @@ export const McssMobileCarousel: React.FC = () => {
               key={item.src}
               className="min-w-0 flex-[0_0_72%] sm:flex-[0_0_52%] md:flex-[0_0_40%] lg:flex-[0_0_32%]"
             >
-              <div className="overflow-hidden rounded-[8px] border border-border-base bg-surface-1">
+              <div className="overflow-hidden rounded-[8px] border border-border-base bg-surface-1 dark:border-transparent dark:bg-transparent">
                 <Image
                   src={item.src}
                   alt={item.alt}
@@ -68,9 +72,9 @@ export const McssMobileCarousel: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-4 rounded-lg bg-surface-dark-1 px-3 py-3 text-text-inverted-1">
+      <div className="mt-4 rounded-lg bg-surface-dark-1 px-3 py-3 text-footer-console-text">
         <div className="flex items-center justify-between gap-4">
-          <p className="type-label text-text-inverted-1">Mobile Screenshots</p>
+          <p className="type-label text-footer-console-text">Mobile Screenshots</p>
           <div className="flex items-center gap-2">
             <Button
               type="button"
