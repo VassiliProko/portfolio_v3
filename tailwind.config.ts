@@ -63,6 +63,10 @@ const config: Config = {
   			},
   			jetpacks: {
   				media: 'var(--color-jetpacks-media-bg)',
+  				board: 'var(--color-jetpacks-board-bg)',
+				'tag-bg': 'var(--color-jetpacks-tag-bg)',
+				'tag-text': 'var(--color-jetpacks-tag-text)',
+				silhouette: 'var(--color-jetpacks-silhouette-bg)',
   			},
 			'prettify-minerva': {
 				'logo-bg': 'var(--color-prettify-minerva-logo-bg)',
@@ -186,7 +190,7 @@ const config: Config = {
   			'highlight-reel-inset': 'var(--shadow-highlight-reel-inset)',
   			'highlight-reel-video-outer': 'var(--shadow-highlight-reel-video-outer)',
   			'about-profile-stamp': 'var(--shadow-about-profile-stamp)',
-  			'prettify-minerva-showcase-frame': 'var(--shadow-prettify-minerva-showcase-frame)',
+			'prettify-minerva-showcase-frame': 'var(--shadow-prettify-minerva-showcase-frame)',
   		}
   	}
   },

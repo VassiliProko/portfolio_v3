@@ -1,4 +1,6 @@
 import React from 'react';
+import { CaseStudyCaption } from '@/src/components/ui/CaseStudyCaption';
+import { caseStudyCaptionFigureGapClass } from '@/src/constants/caseStudy';
 import { cn } from '@/src/utils/cn';
 
 function RedditIcon({ className }: { className?: string }) {
@@ -41,7 +43,13 @@ export const PrettifyMinervaRedditComment: React.FC<PrettifyMinervaRedditComment
   className,
 }) => {
   return (
-    <figure className={cn('mb-lg flex w-full flex-col gap-md text-left md:mb-xl', className)}>
+    <figure
+      className={cn(
+        'flex w-full flex-col text-left',
+        caseStudyCaptionFigureGapClass('section'),
+        className
+      )}
+    >
       <div
         className="flex w-full items-center justify-center rounded-[8px] px-6 py-10 md:px-10 md:py-16"
         style={{ background: 'var(--gradient-prettify-minerva-reddit)' }}
@@ -59,9 +67,7 @@ export const PrettifyMinervaRedditComment: React.FC<PrettifyMinervaRedditComment
           </footer>
         </blockquote>
       </div>
-      <figcaption className="type-paragraph m-0 text-text [&_p]:m-0">
-        {subtitle}
-      </figcaption>
+      <CaseStudyCaption caption={subtitle} captionLayout="section" />
     </figure>
   );
 };

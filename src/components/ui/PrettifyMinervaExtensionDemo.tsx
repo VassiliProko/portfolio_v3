@@ -5,7 +5,13 @@ import Image from 'next/image';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { useReducedMotion } from 'motion/react';
 import { PrettifyMinervaChromeToolbar } from '@/src/components/ui/PrettifyMinervaChromeToolbar';
-import { CASE_STUDY_EXTERNAL_LINK_CLASS } from '@/src/constants/caseStudy';
+import { CaseStudyCaption } from '@/src/components/ui/CaseStudyCaption';
+import {
+  CASE_STUDY_EXTERNAL_LINK_CLASS,
+  caseStudyCaptionFigureGapClass,
+  resolveCaseStudyCaptionLayout,
+  type CaseStudyCaptionLayout,
+} from '@/src/constants/caseStudy';
 import { motion } from '@/src/tokens/motion';
 import { cn } from '@/src/utils/cn';
 
@@ -25,6 +31,7 @@ export interface PrettifyMinervaExtensionDemoProps {
   captionLabel?: string;
   caption?: React.ReactNode;
   captionClassName?: string;
+  captionLayout?: CaseStudyCaptionLayout;
   footerHref?: string;
   footerLabel?: string;
   className?: string;
@@ -38,6 +45,7 @@ export const PrettifyMinervaExtensionDemo: React.FC<PrettifyMinervaExtensionDemo
   captionLabel,
   caption,
   captionClassName,
+  captionLayout,
   footerHref,
   footerLabel,
   className,
@@ -157,12 +165,18 @@ export const PrettifyMinervaExtensionDemo: React.FC<PrettifyMinervaExtensionDemo
   }, [inView, imagesReady, prefersReducedMotion]);
 
   const hasCaption = Boolean(caption || captionLabel || footerHref);
+  const layout = resolveCaseStudyCaptionLayout({
+    captionLabel,
+    captionClassName,
+    captionLayout,
+    hasSectionFooter: Boolean(footerHref),
+  });
 
   return (
     <figure
       className={cn(
         'flex w-full flex-col',
-        captionLabel ? 'gap-md' : 'gap-2xs',
+        hasCaption && caseStudyCaptionFigureGapClass(layout),
         className
       )}
       aria-label="Prettify Minerva browser extension transforming the Minerva login"
@@ -212,25 +226,14 @@ export const PrettifyMinervaExtensionDemo: React.FC<PrettifyMinervaExtensionDemo
       </div>
 
       {hasCaption ? (
-        <figcaption
-          className={cn(
-            'flex w-full flex-col gap-sm',
-            (captionLabel || footerHref) && 'mb-lg md:mb-xl'
-          )}
+        <CaseStudyCaption
+          caption={caption}
+          captionLabel={captionLabel}
+          captionClassName={captionClassName}
+          captionLayout={captionLayout}
+          hasSectionFooter={Boolean(footerHref)}
+          className={footerHref ? 'gap-sm' : undefined}
         >
-          {captionLabel ? (
-            <p className="type-label m-0 text-text-subtle">{captionLabel}</p>
-          ) : null}
-          {caption ? (
-            <div
-              className={cn(
-                'type-paragraph m-0 text-text [&_p]:m-0',
-                captionClassName
-              )}
-            >
-              {caption}
-            </div>
-          ) : null}
           {footerHref && footerLabel ? (
             <a
               href={footerHref}
@@ -242,7 +245,7 @@ export const PrettifyMinervaExtensionDemo: React.FC<PrettifyMinervaExtensionDemo
               <ArrowUpRight className="size-5 shrink-0" size={20} aria-hidden />
             </a>
           ) : null}
-        </figcaption>
+        </CaseStudyCaption>
       ) : null}
     </figure>
   );

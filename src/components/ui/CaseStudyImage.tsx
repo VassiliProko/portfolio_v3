@@ -2,7 +2,13 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { CASE_STUDY_MEDIA_INSET_CLASS } from '@/src/constants/caseStudy';
+import { CaseStudyCaption } from '@/src/components/ui/CaseStudyCaption';
+import {
+  CASE_STUDY_MEDIA_INSET_CLASS,
+  caseStudyCaptionFigureGapClass,
+  resolveCaseStudyCaptionLayout,
+  type CaseStudyCaptionLayout,
+} from '@/src/constants/caseStudy';
 import { cn } from '@/src/utils/cn';
 
 /** Half of CaseStudyLayout children spacing (`gap-4 md:gap-8` → `gap-2 md:gap-4`). */
@@ -37,6 +43,8 @@ export interface CaseStudyImageProps {
   captionLabel?: string;
   /** Extra classes for the caption body (e.g. overview two-column measure). */
   captionClassName?: string;
+  /** Override auto layout: compact for short lines, section for editorial blocks. */
+  captionLayout?: CaseStudyCaptionLayout;
   /**
    * Full-width dark contrast bar (16px) flush under the media.
    * Image + bar share one rounded frame.
@@ -46,6 +54,13 @@ export interface CaseStudyImageProps {
   mediaInset?: boolean;
   /** CSS background for the media frame (color or gradient token). */
   mediaBackground?: string;
+  /**
+   * Center and cap media width (phone screenshots in a padded frame).
+   * Uses the same 300px measure as the previous MCSS phase boards.
+   */
+  mediaCentered?: boolean;
+  /** Extra classes on the inner media wrapper (e.g. glow). */
+  mediaFrameClassName?: string;
   /** Intrinsic width for a single Next Image (defaults to 1920) */
   width?: number;
   /** Intrinsic height for a single Next Image (defaults to 1080) */
@@ -64,6 +79,8 @@ function CaseStudyMediaFrame({
   mediaBar = false,
   mediaInset = false,
   mediaBackground,
+  mediaCentered = false,
+  mediaFrameClassName,
 }: {
   src: string;
   alt: string;
@@ -74,25 +91,48 @@ function CaseStudyMediaFrame({
   mediaBar?: boolean;
   mediaInset?: boolean;
   mediaBackground?: string;
+  mediaCentered?: boolean;
+  mediaFrameClassName?: string;
 }) {
+  const image = (
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      className={cn(
+        'block h-auto w-full',
+        mediaInset && !mediaCentered && 'rounded-t-[8px]',
+        mediaCentered && 'rounded-[8px]'
+      )}
+      sizes={sizes}
+      priority={priority}
+    />
+  );
+
   return (
     <div
       className={cn(
-        'relative w-full overflow-hidden rounded-[8px]',
+        'relative w-full rounded-[8px]',
+        mediaCentered ? 'overflow-visible' : 'overflow-hidden',
         !mediaBackground && 'bg-surface-2',
-        mediaInset && CASE_STUDY_MEDIA_INSET_CLASS
+        mediaInset && CASE_STUDY_MEDIA_INSET_CLASS,
+        mediaCentered && 'flex justify-center pb-6 md:pb-10'
       )}
       style={mediaBackground ? { background: mediaBackground } : undefined}
     >
-      <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        className={cn('block h-auto w-full', mediaInset && 'rounded-t-[8px]')}
-        sizes={sizes}
-        priority={priority}
-      />
+      {mediaCentered ? (
+        <div
+          className={cn(
+            'w-full max-w-[300px] overflow-hidden rounded-[8px] border border-border-base bg-surface-1',
+            mediaFrameClassName
+          )}
+        >
+          {image}
+        </div>
+      ) : (
+        image
+      )}
       {mediaBar ? (
         <div className="h-4 w-full bg-surface-dark-2" aria-hidden />
       ) : null}
@@ -111,9 +151,12 @@ export const CaseStudyImage: React.FC<CaseStudyImageProps> = ({
   caption,
   captionLabel,
   captionClassName,
+  captionLayout,
   mediaBar = false,
   mediaInset = false,
   mediaBackground,
+  mediaCentered = false,
+  mediaFrameClassName,
   width = 1920,
   height = 1080,
   priority = false,
@@ -121,13 +164,17 @@ export const CaseStudyImage: React.FC<CaseStudyImageProps> = ({
 }) => {
   const isRow = Boolean(images && images.length > 0);
   const hasCaption = Boolean(caption || captionLabel);
+  const layout = resolveCaseStudyCaptionLayout({
+    captionLabel,
+    captionClassName,
+    captionLayout,
+  });
 
   return (
     <figure
       className={cn(
         'flex w-full flex-col',
-        // Labeled captions sit further from the media (overview-like section rhythm).
-        captionLabel ? 'gap-md' : 'gap-2xs',
+        hasCaption && caseStudyCaptionFigureGapClass(layout),
         className
       )}
     >
@@ -156,30 +203,17 @@ export const CaseStudyImage: React.FC<CaseStudyImageProps> = ({
           mediaBar={mediaBar}
           mediaInset={mediaInset}
           mediaBackground={mediaBackground}
+          mediaCentered={mediaCentered}
+          mediaFrameClassName={mediaFrameClassName}
         />
       ) : null}
       {hasCaption ? (
-        <figcaption
-          className={cn(
-            'flex w-full flex-col gap-2xs',
-            // Extra space before the next case-study child for labeled detail blocks.
-            captionLabel && 'mb-lg md:mb-xl'
-          )}
-        >
-          {captionLabel ? (
-            <p className="type-label m-0 text-text-subtle">{captionLabel}</p>
-          ) : null}
-          {caption ? (
-            <div
-              className={cn(
-                'type-paragraph m-0 text-text [&_p]:m-0',
-                captionClassName
-              )}
-            >
-              {caption}
-            </div>
-          ) : null}
-        </figcaption>
+        <CaseStudyCaption
+          caption={caption}
+          captionLabel={captionLabel}
+          captionClassName={captionClassName}
+          captionLayout={captionLayout}
+        />
       ) : null}
     </figure>
   );

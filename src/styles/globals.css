@@ -103,6 +103,12 @@
 
   /* Case study: Jetpacks media boards (darker than dark-mode page bg) */
   --color-jetpacks-media-bg: #0e0e11;
+  /* General Learning family lockup — always black, both themes */
+  --color-jetpacks-board-bg: #000000;
+  --color-jetpacks-tag-bg: #ffffff;
+  --color-jetpacks-tag-text: #000000;
+  /* Silhouette study — always light, both themes */
+  --color-jetpacks-silhouette-bg: #f4f4f5;
   /* Work showcase: Jetpacks logo card */
   --color-jetpacks-showcase-bg: #0e0e11;
 

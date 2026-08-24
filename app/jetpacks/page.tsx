@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
+import { CASE_STUDY_OVERVIEW_COLUMNS_CLASS } from '@/src/constants/caseStudy';
+import { JetpacksBrandFamilyBoard } from '@/src/components/ui/JetpacksBrandFamilyBoard';
 import { JetpacksLoadingAnimation } from '@/src/components/ui/JetpacksLoadingAnimation';
 import { JetpacksLogoBoard } from '@/src/components/ui/JetpacksLogoBoard';
 import { JetpacksCastBoard, JetpacksHomeBoard } from '@/src/components/ui/JetpacksMascotSections';
+import { JetpacksSilhouetteBoard } from '@/src/components/ui/JetpacksSilhouetteBoard';
 import { JetpacksWavingAnimation } from '@/src/components/ui/JetpacksWavingAnimation';
 
 export const metadata: Metadata = {
@@ -17,7 +20,7 @@ const META_LINK_CLASS =
 const JETPACKS_OVERVIEW = (
   <p>
     I led the brand design for Jetpacks, an AI-powered study workspace. I created the
-    chicken-with-jetpacks mascot, and supporting graphics + animations that give the product a
+    chicken-with-jetpacks mascot, and supporting graphics + animations to give the product a
     playful, memorable identity.
   </p>
 );
@@ -55,8 +58,41 @@ export default function JetpacksCaseStudyPage() {
       websiteUrl="https://jetpacks.com"
       websiteLabel="Jetpacks"
     >
-      <JetpacksLogoBoard />
-      <JetpacksLoadingAnimation />
+      <JetpacksLogoBoard
+        captionLabel="The Approach"
+        captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
+        caption={
+          <p>
+            Jetpacks needed a brand that students could recognize instantly and that could stand out among the growing number of AI study tools. I explored mascot concepts that could give the product a distinct visual hook and personality, while creating a foundation that could extend into illustration, motion, and the product experience.
+          </p>
+        }
+      />
+      <JetpacksBrandFamilyBoard
+        captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
+        caption={
+          <p>
+            Jetpacks launched under General Learning (YC F24), alongside our existing brands RevisionDojo, OnePrep, and MathsGenie. I wanted the identity to feel connected to this family of products while establishing its own personality. Since Jetpacks was designed to grow with students beyond our curriculum-specific tools (IB, A-Levels, AP), the brand needed to feel flexible enough to resonate with students in college and beyond.
+          </p>
+        }
+      />
+      <JetpacksLoadingAnimation
+        captionLabel="The Chicken was Born"
+        caption={
+          <p>
+            Besides a strong visual hook tying in with the jetpacks feature, I wanted a mascot
+            simple enough to read at icon size, expressive enough to carry empty states and
+            marketing, and flexible enough to grow with the product across illustration and motion.
+          </p>
+        }
+      />
+      <JetpacksSilhouetteBoard
+        caption={
+          <p>
+            When exploring mascot designs, it was crucial to reference the silhouette shape to
+            ensure distinctiveness.
+          </p>
+        }
+      />
       <JetpacksCastBoard />
       <JetpacksWavingAnimation caption="heyyy" />
       <JetpacksHomeBoard />
