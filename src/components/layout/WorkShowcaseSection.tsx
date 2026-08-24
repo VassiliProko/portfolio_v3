@@ -839,12 +839,12 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 /** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
-    ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'yinlin', 'jetpacks', 'usthing'],
-    ['dojo-icons', 'mcss', 'coursework-grader', 'mathsgenie', 'visual-explorations'],
+    ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'jetpacks', 'usthing'],
+    ['dojo-icons', 'mcss', 'coursework-grader', 'mathsgenie'],
   ],
   3: [
-    ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'yinlin'],
-    ['dojo-icons', 'mcss', 'coursework-grader', 'visual-explorations'],
+    ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace'],
+    ['dojo-icons', 'mcss', 'coursework-grader'],
     ['jetpacks', 'usthing', 'mathsgenie'],
   ],
 };
