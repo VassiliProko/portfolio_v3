@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
-import { Button } from '@/src/components/ui/Button';
+import { cn } from '@/src/utils/cn';
 
 const MOBILE_SCREENSHOTS = [
   { src: '/images/optimized/mcss/mobile_membership.png', alt: 'MCSS mobile membership page' },
@@ -14,6 +14,16 @@ const MOBILE_SCREENSHOTS = [
   { src: '/images/optimized/mcss/mobile_home.png', alt: 'MCSS mobile homepage' },
   { src: '/images/optimized/mcss/mobile_about.png', alt: 'MCSS mobile about page' },
 ];
+
+const carouselControlClass = cn(
+  'inline-flex h-9 w-9 items-center justify-center rounded-[8px] border-none',
+  'bg-surface-dark-2 text-footer-console-text',
+  'transition-all duration-micro ease-snap',
+  'hover:bg-surface-dark-1 focus-visible:bg-surface-dark-1',
+  'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-outline',
+  'disabled:opacity-40 disabled:pointer-events-none',
+  '[&_svg]:shrink-0 [&_svg]:text-footer-console-text'
+);
 
 export const McssMobileCarousel: React.FC = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -41,9 +51,6 @@ export const McssMobileCarousel: React.FC = () => {
       emblaApi.off('reInit', updateScrollButtons);
     };
   }, [emblaApi, updateScrollButtons]);
-
-  const arrowButtonClass =
-    'h-9 w-9 rounded-[8px] border-none bg-surface-dark-2 p-0 text-footer-console-text hover:bg-surface-dark-1 focus-visible:bg-surface-dark-1';
 
   return (
     <section
@@ -76,28 +83,24 @@ export const McssMobileCarousel: React.FC = () => {
         <div className="flex items-center justify-between gap-4">
           <p className="type-label text-footer-console-text">Mobile Screenshots</p>
           <div className="flex items-center gap-2">
-            <Button
+            <button
               type="button"
-              variant="ghost"
-              size="sm"
               onClick={() => emblaApi?.scrollPrev()}
               disabled={!canScrollPrev}
               aria-label="Previous mobile screenshot"
-              className={arrowButtonClass}
+              className={carouselControlClass}
             >
               <CaretLeft size={18} aria-hidden />
-            </Button>
-            <Button
+            </button>
+            <button
               type="button"
-              variant="ghost"
-              size="sm"
               onClick={() => emblaApi?.scrollNext()}
               disabled={!canScrollNext}
               aria-label="Next mobile screenshot"
-              className={arrowButtonClass}
+              className={carouselControlClass}
             >
               <CaretRight size={18} aria-hidden />
-            </Button>
+            </button>
           </div>
         </div>
       </div>

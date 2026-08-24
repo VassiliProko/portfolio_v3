@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const USTHING_OVERVIEW = (
   <p>
     Highlight of a grade distribution feature design shipped for USThing, used by 8,000+ students at
-    HKUST.
+    HKUST. As a designer, I explored ways to visually enhance the app experience for students, simplifying the core data which we collect to something more valuable.
   </p>
 );
 

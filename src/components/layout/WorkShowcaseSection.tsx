@@ -311,7 +311,7 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
       ariaLabel="Open MCSS case study"
       reveal={reveal}
       delayMs={delayMs}
-      hoverTitle="Website & Graphics"
+      hoverTitle="Cultural Website"
     >
       <Image
         src="/images/optimized/home/mcss-preview.jpg"

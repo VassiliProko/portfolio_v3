@@ -80,18 +80,11 @@ export default function JetpacksCaseStudyPage() {
         caption={
           <p>
             Besides a strong visual hook tying in with the jetpacks feature, I wanted a mascot
-            simple enough to read at icon size, expressive enough to carry empty states and
-            marketing, and flexible enough to grow with the product across illustration and motion.
+            simple enough to read at icon size while still being expressive.
           </p>
         }
       />
       <JetpacksSilhouetteBoard
-        caption={
-          <p>
-            When exploring mascot designs, it was crucial to reference the silhouette shape to
-            ensure distinctiveness.
-          </p>
-        }
       />
       <JetpacksCastBoard />
       <JetpacksWavingAnimation caption="heyyy" />
