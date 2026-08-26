@@ -31,7 +31,7 @@ export default function PrettifyMinervaCaseStudyPage() {
       overview={PRETTIFY_MINERVA_OVERVIEW}
       meta={{
         role: 'Designer / Developer',
-        tools: 'Figma, Javascript, ChatGPT',
+        tools: 'Figma, JavaScript, ChatGPT',
         skills: 'UI design, Browser Extension development',
       }}
       websiteUrl={CHROME_WEB_STORE_URL}
