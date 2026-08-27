@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { Alignment, Fit, Layout, useRive } from '@rive-app/react-canvas';
 
@@ -48,6 +48,7 @@ function getScaledLogomarkPlacement() {
 }
 
 function JetpacksFlyingMark() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const { RiveComponent, rive } = useRive(
     {
@@ -70,18 +71,17 @@ function JetpacksFlyingMark() {
 
     syncCanvasResolution();
 
-    const canvas = rive.canvas;
-    const container = canvas?.parentElement;
-    const observer =
-      container &&
-      new ResizeObserver(() => {
-        syncCanvasResolution();
-      });
+    const container = containerRef.current;
+    if (!container) return;
 
-    observer?.observe(container);
+    const observer = new ResizeObserver(() => {
+      syncCanvasResolution();
+    });
+
+    observer.observe(container);
 
     return () => {
-      observer?.disconnect();
+      observer.disconnect();
     };
   }, [rive]);
 
@@ -106,7 +106,9 @@ function JetpacksFlyingMark() {
   }, [rive, prefersReducedMotion]);
 
   return (
-    <RiveComponent className="pointer-events-none block h-full w-full [&_canvas]:block [&_canvas]:h-full [&_canvas]:w-full" />
+    <div ref={containerRef} className="h-full w-full">
+      <RiveComponent className="pointer-events-none block h-full w-full [&_canvas]:block [&_canvas]:h-full [&_canvas]:w-full" />
+    </div>
   );
 }
 
