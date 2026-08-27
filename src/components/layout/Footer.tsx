@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { trackEvent } from '@/src/utils/analytics';
 import { cn } from '@/src/utils/cn';
 
 /** WebGL fluid footer is large — keep it out of the critical home compile graph. */
@@ -373,12 +374,14 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
               target="_blank"
               rel="noopener noreferrer"
               className={cn(contactLinkClass, 'relative z-10 rounded-sm -mr-px')}
+              onClick={() => trackEvent('linkedin_clicked')}
             >
               LinkedIn
             </a>
             <a
               href="mailto:vassiligb12@gmail.com"
               className={cn(contactLinkClass, 'relative z-0 rounded-[48px]')}
+              onClick={() => trackEvent('email_clicked')}
             >
               Email Me
             </a>

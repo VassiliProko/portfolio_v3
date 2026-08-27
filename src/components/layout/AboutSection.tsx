@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { ArrowUpRight } from '@phosphor-icons/react';
+import { trackEvent } from '@/src/utils/analytics';
 import { cn } from '@/src/utils/cn';
 import { ScrollPopdownReveal } from '@/src/components/ui/PopdownReveal';
 import {
@@ -289,6 +290,7 @@ export const AboutSection: React.FC = () => {
             rel="noopener noreferrer"
             className={resumeButtonClass}
             aria-label="Open PDF resume in a new tab"
+            onClick={() => trackEvent('resume_clicked')}
           >
             PDF Resume
             <span className={resumeButtonIconSlotClass} aria-hidden>

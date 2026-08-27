@@ -1,8 +1,14 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { ArrowUpRight } from '@phosphor-icons/react';
+import {
+  projectSlugFromPathname,
+  sectionIdFromLabel,
+  trackEvent,
+} from '@/src/utils/analytics';
 import { cn } from '@/src/utils/cn';
 import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
 import {
@@ -76,6 +82,67 @@ function MetaRow({ label, value }: { label: string; value: React.ReactNode }) {
       <div className={META_VALUE_CLASS}>{value}</div>
     </div>
   );
+}
+
+function findSectionLabel(node: React.ReactNode, depth = 0): string | null {
+  if (depth > 2 || !React.isValidElement(node)) return null;
+
+  const props = node.props as {
+    captionLabel?: unknown;
+    title?: unknown;
+    'aria-label'?: unknown;
+    children?: React.ReactNode;
+  };
+
+  if (typeof props.captionLabel === 'string' && props.captionLabel.trim()) {
+    return props.captionLabel;
+  }
+  if (typeof props.title === 'string' && props.title.trim()) {
+    return props.title;
+  }
+  if (typeof props['aria-label'] === 'string' && props['aria-label'].trim()) {
+    return props['aria-label'];
+  }
+
+  return React.Children.toArray(props.children)
+    .map((child) => findSectionLabel(child, depth + 1))
+    .find((label): label is string => Boolean(label)) ?? null;
+}
+
+function sectionIdFromChild(child: React.ReactNode, index: number): string {
+  const label = findSectionLabel(child);
+  return label ? sectionIdFromLabel(label) : `section-${index + 1}`;
+}
+
+function CaseStudySectionReached({
+  project,
+  section,
+  children,
+}: {
+  project: string;
+  section: string;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        trackEvent('case_study_section_reached', { project, section });
+        observer.disconnect();
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [project, section]);
+
+  return <div ref={ref}>{children}</div>;
 }
 
 function CaseStudyHeroMedia({
@@ -171,6 +238,13 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
   children,
   className,
 }) => {
+  const pathname = usePathname();
+  const project = projectSlugFromPathname(pathname);
+
+  useEffect(() => {
+    trackEvent('project_viewed', { project });
+  }, [project]);
+
   const hasMeta = meta && (meta.duration ?? meta.role ?? meta.tools ?? meta.skills ?? meta.team);
   const hasDefaultHero = Boolean(heroVideoSrc || heroVideoEmbedUrl || heroImageSrc);
   const hasHero = Boolean(hero ?? hasDefaultHero);
@@ -194,6 +268,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
       {hasHero ? (
         <div className="w-full pt-6">
           <ScrollPopdownReveal delayMs={0}>
+            <CaseStudySectionReached project={project} section="hero">
             {hero ?? (
               <CaseStudyHeroMedia
                 heroVideoSrc={heroVideoSrc}
@@ -206,6 +281,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
                 heroMediaStyle={heroMediaStyle}
               />
             )}
+            </CaseStudySectionReached>
           </ScrollPopdownReveal>
         </div>
       ) : null}
@@ -213,6 +289,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
       <div className={cn(CASE_STUDY_CONTENT_CLASS, 'flex flex-col gap-showcase-illustration pt-lg pb-2xl')}>
         <ScrollRevealGroup>
           {(revealed) => (
+            <CaseStudySectionReached project={project} section="overview">
             <section
               className="flex flex-col gap-showcase-illustration"
               aria-label="Project overview"
@@ -253,6 +330,9 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         className={CASE_STUDY_EXTERNAL_LINK_CLASS}
+                        onClick={() =>
+                          trackEvent('project_demo_clicked', { project })
+                        }
                       >
                         <span className="min-w-0 truncate">{websiteLabel}</span>
                         <ArrowUpRight className="size-5 shrink-0" size={20} aria-hidden />
@@ -273,6 +353,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
                 </PopdownReveal>
               )}
             </section>
+            </CaseStudySectionReached>
           )}
         </ScrollRevealGroup>
 
@@ -280,7 +361,12 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
           <div className="flex flex-col gap-4 md:gap-8">
             {React.Children.toArray(children).map((child, index) => (
               <ScrollPopdownReveal key={index} delayMs={0}>
-                {child}
+                <CaseStudySectionReached
+                  project={project}
+                  section={sectionIdFromChild(child, index)}
+                >
+                  {child}
+                </CaseStudySectionReached>
               </ScrollPopdownReveal>
             ))}
           </div>
