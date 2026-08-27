@@ -9,6 +9,7 @@ import { ThemeProvider } from '@/src/components/ThemeProvider';
 import { ThemeScript } from '@/src/components/ThemeScript';
 import { HomeEnterAnimationProvider } from '@/src/contexts/HomeEnterAnimationContext';
 import { Analytics } from "@vercel/analytics/next";
+import { PostHogInit } from '@/src/components/PostHogInit';
 
 const satoshiVariable = localFont({
   src: '../public/fonts/Satoshi-Variable.ttf',
@@ -75,6 +76,7 @@ export default function RootLayout({
           </HomeEnterAnimationProvider>
         </ThemeProvider>
         <Analytics />
+        <PostHogInit />
       </body>
     </html>
   );

@@ -2,6 +2,24 @@
 
 import posthog from 'posthog-js';
 
+export function initPostHog(): void {
+  if (typeof window === 'undefined') return;
+  if (posthog.__loaded) return;
+
+  const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+  if (!key) return;
+
+  posthog.init(key, {
+    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+    defaults: '2026-05-30',
+    capture_pageview: 'history_change',
+    autocapture: false,
+    person_profiles: 'identified_only',
+    disable_session_recording: true,
+    disable_surveys: true,
+  });
+}
+
 export type AnalyticsEventName =
   | 'project_viewed'
   | 'resume_clicked'
