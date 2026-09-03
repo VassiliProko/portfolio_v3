@@ -132,7 +132,7 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({
           }
         }}
       >
-        <span>{'// currently designing at'}</span>
+        <span>{'// previously designing at'}</span>
         <IntroSubtitleLink prefersReducedMotion={prefersReducedMotion} />
       </motion.div>
     </div>
