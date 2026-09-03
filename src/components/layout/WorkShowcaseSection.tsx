@@ -83,12 +83,12 @@ const MATHSGENIE_IMAGE_PREVIEW: ImagePreviewItem = {
 const COURSEWORK_GRADER_IMAGE_PREVIEW: ImagePreviewItem = {
   src: '/other/icon-full-report.riv',
   name: 'Coursework Grader',
-  description: 'Coursework full report animation for RevisionDojo',
+  description: 'Featured RIve Animation for RevisionDojo Coursework Grader',
   width: 16,
   height: 9,
   rive: {
     src: '/other/icon-full-report.riv',
-    playbackMode: 'entry-then-loop-once',
+    playbackMode: 'entry-loop',
     alignment: Alignment.Center,
     backgroundColor: 'var(--color-coursework-grader-showcase-bg)',
   },
@@ -421,8 +421,9 @@ const CourseworkGraderCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }
         <ShowcaseRivePreview
           riveSrc="/other/icon-full-report.riv"
           ariaLabel="Coursework full report animation"
-          playbackMode="entry-then-loop-once"
+          playbackMode="entry-loop"
           riveAlignment={Alignment.Center}
+          riveOffsetY={-10}
           className={IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS}
         />
       </WorkCardShell>

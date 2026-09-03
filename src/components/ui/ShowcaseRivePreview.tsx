@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import Image from 'next/image';
 import { useReducedMotion } from 'motion/react';
 import {
@@ -8,11 +8,17 @@ import {
   EventType,
   Fit,
   Layout,
+  StateMachineInputType,
   useRive,
   type Event,
   type LoopEvent,
   type Rive,
 } from '@rive-app/react-canvas';
+import {
+  getServerThemeSnapshot,
+  getThemeSnapshot,
+  subscribeTheme,
+} from '@/src/utils/theme';
 
 const ONEPREP_BACKGROUND_SCALE = 1.12;
 
@@ -41,6 +47,7 @@ type ShowcaseRivePreviewProps = {
   backgroundScale?: number;
   ariaLabel: string;
   riveAlignment?: Alignment;
+  riveOffsetY?: number;
   playbackMode?: ShowcaseRivePlaybackMode;
   className?: string;
 };
@@ -154,6 +161,20 @@ type ShowcaseRiveCanvasProps = {
   playback: ResolvedRivePlayback;
   autoplay: boolean;
   riveAlignment: Alignment;
+  isDarkMode: boolean;
+};
+
+const applyDarkModeInput = (rive: Rive, isDarkMode: boolean) => {
+  for (const stateMachineName of rive.stateMachineNames) {
+    const darkModeInput = rive
+      .stateMachineInputs(stateMachineName)
+      ?.find(
+        (input) =>
+          input.name === 'isDarkMode' && input.type === StateMachineInputType.Boolean,
+      );
+
+    if (darkModeInput) darkModeInput.value = isDarkMode;
+  }
 };
 
 const ShowcaseRiveCanvas: React.FC<ShowcaseRiveCanvasProps> = ({
@@ -161,6 +182,7 @@ const ShowcaseRiveCanvas: React.FC<ShowcaseRiveCanvasProps> = ({
   playback,
   autoplay,
   riveAlignment,
+  isDarkMode,
 }) => {
   const playbackConfig =
     playback.target.kind === 'stateMachine'
@@ -173,6 +195,7 @@ const ShowcaseRiveCanvas: React.FC<ShowcaseRiveCanvasProps> = ({
       artboard: playback.artboard,
       ...playbackConfig,
       autoplay,
+      onRiveReady: (readyRive) => applyDarkModeInput(readyRive, isDarkMode),
       layout: new Layout({
         fit: Fit.Contain,
         alignment: riveAlignment,
@@ -180,6 +203,11 @@ const ShowcaseRiveCanvas: React.FC<ShowcaseRiveCanvasProps> = ({
     },
     { shouldResizeCanvasToContainer: true },
   );
+
+  useEffect(() => {
+    if (!rive) return;
+    applyDarkModeInput(rive, isDarkMode);
+  }, [rive, isDarkMode]);
 
   useEffect(() => {
     const followUp = playback.followUpAnimation;
@@ -323,10 +351,16 @@ export const ShowcaseRivePreview: React.FC<ShowcaseRivePreviewProps> = ({
   backgroundScale = ONEPREP_BACKGROUND_SCALE,
   ariaLabel,
   riveAlignment = Alignment.BottomCenter,
+  riveOffsetY = 0,
   playbackMode = 'entry-loop',
   className,
 }) => {
   const prefersReducedMotion = useReducedMotion();
+  const theme = useSyncExternalStore(
+    subscribeTheme,
+    getThemeSnapshot,
+    getServerThemeSnapshot,
+  );
   const [probeArtboard, setProbeArtboard] = useState<string | undefined>(undefined);
   const [playback, setPlayback] = useState<ResolvedRivePlayback | null | undefined>(undefined);
 
@@ -361,7 +395,10 @@ export const ShowcaseRivePreview: React.FC<ShowcaseRivePreviewProps> = ({
         </div>
       ) : null}
 
-      <div className="absolute inset-0 flex items-end justify-center">
+      <div
+        className="absolute inset-0 flex items-end justify-center"
+        style={riveOffsetY === 0 ? undefined : { transform: `translateY(${riveOffsetY}px)` }}
+      >
         {playback ? (
           <ShowcaseRiveCanvas
             key={`${playback.artboard ?? 'default'}-${playback.target.kind}-${playback.target.name}`}
@@ -369,6 +406,7 @@ export const ShowcaseRivePreview: React.FC<ShowcaseRivePreviewProps> = ({
             playback={playback}
             autoplay={!prefersReducedMotion}
             riveAlignment={riveAlignment}
+            isDarkMode={theme === 'dark'}
           />
         ) : null}
       </div>
