@@ -112,6 +112,21 @@ const HEART_ANIMATION_IMAGE_PREVIEW: ImagePreviewItem = {
     sources: [...HEART_ANIMATION_VIDEO_SOURCES],
   },
 };
+
+const FIGMA_SUMMER_CAMP_VIDEO_SOURCES = [
+  { src: '/other/figma-summer-camp.webm', type: 'video/webm' },
+] as const;
+
+const FIGMA_SUMMER_CAMP_IMAGE_PREVIEW: ImagePreviewItem = {
+  src: '/other/figma-summer-camp.webm',
+  name: 'Figma Summer Camp',
+  description: 'A bento animation crafted during Figma Summer Camp (Cohort 02)',
+  width: 2234,
+  height: 1410,
+  video: {
+    sources: [...FIGMA_SUMMER_CAMP_VIDEO_SOURCES],
+  },
+};
 type WorkShowcaseSectionProps = {
   visible?: boolean;
   /** Animate the whole grid once (return home visit) instead of staggering cards */
@@ -122,6 +137,7 @@ type ShowcaseCardKey =
   | 'prettify-minerva'
   | 'dojo-icons'
   | 'jetpacks'
+  | 'figma-summer-camp'
   | 'usthing'
   | 'mcss'
   | 'coursework-grader'
@@ -495,6 +511,41 @@ const JetpacksCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   );
 };
 
+const FigmaSummerCampPreview: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+
+  return (
+    <>
+      <WorkCardShell
+        className="aspect-[2234/1410]"
+        ariaLabel="Open Figma Summer Camp animation preview"
+        hoverTitle="Figma Summer Camp"
+        reveal={reveal}
+        delayMs={delayMs}
+        onActivate={() => setPreviewOpen(true)}
+      >
+        <ShowcaseLoopingVideo
+          sources={[...FIGMA_SUMMER_CAMP_VIDEO_SOURCES]}
+          shouldPlay={!previewOpen}
+          className={cn(
+            'h-full w-full object-contain',
+            IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
+          )}
+          ariaLabel="Figma Summer Camp bento animation preview"
+        />
+      </WorkCardShell>
+      <ImagePreview
+        item={FIGMA_SUMMER_CAMP_IMAGE_PREVIEW}
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+      />
+    </>
+  );
+};
+
 const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   reveal = true,
   delayMs = 0,
@@ -800,37 +851,43 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
   },
   {
     key: 'usthing',
-    priority: 6,
-    delayMs: 100,
+    priority: 7,
+    delayMs: 125,
     render: (props) => <UsthingCaseStudy {...props} />,
   },
   {
+    key: 'figma-summer-camp',
+    priority: 6,
+    delayMs: 100,
+    render: (props) => <FigmaSummerCampPreview {...props} />,
+  },
+  {
     key: 'mcss',
-    priority: 7,
+    priority: 8,
     delayMs: 150,
     render: (props) => <McssFeaturedCaseStudy {...props} />,
   },
   {
     key: 'coursework-grader',
-    priority: 8,
+    priority: 9,
     delayMs: 163,
     render: (props) => <CourseworkGraderCaseStudy {...props} />,
   },
   {
     key: 'mathsgenie',
-    priority: 9,
+    priority: 10,
     delayMs: 175,
     render: (props) => <MathsGenieCaseStudy {...props} />,
   },
   {
     key: 'oneprep-pro-trial',
-    priority: 10,
+    priority: 11,
     delayMs: 200,
     render: (props) => <OnePrepProTrialCaseStudy {...props} />,
   },
   {
     key: 'visual-explorations',
-    priority: 11,
+    priority: 12,
     delayMs: 225,
     render: (props) => <VisualExplorationsCaseStudy {...props} />,
   },
@@ -839,13 +896,13 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 /** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
-    ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'jetpacks', 'usthing'],
-    ['dojo-icons', 'mcss', 'coursework-grader', 'mathsgenie'],
+    ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'jetpacks', 'figma-summer-camp'],
+    ['dojo-icons', 'mcss', 'coursework-grader', 'mathsgenie', 'usthing'],
   ],
   3: [
     ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace'],
-    ['dojo-icons', 'mcss', 'coursework-grader'],
-    ['jetpacks', 'usthing', 'mathsgenie'],
+    ['dojo-icons', 'mcss', 'coursework-grader', 'mathsgenie'],
+    ['jetpacks', 'figma-summer-camp', 'usthing'],
   ],
 };
 
