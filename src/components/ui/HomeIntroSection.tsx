@@ -86,7 +86,7 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({
         >
           <StaticIntroHeadline />
           <div className={SUBTITLE_CLASS}>
-            <span>{'// currently designing at'}</span>
+            <span>{'// previously designing at'}</span>
             <IntroSubtitleLink prefersReducedMotion={prefersReducedMotion} />
           </div>
         </PopdownReveal>
