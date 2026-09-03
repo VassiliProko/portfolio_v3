@@ -6,11 +6,28 @@ import { CompareImage } from '@/src/components/ui/CompareImage';
 import { PrettifyMinervaLogoLockup } from '@/src/components/ui/PrettifyMinervaLogoLockup';
 import { PrettifyMinervaQuickLinksLogo } from '@/src/components/ui/PrettifyMinervaQuickLinksLogo';
 import { PrettifyMinervaRedditComment } from '@/src/components/ui/PrettifyMinervaRedditComment';
+import { JsonLd } from '@/src/components/JsonLd';
+
+const prettifyMinervaJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Prettify Minerva',
+  applicationCategory: 'BrowserApplication',
+  operatingSystem: 'Google Chrome',
+  url: 'https://www.vassiliprokopenko.com/prettify-minerva',
+  description:
+    'JavaScript browser extension that redesigns and modernizes McGill University’s Minerva student portal.',
+  author: { '@id': 'https://www.vassiliprokopenko.com/#person' },
+  mainEntityOfPage: 'https://www.vassiliprokopenko.com/prettify-minerva',
+};
 
 export const metadata: Metadata = {
   title: 'Prettify Minerva',
   description:
     "Improving the appearance of Minerva, McGill's central university portal.",
+  alternates: {
+    canonical: '/prettify-minerva',
+  },
 };
 
 const CHROME_WEB_STORE_URL =
@@ -24,21 +41,23 @@ const PRETTIFY_MINERVA_OVERVIEW = (
 
 export default function PrettifyMinervaCaseStudyPage() {
   return (
-    <CaseStudyLayout
-      title="Prettify Minerva"
-      heroImageSrc="/images/optimized/prettify-minerva/prettify-minerva-head.jpg"
-      heroImageAlt="Prettify Minerva preview"
-      overview={PRETTIFY_MINERVA_OVERVIEW}
-      meta={{
-        role: 'Designer / Developer',
-        tools: 'Figma, JavaScript, ChatGPT',
-        skills: 'UI design, Browser Extension development',
-      }}
-      websiteUrl={CHROME_WEB_STORE_URL}
-      websiteLabel="Chrome Web Store"
-      githubUrl="https://github.com/VassiliProko/prettify_minerva"
-      githubLabel="Github"
-    >
+    <>
+      <JsonLd data={prettifyMinervaJsonLd} />
+      <CaseStudyLayout
+        title="Prettify Minerva"
+        heroImageSrc="/images/optimized/prettify-minerva/prettify-minerva-head.jpg"
+        heroImageAlt="Prettify Minerva preview"
+        overview={PRETTIFY_MINERVA_OVERVIEW}
+        meta={{
+          role: 'Designer / Developer',
+          tools: 'Figma, JavaScript, ChatGPT',
+          skills: 'UI design, Browser Extension development',
+        }}
+        websiteUrl={CHROME_WEB_STORE_URL}
+        websiteLabel="Chrome Web Store"
+        githubUrl="https://github.com/VassiliProko/prettify_minerva"
+        githubLabel="Github"
+      >
       <CompareImage
         beforeSrc="/images/optimized/prettify-minerva/prettify-minerva-before.jpg"
         afterSrc="/images/optimized/prettify-minerva/prettify-minerva-after.jpg"
@@ -122,6 +141,7 @@ export default function PrettifyMinervaCaseStudyPage() {
           </p>
         }
       />
-    </CaseStudyLayout>
+      </CaseStudyLayout>
+    </>
   );
 }

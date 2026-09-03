@@ -265,6 +265,7 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
       className={cn('min-h-screen bg-background', className)}
       aria-label={`Case study: ${title}`}
     >
+      <h1 className="sr-only">{title} case study</h1>
       {hasHero ? (
         <div className="w-full pt-6">
           <ScrollPopdownReveal delayMs={0}>
@@ -292,11 +293,13 @@ export const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({
             <CaseStudySectionReached project={project} section="overview">
             <section
               className="flex flex-col gap-showcase-illustration"
-              aria-label="Project overview"
+              aria-labelledby="project-overview-heading"
             >
               <PopdownReveal reveal={revealed} delayMs={0}>
                 <div className="flex flex-col gap-2xs">
-                  <p className="type-label m-0 text-text-subtle">Overview</p>
+                  <h2 id="project-overview-heading" className="type-label m-0 text-text-subtle">
+                    Overview
+                  </h2>
                   <div className={cn(CASE_STUDY_OVERVIEW_COLUMNS_CLASS, '[&_p]:m-0')}>
                     {overview}
                   </div>

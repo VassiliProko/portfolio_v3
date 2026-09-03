@@ -1,8 +1,14 @@
-'use client';
+import type { Metadata } from 'next';
+import AboutPageClient from '@/app/about/AboutPageClient';
 
-import React from 'react';
-import { AboutSection } from '@/src/components/layout/AboutSection';
+export const metadata: Metadata = {
+  title: 'About',
+  description: 'About Vassili Prokopenko, a multidisciplinary product, brand, and web designer.',
+  alternates: {
+    canonical: '/about',
+  },
+};
 
 export default function AboutPage() {
-  return <AboutSection />;
+  return <AboutPageClient />;
 }

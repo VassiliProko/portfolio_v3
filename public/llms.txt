@@ -1,0 +1,19 @@
+# Vassili Prokopenko
+
+Multidisciplinary product, brand, and web designer; Business Analytics student at McGill University.
+
+Vassili creates thoughtful digital products, visual systems, and interactive web experiences for education, student communities, and consumer tools. Experience includes product design at General Learning (YC F24), web design and development, Figma, JavaScript, Next.js, and AI prototyping.
+
+## Core Content
+
+- [Homepage](https://www.vassiliprokopenko.com/): Portfolio overview featuring product design, branding, illustration, web development, and interactive experiments.
+- [Prettify Minerva](https://www.vassiliprokopenko.com/prettify-minerva): Designed and built a JavaScript Chrome extension that modernizes McGill's Minerva portal; 650+ installs and 200+ active users.
+- [RevisionDojo Icons](https://www.vassiliprokopenko.com/dojo-icons): Revamped the visual icon system for RevisionDojo, an IB learning platform serving 650k+ students; created 20+ hand-drawn icons with four color variants.
+- [Jetpacks](https://www.vassiliprokopenko.com/jetpacks): Led brand design for an AI-powered study workspace, including mascot concepts, illustration, motion, and a scalable product identity.
+- [About and Experience](https://www.vassiliprokopenko.com/about): Background, product design experience, education at McGill University, and community work.
+- [Contact / Hire](mailto:vassiligb12@gmail.com): Contact Vassili for product design, brand design, web design, and creative collaboration.
+
+## Optional
+
+- [Project Archive](https://www.vassiliprokopenko.com/): Additional selected work, including USThing product design, MCSS web design, illustration, and motion projects.
+- [Resume / CV](https://docs.google.com/document/d/1W0-QIjajoPcEnDEO99qnTczTWo3l3Wu7W1VPZ29Igfw/edit?usp=sharing): Experience, education, skills, and selected achievements.

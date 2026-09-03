@@ -331,7 +331,7 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
     >
       <Image
         src="/images/optimized/home/mcss-preview.jpg"
-        alt=""
+        alt="MCSS website homepage redesign"
         fill
         className="object-cover"
         sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
@@ -563,7 +563,7 @@ const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       <div className="flex h-full w-full items-center justify-center p-2xs md:p-xs xl:p-sm">
         <Image
           src="/images/optimized/Other/usthing-preview.png"
-          alt=""
+          alt="USThing grade distribution feature displayed on a mobile phone"
           width={633}
           height={1314}
           className="pointer-events-none h-auto max-h-[90%] w-[72%] select-none object-contain md:max-h-[86%] md:w-[62%] xl:max-h-[82%] xl:w-[55%]"
@@ -608,7 +608,7 @@ const PrettifyMinervaCardContent: React.FC = () => {
         >
           <Image
             src="/images/optimized/prettify-minerva/minerva-preview-card.jpg"
-            alt=""
+            alt="Prettify Minerva browser extension redesign of the McGill student portal"
             fill
             className="pointer-events-none select-none object-cover object-left-top"
             sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
@@ -646,6 +646,7 @@ type IllustrationShowcaseCardProps = {
   src: string;
   ariaLabel: string;
   hoverTitle: string;
+  imageAlt: string;
   background: string;
   /** When set, opens ImagePreview (full-bleed art — no padded gradient). */
   previewItem?: ImagePreviewItem;
@@ -658,6 +659,7 @@ const IllustrationShowcaseCard: React.FC<IllustrationShowcaseCardProps> = ({
   src,
   ariaLabel,
   hoverTitle,
+  imageAlt,
   background,
   previewItem,
 }) => {
@@ -686,7 +688,7 @@ const IllustrationShowcaseCard: React.FC<IllustrationShowcaseCardProps> = ({
           >
             <Image
               src={src}
-              alt=""
+              alt={imageAlt}
               fill
               className={cn(
                 'pointer-events-none select-none object-cover rounded',
@@ -720,6 +722,7 @@ const DiscordSnowsgivingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
     src={DISCORD_SNOWSGIVING_IMAGE_PREVIEW.src}
     ariaLabel="Open Discord Snowsgiving illustration preview"
     hoverTitle="Discord Snowsgiving"
+    imageAlt="Discord Snowsgiving prize-winning Wumpus illustration"
     background="var(--gradient-discord-snowsgiving-showcase)"
     previewItem={DISCORD_SNOWSGIVING_IMAGE_PREVIEW}
   />
@@ -745,7 +748,7 @@ const OasisVisualWorkspaceCaseStudy: React.FC<{ reveal?: boolean; delayMs?: numb
         <div className="relative aspect-[16/9] w-full overflow-hidden">
           <Image
             src={OASIS_IMAGE_PREVIEW.src}
-            alt=""
+            alt="macOS visual workspace for browsing design and art inspiration"
             fill
             className={cn(
               'pointer-events-none select-none object-cover',
@@ -786,7 +789,7 @@ const YinlinIllustrationCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
         <div className="relative aspect-[16/9] w-full overflow-hidden">
           <Image
             src={YINLIN_IMAGE_PREVIEW.src}
-            alt=""
+            alt="Yinlin character illustration from Wuthering Waves"
             fill
             className={cn(
               'pointer-events-none select-none object-cover',
@@ -926,7 +929,8 @@ export const WorkShowcaseSection: React.FC<WorkShowcaseSectionProps> = ({
     const revealProps = getPopdownRevealProps(visible, 0, prefersReducedMotion);
 
     return (
-      <section className="w-full pt-2 pb-12 md:pt-4 md:pb-20" aria-label="WorkShowcase">
+      <section className="w-full pt-2 pb-12 md:pt-4 md:pb-20" aria-labelledby="selected-work-heading">
+        <h2 id="selected-work-heading" className="sr-only">Selected work</h2>
         <div className={revealProps.className} style={revealProps.style}>
           <WorkColumns visible />
         </div>
@@ -935,7 +939,8 @@ export const WorkShowcaseSection: React.FC<WorkShowcaseSectionProps> = ({
   }
 
   return (
-    <section className="w-full pt-2 pb-12 md:pt-4 md:pb-20" aria-label="WorkShowcase">
+    <section className="w-full pt-2 pb-12 md:pt-4 md:pb-20" aria-labelledby="selected-work-heading">
+      <h2 id="selected-work-heading" className="sr-only">Selected work</h2>
       <WorkColumns visible={visible} />
     </section>
   );

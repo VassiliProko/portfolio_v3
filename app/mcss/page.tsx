@@ -6,11 +6,26 @@ import { CaseStudyCaption } from '@/src/components/ui/CaseStudyCaption';
 import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
 import { McssMobileCarousel } from '@/src/components/ui/McssMobileCarousel';
 import { McssPhaseSection } from '@/src/components/ui/McssPhaseSection';
+import { JsonLd } from '@/src/components/JsonLd';
+
+const mcssJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: 'McGill Chinese Students’ Society Website Redesign',
+  url: 'https://www.vassiliprokopenko.com/mcss',
+  description:
+    'Website redesign and frontend development for the McGill Chinese Students’ Society, improving navigation, mobile usability, and visual identity.',
+  author: { '@id': 'https://www.vassiliprokopenko.com/#person' },
+  mainEntityOfPage: 'https://www.vassiliprokopenko.com/mcss',
+};
 
 export const metadata: Metadata = {
   title: "McGill Chinese Students' Society",
   description:
     "I revamped the MCSS website with a cleaner layout and improved mobile navigation, making it easier for students to discover events, sponsors, and society events.",
+  alternates: {
+    canonical: '/mcss',
+  },
 };
 
 const MCSS_OVERVIEW = (
@@ -30,24 +45,26 @@ const PHASE_BG_RENEWAL =
 
 export default function MCSSCaseStudyPage() {
   return (
-    <CaseStudyLayout
-      title="McGill Chinese Students' Society"
-      heroImageSrc="/images/optimized/mcss/mcss-head.jpg"
-      heroImageAlt="MCSS website header preview"
-      heroImageWidth={2752}
-      heroImageHeight={1414}
-      overview={MCSS_OVERVIEW}
-      meta={{
-        role: 'Web Developer',
-        tools: 'Figma, Next.JS, Cloudinary, Vercel, Cursor',
-        duration: '2024-present',
-        skills: 'Web design, Frontend development',
-      }}
-      websiteUrl="https://mcss.ca/"
-      websiteLabel="Website"
-      githubUrl="https://github.com/Dev-MCSS/websitev2"
-      githubLabel="Github"
-    >
+    <>
+      <JsonLd data={mcssJsonLd} />
+      <CaseStudyLayout
+        title="McGill Chinese Students' Society"
+        heroImageSrc="/images/optimized/mcss/mcss-head.jpg"
+        heroImageAlt="MCSS website header preview"
+        heroImageWidth={2752}
+        heroImageHeight={1414}
+        overview={MCSS_OVERVIEW}
+        meta={{
+          role: 'Web Developer',
+          tools: 'Figma, Next.JS, Cloudinary, Vercel, Cursor',
+          duration: '2024-present',
+          skills: 'Web design, Frontend development',
+        }}
+        websiteUrl="https://mcss.ca/"
+        websiteLabel="Website"
+        githubUrl="https://github.com/Dev-MCSS/websitev2"
+        githubLabel="Github"
+      >
       <section
         className="w-full overflow-hidden rounded-[8px] bg-surface-2 p-3 md:p-5"
         style={{ background: 'var(--gradient-mcss)' }}
@@ -192,6 +209,7 @@ export default function MCSSCaseStudyPage() {
           }
         />
       </figure>
-    </CaseStudyLayout>
+      </CaseStudyLayout>
+    </>
   );
 }

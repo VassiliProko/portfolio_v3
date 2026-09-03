@@ -2,11 +2,26 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
+import { JsonLd } from '@/src/components/JsonLd';
+
+const usthingJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: 'USThing Grade Distribution Feature',
+  url: 'https://www.vassiliprokopenko.com/usthing',
+  description:
+    'Product design for a grade distribution feature in USThing, the student-driven all-in-one app used by more than 8,000 HKUST students.',
+  author: { '@id': 'https://www.vassiliprokopenko.com/#person' },
+  mainEntityOfPage: 'https://www.vassiliprokopenko.com/usthing',
+};
 
 export const metadata: Metadata = {
   title: 'USThing',
   description:
     'A grade distribution feature demo built for USThing, the student-driven all-in-one app for HKUST.',
+  alternates: {
+    canonical: '/usthing',
+  },
 };
 
 const USTHING_OVERVIEW = (
@@ -32,7 +47,7 @@ const USTHING_HERO = (
       </div>
       <Image
         src="/images/optimized/Other/iphone_case.webp"
-        alt=""
+        alt="USThing grade distribution feature displayed on an iPhone"
         width={281}
         height={584}
         className="pointer-events-none h-auto w-full scale-[.92] select-none object-contain"
@@ -45,15 +60,18 @@ const USTHING_HERO = (
 
 export default function USThingCaseStudyPage() {
   return (
-    <CaseStudyLayout
-      title="USThing"
-      hero={USTHING_HERO}
-      overview={USTHING_OVERVIEW}
-      meta={{
-        role: 'Product Designer',
-        tools: 'Cursor',
-        skills: 'AI Prototyping',
-      }}
-    />
+    <>
+      <JsonLd data={usthingJsonLd} />
+      <CaseStudyLayout
+        title="USThing"
+        hero={USTHING_HERO}
+        overview={USTHING_OVERVIEW}
+        meta={{
+          role: 'Product Designer',
+          tools: 'Cursor',
+          skills: 'AI Prototyping',
+        }}
+      />
+    </>
   );
 }

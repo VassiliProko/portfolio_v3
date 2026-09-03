@@ -213,6 +213,7 @@ export const AboutSection: React.FC = () => {
       aria-labelledby="about-heading"
       id="about"
     >
+      <h1 className="sr-only">About Vassili Prokopenko</h1>
       <div className="mx-auto flex w-full max-w-[760px] flex-col gap-xl md:gap-2xl">
         <ScrollPopdownReveal delayMs={0}>
           <div className="relative aspect-[760/456] w-full overflow-hidden rounded-sm bg-surface-2">

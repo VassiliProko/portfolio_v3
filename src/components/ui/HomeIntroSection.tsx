@@ -80,6 +80,7 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({
   if (isReturnHomeVisit) {
     return (
       <div aria-label="Introduction">
+        <h1 className="sr-only">Vassili Prokopenko — multidisciplinary product, brand, and web designer</h1>
         <PopdownReveal
           reveal={returnReveal}
           className="relative flex w-full flex-col items-start gap-3 py-6"
@@ -99,6 +100,7 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({
       className="relative flex w-full flex-col items-start gap-3 py-6"
       aria-label="Introduction"
     >
+      <h1 className="sr-only">Vassili Prokopenko — multidisciplinary product, brand, and web designer</h1>
       <BlurText
         wave
         segments={[...HOME_INTRO_HEADLINE_SEGMENTS]}
