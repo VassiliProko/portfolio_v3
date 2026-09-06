@@ -1,0 +1,12 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="120" height="120" fill="#D0FAE5"/>
+<rect x="19" y="40.0117" width="58" height="63" rx="7.90124" transform="rotate(-15 19 40.0117)" fill="#00BC7D"/>
+<rect x="36" y="25" width="58" height="63" rx="7.90124" fill="white"/>
+<rect width="31.2308" height="15.12" transform="translate(43.1387 31.7202)" fill="white"/>
+<rect x="43.1387" y="31.7202" width="45" height="6" rx="3" fill="#D1D5DC"/>
+<rect x="43.1387" y="43.7202" width="24" height="6" rx="3" fill="#D1D5DC"/>
+<rect x="62" y="55" width="40" height="40" rx="20" fill="#00D492"/>
+<rect x="62" y="55" width="40" height="40" rx="20" stroke="#5EE9B5" stroke-width="4"/>
+<path d="M81.5005 81.5L87.9115 81.5C89.2922 81.5 90.4115 80.3807 90.4115 79V76.75V74.5C90.4115 73.1193 89.2922 72 87.9115 72H76.1172" stroke="white" stroke-width="3" stroke-linecap="round"/>
+<path d="M77 68.0675C77 67.6436 76.5056 67.412 76.1799 67.6834L71.4609 71.6159C71.2211 71.8158 71.2211 72.1842 71.4609 72.3841L76.1799 76.3166C76.5056 76.588 77 76.3564 77 75.9325V68.0675Z" fill="white"/>
+</svg>

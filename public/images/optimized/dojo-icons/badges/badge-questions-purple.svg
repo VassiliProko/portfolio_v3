@@ -1,0 +1,12 @@
+<svg width="240" height="240" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="120" cy="120" r="120" fill="#7600E5"/>
+<rect x="75.473" y="66.1041" width="98.5378" height="117.027" rx="20.1676" transform="rotate(5 75.473 66.1041)" fill="#A983FD" stroke="#8A52FA" stroke-width="9"/>
+<rect x="106.815" y="142.575" width="49.3729" height="25.0963" rx="4.38838" transform="rotate(16 106.815 142.575)" fill="#8A52FA" stroke="#8A52FA" stroke-width="0.381598"/>
+<rect x="118.759" y="149.788" width="33.4463" height="29.464" rx="4.57918" transform="rotate(-13 118.759 149.788)" fill="#7600E5"/>
+<rect x="94.7717" y="45.1226" width="65.9359" height="20.4657" rx="5.14305" transform="rotate(5 94.7717 45.1226)" fill="#8A52FA" stroke="#8A52FA" stroke-width="0.513909"/>
+<rect x="84.188" y="80.9453" width="10.7956" height="29.046" rx="5.3978" transform="rotate(5 84.188 80.9453)" fill="white"/>
+<circle cx="118.897" cy="126.658" r="26.1" fill="white"/>
+<path d="M119.797 127.558C120.973 127.558 122.125 127.228 123.124 126.607C124.122 125.987 124.927 125.099 125.447 124.044C125.967 122.989 126.182 121.81 126.067 120.64C125.951 119.47 125.511 118.355 124.795 117.422C124.079 116.489 123.117 115.776 122.016 115.361C120.916 114.947 119.721 114.849 118.568 115.079C117.415 115.308 116.349 115.856 115.49 116.659C114.632 117.463 114.016 118.491 113.712 119.627" stroke="#A983FD" stroke-width="5.4" stroke-linecap="round"/>
+<path d="M119.797 127.558V131.158" stroke="#A983FD" stroke-width="5.4" stroke-linecap="round"/>
+<path d="M119.797 139.257L119.797 139.258" stroke="#A983FD" stroke-width="5.4" stroke-linecap="round"/>
+</svg>

@@ -223,6 +223,7 @@ export const AboutSection: React.FC = () => {
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 760px"
+              loading="eager"
               priority
             />
           </div>

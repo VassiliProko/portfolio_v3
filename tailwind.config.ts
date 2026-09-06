@@ -15,7 +15,8 @@ const config: Config = {
   			surface: {
   				'1': 'var(--color-surface-1)',
   				'2': 'var(--color-surface-2)',
-  				'3': 'var(--color-surface-3)',
+				'3': 'var(--color-surface-3)',
+				slate: 'var(--color-surface-slate)',
   				'dark-1': 'var(--color-surface-dark-1)',
   				'dark-2': 'var(--color-surface-dark-2)',
   				'dark-4': 'var(--color-surface-dark-4)',

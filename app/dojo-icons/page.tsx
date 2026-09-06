@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
 import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
-import { DojoIconVariantStrip } from '@/src/components/ui/DojoIconVariantStrip';
+import { DojoBadgeGrid, DojoRankedBadgeGrid } from '@/src/components/ui/DojoBadgeGrid';
+import { DojoIconVariantStrip, DojoTintedIconGrid } from '@/src/components/ui/DojoIconVariantStrip';
 import { JsonLd } from '@/src/components/JsonLd';
 
 const dojoIconsJsonLd = {
@@ -28,8 +29,8 @@ export const metadata: Metadata = {
 const DOJO_ICONS_OVERVIEW = (
   <p>
     During my internship at General Learning (YC F24), I revamped icons for RevisionDojo, the
-    world&apos;s largest IB platform used by 650k+ students. I helped craft 20+ hand-drawn icons with
-    4 color variantions each to represent core platform features.
+    world&apos;s largest IB platform used by 650k+ students. I helped craft 50+ illustrative
+    icons/badges to represent core platform features and user achievements.
   </p>
 );
 
@@ -52,7 +53,7 @@ export default function DojoIconsCaseStudyPage() {
         websiteUrl="https://www.revisiondojo.com/"
         websiteLabel="RevisionDojo"
       >
-      <figure className="m-0 flex w-full flex-col gap-2xs">
+      <figure className="m-0 w-full">
         <div className="w-full overflow-hidden rounded-[8px]">
           <BackgroundSafeVideo
             className="pointer-events-none block h-auto w-full"
@@ -64,19 +65,21 @@ export default function DojoIconsCaseStudyPage() {
             aria-label="RevisionDojo icons preview animation"
           />
         </div>
-        <figcaption className="type-paragraph m-0 text-text-subtle">
-          Icon preview animation made with Cursor
-        </figcaption>
       </figure>
 
       <DojoIconVariantStrip />
+      <DojoTintedIconGrid />
 
       <CaseStudyImage
         src="/images/optimized/dojo-icons/dojo-compsci-icons.png"
         alt="RevisionDojo Computer Science icons preview"
         width={1792}
         height={1458}
+        className="mb-lg md:mb-xl"
       />
+
+      <DojoBadgeGrid />
+      <DojoRankedBadgeGrid />
       </CaseStudyLayout>
     </>
   );

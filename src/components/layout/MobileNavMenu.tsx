@@ -16,16 +16,19 @@ import {
 type MobileNavMenuToggleProps = {
   isOpen: boolean;
   onToggle: () => void;
+  buttonRef?: React.Ref<HTMLButtonElement>;
   className?: string;
 };
 
 export const MobileNavMenuToggle: React.FC<MobileNavMenuToggleProps> = ({
   isOpen,
   onToggle,
+  buttonRef,
   className,
 }) => {
   return (
     <button
+      ref={buttonRef}
       type="button"
       onClick={onToggle}
       aria-expanded={isOpen}
@@ -51,12 +54,14 @@ type MobileNavMenuPanelProps = {
   isOpen: boolean;
   onClose: () => void;
   isAboutPage: boolean;
+  panelRef?: React.Ref<HTMLDivElement>;
 };
 
 export const MobileNavMenuPanel: React.FC<MobileNavMenuPanelProps> = ({
   isOpen,
   onClose,
   isAboutPage,
+  panelRef,
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const transition = prefersReducedMotion
@@ -67,6 +72,7 @@ export const MobileNavMenuPanel: React.FC<MobileNavMenuPanelProps> = ({
     <AnimatePresence initial={false}>
       {isOpen ? (
         <motion.div
+          ref={panelRef}
           id="mobile-nav-menu"
           key="mobile-nav-menu"
           initial={{ y: '-100%' }}

@@ -18,6 +18,7 @@
   --color-surface-1: #f4f4f5;
   --color-surface-2: #e4e4e7;
   --color-surface-3: #d4d4d8;
+  --color-surface-slate: #ebebeb;
   --color-surface-dark-1: #18181b;
   --color-surface-dark-2: #27272a;
   --color-surface-dark-4: #111114;
@@ -235,6 +236,7 @@
   --color-surface-1: #27272a;
   --color-surface-2: #3f3f46;
   --color-surface-3: #52525b;
+  --color-surface-slate: #3f3f46;
   --color-text: #fafafa;
   --color-text-subtle: #a1a1aa;
   --color-text-muted: #71717a;

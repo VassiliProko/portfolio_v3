@@ -41,6 +41,8 @@ export const HomeNavbar: React.FC = () => {
   const schedulePeckCycleRef = useRef<(() => void) | null>(null);
   const peckRepeatTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const aboutLinkRef = useRef<HTMLAnchorElement>(null);
+  const mobileMenuToggleRef = useRef<HTMLButtonElement>(null);
+  const mobileMenuPanelRef = useRef<HTMLDivElement>(null);
   const [isAboutHovering, setIsAboutHovering] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [menuPathname, setMenuPathname] = useState(pathname);
@@ -95,15 +97,33 @@ export const HomeNavbar: React.FC = () => {
       return;
     }
 
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node)) {
+        return;
+      }
+
+      if (
+        mobileMenuPanelRef.current?.contains(target) ||
+        mobileMenuToggleRef.current?.contains(target)
+      ) {
+        return;
+      }
+
+      setMobileMenuOpen(false);
+    };
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setMobileMenuOpen(false);
       }
     };
 
+    window.addEventListener('pointerdown', handlePointerDown);
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
+      window.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [mobileMenuOpen]);
@@ -333,6 +353,7 @@ export const HomeNavbar: React.FC = () => {
           <MobileNavMenuToggle
             isOpen={mobileMenuOpen}
             onToggle={() => setMobileMenuOpen((open) => !open)}
+            buttonRef={mobileMenuToggleRef}
             className="min-[787px]:hidden"
           />
         </div>
@@ -342,6 +363,7 @@ export const HomeNavbar: React.FC = () => {
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         isAboutPage={isAboutPage}
+        panelRef={mobileMenuPanelRef}
       />
     </div>
   );
