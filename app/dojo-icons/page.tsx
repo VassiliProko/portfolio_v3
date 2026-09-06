@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
 import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
-import { DojoIconHeroBoard } from '@/src/components/ui/DojoIconHeroBoard';
 import { DojoIconVariantStrip } from '@/src/components/ui/DojoIconVariantStrip';
 import { JsonLd } from '@/src/components/JsonLd';
 
@@ -40,7 +39,10 @@ export default function DojoIconsCaseStudyPage() {
       <JsonLd data={dojoIconsJsonLd} />
       <CaseStudyLayout
         title="RevisionDojo Icons"
-        hero={<DojoIconHeroBoard />}
+        heroImageSrc="/images/optimized/dojo-icons/dojo-icons-head.jpg"
+        heroImageAlt="RevisionDojo icon collection"
+        heroImageWidth={2752}
+        heroImageHeight={1414}
         overview={DOJO_ICONS_OVERVIEW}
         meta={{
           role: 'Designer',

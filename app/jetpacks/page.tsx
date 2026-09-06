@@ -5,6 +5,7 @@ import { JetpacksBrandFamilyBoard } from '@/src/components/ui/JetpacksBrandFamil
 import { JetpacksLoadingAnimation } from '@/src/components/ui/JetpacksLoadingAnimation';
 import { JetpacksLogoBoard } from '@/src/components/ui/JetpacksLogoBoard';
 import { JetpacksCastBoard, JetpacksHomeBoard } from '@/src/components/ui/JetpacksMascotSections';
+import { JetpacksPlanBoard } from '@/src/components/ui/JetpacksPlanBoard';
 import { JetpacksSilhouetteBoard } from '@/src/components/ui/JetpacksSilhouetteBoard';
 import { JetpacksWavingAnimation } from '@/src/components/ui/JetpacksWavingAnimation';
 import { JsonLd } from '@/src/components/JsonLd';
@@ -109,6 +110,7 @@ export default function JetpacksCaseStudyPage() {
       <JetpacksCastBoard />
       <JetpacksWavingAnimation caption="heyyy" />
       <JetpacksHomeBoard />
+      <JetpacksPlanBoard />
       </CaseStudyLayout>
     </>
   );

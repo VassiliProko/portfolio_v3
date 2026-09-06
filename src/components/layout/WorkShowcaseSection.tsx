@@ -83,7 +83,8 @@ const MATHSGENIE_IMAGE_PREVIEW: ImagePreviewItem = {
 const COURSEWORK_GRADER_IMAGE_PREVIEW: ImagePreviewItem = {
   src: '/other/icon-full-report.riv',
   name: 'Coursework Grader',
-  description: 'Featured RIve Animation for RevisionDojo Coursework Grader',
+  description:
+    'Featured RIve Animation for RevisionDojo Coursework Grader (Dark/Light Mode Responsive)',
   width: 16,
   height: 9,
   rive: {
@@ -877,12 +878,14 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     delayMs: 163,
     render: (props) => <CourseworkGraderCaseStudy {...props} />,
   },
-  {
-    key: 'mathsgenie',
-    priority: 10,
-    delayMs: 175,
-    render: (props) => <MathsGenieCaseStudy {...props} />,
-  },
+  // MathsGenie is intentionally hidden from the homepage for now.
+  // Keep this configuration to make restoring the card a one-line change.
+  // {
+  //   key: 'mathsgenie',
+  //   priority: 10,
+  //   delayMs: 175,
+  //   render: (props) => <MathsGenieCaseStudy {...props} />,
+  // },
   {
     key: 'oneprep-pro-trial',
     priority: 11,
@@ -901,11 +904,11 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
     ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'jetpacks', 'figma-summer-camp'],
-    ['dojo-icons', 'mcss', 'coursework-grader', 'mathsgenie', 'usthing'],
+    ['dojo-icons', 'mcss', 'coursework-grader', /* 'mathsgenie', */ 'usthing'],
   ],
   3: [
     ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace'],
-    ['dojo-icons', 'mcss', 'coursework-grader', 'mathsgenie'],
+    ['dojo-icons', 'mcss', 'coursework-grader' /* 'mathsgenie' */],
     ['jetpacks', 'figma-summer-camp', 'usthing'],
   ],
 };
