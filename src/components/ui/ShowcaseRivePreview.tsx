@@ -345,7 +345,7 @@ const ShowcaseRiveProbe: React.FC<ShowcaseRiveProbeProps> = ({
   );
 };
 
-export const ShowcaseRivePreview: React.FC<ShowcaseRivePreviewProps> = ({
+const ShowcaseRivePreviewContent: React.FC<ShowcaseRivePreviewProps> = ({
   riveSrc,
   backgroundSrc,
   backgroundScale = ONEPREP_BACKGROUND_SCALE,
@@ -371,7 +371,7 @@ export const ShowcaseRivePreview: React.FC<ShowcaseRivePreviewProps> = ({
     >
       {playback === undefined ? (
         <ShowcaseRiveProbe
-          key={probeArtboard ?? 'initial-artboard'}
+          key={`${riveSrc}-${probeArtboard ?? 'initial-artboard'}`}
           riveSrc={riveSrc}
           artboard={probeArtboard}
           playbackMode={playbackMode}
@@ -401,7 +401,7 @@ export const ShowcaseRivePreview: React.FC<ShowcaseRivePreviewProps> = ({
       >
         {playback ? (
           <ShowcaseRiveCanvas
-            key={`${playback.artboard ?? 'default'}-${playback.target.kind}-${playback.target.name}`}
+            key={`${riveSrc}-${playback.artboard ?? 'default'}-${playback.target.kind}-${playback.target.name}`}
             riveSrc={riveSrc}
             playback={playback}
             autoplay={!prefersReducedMotion}
@@ -413,3 +413,11 @@ export const ShowcaseRivePreview: React.FC<ShowcaseRivePreviewProps> = ({
     </div>
   );
 };
+
+/**
+ * Rive retains its loaded file internally, so a keyed child ensures that source
+ * changes—including Fast Refresh updates—always create a fresh loader instance.
+ */
+export const ShowcaseRivePreview: React.FC<ShowcaseRivePreviewProps> = (props) => (
+  <ShowcaseRivePreviewContent key={`${props.riveSrc}-${props.playbackMode ?? 'entry-loop'}`} {...props} />
+);

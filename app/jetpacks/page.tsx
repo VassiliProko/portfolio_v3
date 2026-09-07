@@ -38,7 +38,7 @@ const META_LINK_CLASS =
 
 const JETPACKS_OVERVIEW = (
   <p>
-    I led the brand design for Jetpacks, an AI-powered study workspace. I created the
+    I led the mascot design for Jetpacks, an AI-powered study workspace. I created the
     chicken-with-jetpacks mascot, and supporting graphics + animations to give the product a
     playful, memorable identity.
   </p>

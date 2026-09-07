@@ -3,6 +3,7 @@ import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
 import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
 import { DojoBadgeGrid, DojoRankedBadgeGrid } from '@/src/components/ui/DojoBadgeGrid';
+import { DojoCourseworkRiveGrid } from '@/src/components/ui/DojoCourseworkRiveGrid';
 import { DojoIconVariantStrip, DojoTintedIconGrid } from '@/src/components/ui/DojoIconVariantStrip';
 import { JsonLd } from '@/src/components/JsonLd';
 
@@ -78,6 +79,7 @@ export default function DojoIconsCaseStudyPage() {
         className="mb-lg md:mb-xl"
       />
 
+      <DojoCourseworkRiveGrid />
       <DojoBadgeGrid />
       <DojoRankedBadgeGrid />
       </CaseStudyLayout>

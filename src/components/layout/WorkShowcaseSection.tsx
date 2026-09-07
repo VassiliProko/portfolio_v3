@@ -81,14 +81,14 @@ const MATHSGENIE_IMAGE_PREVIEW: ImagePreviewItem = {
 };
 
 const COURSEWORK_GRADER_IMAGE_PREVIEW: ImagePreviewItem = {
-  src: '/other/icon-full-report.riv',
+  src: '/images/optimized/dojo-icons/rive/icon-full-report.riv',
   name: 'Coursework Grader',
   description:
     'Featured RIve Animation for RevisionDojo Coursework Grader (Dark/Light Mode Responsive)',
   width: 16,
   height: 9,
   rive: {
-    src: '/other/icon-full-report.riv',
+    src: '/images/optimized/dojo-icons/rive/icon-full-report.riv',
     playbackMode: 'entry-loop',
     alignment: Alignment.Center,
     backgroundColor: 'var(--color-coursework-grader-showcase-bg)',
@@ -420,7 +420,7 @@ const CourseworkGraderCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }
         onActivate={() => setPreviewOpen(true)}
       >
         <ShowcaseRivePreview
-          riveSrc="/other/icon-full-report.riv"
+          riveSrc="/images/optimized/dojo-icons/rive/icon-full-report.riv"
           ariaLabel="Coursework full report animation"
           playbackMode="entry-loop"
           riveAlignment={Alignment.Center}
@@ -503,7 +503,7 @@ const JetpacksCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       href="/jetpacks"
       className="aspect-[451/183]"
       ariaLabel="Open Jetpacks case study"
-      hoverTitle="Edtech Branding"
+      hoverTitle="Edtech Branding (Mascot)"
       style={{ backgroundColor: 'var(--color-jetpacks-showcase-bg)' }}
       reveal={reveal}
       delayMs={delayMs}
