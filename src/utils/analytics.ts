@@ -15,7 +15,10 @@ export function initPostHog(): void {
     capture_pageview: 'history_change',
     autocapture: false,
     person_profiles: 'identified_only',
-    disable_session_recording: true,
+    disable_session_recording: false,
+    session_recording: {
+      maskAllInputs: true,
+    },
     disable_surveys: true,
   });
 }
