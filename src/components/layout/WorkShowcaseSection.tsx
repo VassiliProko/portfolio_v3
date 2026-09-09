@@ -15,6 +15,7 @@ import { JetpacksShowcaseLockup } from '@/src/components/ui/JetpacksShowcaseLock
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
 import { ShowcaseRivePreview } from '@/src/components/ui/ShowcaseRivePreview';
 import { getPopdownRevealProps } from '@/src/components/ui/PopdownReveal';
+import { trackEvent } from '@/src/utils/analytics';
 import { cn } from '@/src/utils/cn';
 
 type WorkCardShellProps = {
@@ -187,6 +188,10 @@ const useShowcaseColumnCount = (): ShowcaseColumnCount => {
 
   return hasThreeColumns ? 3 : 2;
 };
+
+function trackPreviewOpened(project: ShowcaseCardKey): void {
+  trackEvent('preview_opened', { project });
+}
 
 const WorkCardShell: React.FC<WorkCardShellProps> = ({
   className,
@@ -383,7 +388,10 @@ const MathsGenieCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
         reveal={reveal}
         delayMs={delayMs}
         hoverTitle="MathsGenie Animation"
-        onActivate={() => setPreviewOpen(true)}
+        onActivate={() => {
+          trackPreviewOpened('mathsgenie');
+          setPreviewOpen(true);
+        }}
       >
         <ShowcaseRivePreview
           riveSrc="/other/genie-landing-page.riv"
@@ -417,7 +425,10 @@ const CourseworkGraderCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }
         reveal={reveal}
         delayMs={delayMs}
         hoverTitle="Coursework Grader"
-        onActivate={() => setPreviewOpen(true)}
+        onActivate={() => {
+          trackPreviewOpened('coursework-grader');
+          setPreviewOpen(true);
+        }}
       >
         <ShowcaseRivePreview
           riveSrc="/images/optimized/dojo-icons/rive/icon-full-report.riv"
@@ -473,7 +484,10 @@ const VisualExplorationsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
         reveal={reveal}
         delayMs={delayMs}
         hoverTitle="A Cute Heart Animation"
-        onActivate={() => setPreviewOpen(true)}
+        onActivate={() => {
+          trackPreviewOpened('visual-explorations');
+          setPreviewOpen(true);
+        }}
       >
         <ShowcaseLoopingVideo
           sources={[...HEART_ANIMATION_VIDEO_SOURCES]}
@@ -527,7 +541,10 @@ const FigmaSummerCampPreview: React.FC<{ reveal?: boolean; delayMs?: number }> =
         hoverTitle="Figma Summer Camp"
         reveal={reveal}
         delayMs={delayMs}
-        onActivate={() => setPreviewOpen(true)}
+        onActivate={() => {
+          trackPreviewOpened('figma-summer-camp');
+          setPreviewOpen(true);
+        }}
       >
         <ShowcaseLoopingVideo
           sources={[...FIGMA_SUMMER_CAMP_VIDEO_SOURCES]}
@@ -650,6 +667,7 @@ type IllustrationShowcaseCardProps = {
   hoverTitle: string;
   imageAlt: string;
   background: string;
+  project: ShowcaseCardKey;
   /** When set, opens ImagePreview (full-bleed art — no padded gradient). */
   previewItem?: ImagePreviewItem;
 };
@@ -663,6 +681,7 @@ const IllustrationShowcaseCard: React.FC<IllustrationShowcaseCardProps> = ({
   hoverTitle,
   imageAlt,
   background,
+  project,
   previewItem,
 }) => {
   const [previewOpen, setPreviewOpen] = React.useState(false);
@@ -678,7 +697,10 @@ const IllustrationShowcaseCard: React.FC<IllustrationShowcaseCardProps> = ({
         delayMs={delayMs}
         fillSurface={false}
         style={{ background }}
-        onActivate={opensPreview ? () => setPreviewOpen(true) : undefined}
+        onActivate={opensPreview ? () => {
+          trackPreviewOpened(project);
+          setPreviewOpen(true);
+        } : undefined}
       >
         <div className="box-border flex w-full items-center justify-center p-showcase-illustration-sm sm:p-showcase-illustration">
           <div
@@ -726,6 +748,7 @@ const DiscordSnowsgivingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
     hoverTitle="Discord Snowsgiving"
     imageAlt="Discord Snowsgiving prize-winning Wumpus illustration"
     background="var(--gradient-discord-snowsgiving-showcase)"
+    project="discord-snowsgiving"
     previewItem={DISCORD_SNOWSGIVING_IMAGE_PREVIEW}
   />
 );
@@ -745,7 +768,10 @@ const OasisVisualWorkspaceCaseStudy: React.FC<{ reveal?: boolean; delayMs?: numb
         reveal={reveal}
         delayMs={delayMs}
         fillSurface={false}
-        onActivate={() => setPreviewOpen(true)}
+        onActivate={() => {
+          trackPreviewOpened('oasis-visual-workspace');
+          setPreviewOpen(true);
+        }}
       >
         <div className="relative aspect-[16/9] w-full overflow-hidden">
           <Image
@@ -786,7 +812,10 @@ const YinlinIllustrationCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
         reveal={reveal}
         delayMs={delayMs}
         fillSurface={false}
-        onActivate={() => setPreviewOpen(true)}
+        onActivate={() => {
+          trackPreviewOpened('yinlin');
+          setPreviewOpen(true);
+        }}
       >
         <div className="relative aspect-[16/9] w-full overflow-hidden">
           <Image

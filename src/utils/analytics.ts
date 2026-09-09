@@ -26,6 +26,7 @@ export type AnalyticsEventName =
   | 'linkedin_clicked'
   | 'email_clicked'
   | 'project_demo_clicked'
+  | 'preview_opened'
   | 'case_study_section_reached';
 
 export type AnalyticsProperties = Record<string, string>;
