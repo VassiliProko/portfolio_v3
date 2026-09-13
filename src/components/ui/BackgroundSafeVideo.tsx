@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, type VideoHTMLAttributes } from 'react';
+import { useReducedMotion } from 'motion/react';
 import { useBackgroundSafeVideo } from '@/src/hooks/useBackgroundSafeVideo';
 import { cn } from '@/src/utils/cn';
 
@@ -29,7 +30,10 @@ export const BackgroundSafeVideo: React.FC<BackgroundSafeVideoProps> = ({
   ...props
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  useBackgroundSafeVideo(videoRef, { enabled, shouldPlay: enabled });
+  const prefersReducedMotion = useReducedMotion();
+  const shouldPlay = enabled && !prefersReducedMotion;
+
+  useBackgroundSafeVideo(videoRef, { enabled: true, shouldPlay });
 
   return (
     <video

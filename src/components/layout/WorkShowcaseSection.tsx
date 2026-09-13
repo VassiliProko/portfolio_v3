@@ -119,6 +119,11 @@ const FIGMA_SUMMER_CAMP_VIDEO_SOURCES = [
   { src: '/other/figma-summer-camp.webm', type: 'video/webm' },
 ] as const;
 
+const PRETTIFY_MINERVA_VIDEO_SOURCES = [
+  { src: '/other/prettify-minerva-preview.webm', type: 'video/webm' },
+  { src: '/other/prettify-minerva-preview.mp4', type: 'video/mp4' },
+] as const;
+
 const FIGMA_SUMMER_CAMP_IMAGE_PREVIEW: ImagePreviewItem = {
   src: '/other/figma-summer-camp.webm',
   name: 'Figma Summer Camp',
@@ -613,33 +618,6 @@ const WorkColumns: React.FC<{ visible: boolean }> = ({ visible }) => {
   );
 };
 
-const PrettifyMinervaCardContent: React.FC = () => {
-  return (
-    <>
-      {/* Nested like USThing: padded inset, clipped by the scaling surface radius. */}
-      <div
-        className="absolute inset-0 z-[2] p-[var(--spacing-prettify-minerva-showcase-offset)] pb-0 pr-0"
-        aria-hidden
-      >
-        <div
-          className="relative h-full w-full overflow-hidden rounded-tl-[6px] shadow-prettify-minerva-showcase-frame"
-          style={{ backgroundColor: 'var(--color-prettify-minerva-chrome)' }}
-        >
-          <Image
-            src="/images/optimized/prettify-minerva/minerva-preview-card.jpg"
-            alt="Prettify Minerva browser extension redesign of the McGill student portal"
-            fill
-            className="pointer-events-none select-none object-cover object-left-top"
-            sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
-            priority={false}
-            unoptimized
-          />
-        </div>
-      </div>
-    </>
-  );
-};
-
 const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   reveal = true,
   delayMs = 0,
@@ -647,14 +625,18 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
   return (
     <WorkCardShell
       href="/prettify-minerva"
-      className="aspect-[50/39] relative"
+      className="aspect-[877/720]"
       ariaLabel="Open Prettify Minerva case study"
-      style={{ background: 'var(--gradient-prettify-minerva-showcase)' }}
       reveal={reveal}
       delayMs={delayMs}
       hoverTitle="Prettify Minerva ∙ Browser Extension"
     >
-      <PrettifyMinervaCardContent />
+      <ShowcaseLoopingVideo
+        sources={[...PRETTIFY_MINERVA_VIDEO_SOURCES]}
+        className="h-full w-full object-cover"
+        ariaLabel="Prettify Minerva browser extension transformation preview"
+        poster="/images/optimized/prettify-minerva/prettify-minerva-preview-poster.jpg"
+      />
     </WorkCardShell>
   );
 };

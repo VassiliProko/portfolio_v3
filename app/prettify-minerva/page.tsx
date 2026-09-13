@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
-import { CASE_STUDY_OVERVIEW_COLUMNS_CLASS } from '@/src/constants/caseStudy';
+import {
+  CASE_STUDY_OVERVIEW_COLUMNS_CLASS,
+  caseStudyCaptionFigureGapClass,
+} from '@/src/constants/caseStudy';
+import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
+import { CaseStudyCaption } from '@/src/components/ui/CaseStudyCaption';
 import { CaseStudyImage } from '@/src/components/ui/CaseStudyImage';
 import { CompareImage } from '@/src/components/ui/CompareImage';
 import { PrettifyMinervaLogoLockup } from '@/src/components/ui/PrettifyMinervaLogoLockup';
@@ -128,19 +133,37 @@ export default function PrettifyMinervaCaseStudyPage() {
         alt="Redesigned Minerva login with McGill header, student and guest login, and campus building"
         width={1620}
         height={1140}
-        captionLabel="Results"
-        captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
-        caption={
-          <p>
-            After facing a range of challenges like DOM quirks to styling messy table elements, I
-            published the extension on the chrome web store. The extension has gotten over 650+
-            installs and 200+ active users. It was incredibly rewarding to take an idea from an
-            initial design through development and ultimately launch a real, usable product. Along
-            the way, I deepened my understanding of front-end development using JavaScript, HTML,
-            and CSS.
-          </p>
-        }
       />
+      <figure
+        className={`flex w-full flex-col ${caseStudyCaptionFigureGapClass('section')}`}
+      >
+        <div className="w-full overflow-hidden rounded-[8px] bg-surface-2">
+          <BackgroundSafeVideo
+            className="pointer-events-none block h-auto w-full"
+            sources={[
+              { src: '/other/prettify-minerva-preview.webm', type: 'video/webm' },
+              { src: '/other/prettify-minerva-preview.mp4', type: 'video/mp4' },
+            ]}
+            poster="/images/optimized/prettify-minerva/prettify-minerva-preview-poster.jpg"
+            loop
+            aria-label="Prettify Minerva browser extension transformation preview"
+          />
+        </div>
+        <CaseStudyCaption
+          captionLabel="Results"
+          captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
+          caption={
+            <p>
+              After facing a range of challenges like DOM quirks to styling messy table elements, I
+              published the extension on the chrome web store. The extension has gotten over 650+
+              installs and 200+ active users. It was incredibly rewarding to take an idea from an
+              initial design through development and ultimately launch a real, usable product. Along
+              the way, I deepened my understanding of front-end development using JavaScript, HTML,
+              and CSS.
+            </p>
+          }
+        />
+      </figure>
       </CaseStudyLayout>
     </>
   );

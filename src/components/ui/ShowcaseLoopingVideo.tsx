@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useReducedMotion } from 'motion/react';
 import { useBackgroundSafeVideo } from '@/src/hooks/useBackgroundSafeVideo';
 import { playVideoSafely } from '@/src/utils/playVideoSafely';
 
@@ -12,6 +13,7 @@ type ShowcaseLoopingVideoProps = {
   }>;
   className?: string;
   ariaLabel: string;
+  poster?: string;
   /** Pause before replay; 0 uses native seamless loop. */
   loopDelayMs?: number;
   /** When false, keep the video paused (e.g. while a lightbox is open). */
@@ -23,16 +25,19 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
   sources,
   className,
   ariaLabel,
+  poster,
   loopDelayMs = 0,
   shouldPlay = true,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const prefersReducedMotion = useReducedMotion();
   const useDelayedLoop = loopDelayMs > 0;
+  const canPlay = shouldPlay && !prefersReducedMotion;
 
-  useBackgroundSafeVideo(videoRef, { enabled: true, shouldPlay });
+  useBackgroundSafeVideo(videoRef, { enabled: true, shouldPlay: canPlay });
 
   useEffect(() => {
-    if (!useDelayedLoop) {
+    if (!useDelayedLoop || !canPlay) {
       return;
     }
 
@@ -60,7 +65,7 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
       video.removeEventListener('ended', restartAfterDelay);
       window.clearTimeout(loopTimeoutId);
     };
-  }, [loopDelayMs, src, useDelayedLoop]);
+  }, [canPlay, loopDelayMs, src, useDelayedLoop]);
 
   return (
     <video
@@ -71,7 +76,8 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
       playsInline
       autoPlay={false}
       loop={!useDelayedLoop}
-      preload="auto"
+      preload="metadata"
+      poster={poster}
       aria-label={ariaLabel}
     >
       {sources?.map((source) => (
