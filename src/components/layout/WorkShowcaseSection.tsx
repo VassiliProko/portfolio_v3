@@ -633,6 +633,7 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
     >
       <ShowcaseLoopingVideo
         sources={[...PRETTIFY_MINERVA_VIDEO_SOURCES]}
+        shouldPlay={reveal}
         className="h-full w-full object-cover"
         ariaLabel="Prettify Minerva browser extension transformation preview"
         poster="/images/optimized/prettify-minerva/prettify-minerva-preview-poster.jpg"
