@@ -1,5 +1,4 @@
 export const CASE_STUDY_PATHS = [
-  '/mcss',
   '/prettify-minerva',
   '/dojo-icons',
   '/jetpacks',

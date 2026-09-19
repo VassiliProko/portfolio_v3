@@ -332,16 +332,16 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
 }) => {
   return (
     <WorkCardShell
-      href="/mcss"
-      className="relative aspect-[1352/909]"
-      ariaLabel="Open MCSS case study"
+      externalHref="https://mcss.ca/"
+      className="relative aspect-[1080/727]"
+      ariaLabel="Visit the MCSS website"
       reveal={reveal}
       delayMs={delayMs}
       hoverTitle="Cultural Website"
     >
       <Image
         src="/images/optimized/home/mcss-preview.jpg"
-        alt="MCSS website homepage redesign"
+        alt="MCSS website preview"
         fill
         className="object-cover"
         sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
