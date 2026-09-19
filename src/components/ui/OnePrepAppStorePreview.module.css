@@ -1,0 +1,139 @@
+.surface,
+.lightboxMedia {
+  background: linear-gradient(172deg, #c8f7df 6.48%, #8dd9fa 95.31%);
+}
+
+.rail {
+  --preview-width: 132px;
+  overflow: hidden;
+  padding-block: 21px;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  margin-left: calc(var(--preview-width) * -0.42);
+  transform: translate3d(0, 0, 0);
+  animation: oneprep-preview-loop 48s linear infinite;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.group {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 15px;
+  padding-right: 15px;
+}
+
+.previewButton {
+  width: var(--preview-width);
+  flex: 0 0 var(--preview-width);
+  overflow: hidden;
+  border-radius: 22px;
+  background: transparent;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.previewButton:hover,
+.previewButton:focus-visible {
+  transform: translateY(-3px);
+}
+
+.previewImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+
+.lightboxMedia {
+  height: 100%;
+  width: 100%;
+}
+
+.lightboxMedia .rail {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  padding-block: 0;
+}
+
+.lightboxMedia .track,
+.lightboxMedia .group {
+  height: 100%;
+  align-items: center;
+}
+
+.lightboxMedia .group {
+  gap: clamp(5px, 1vw, 15px);
+  padding-right: clamp(5px, 1vw, 15px);
+}
+
+.lightboxMedia .previewButton {
+  width: auto;
+  height: min(calc(100% - 32px), 541px);
+  aspect-ratio: 1241 / 2688;
+  flex-basis: auto;
+  border-radius: clamp(7px, 1.5vw, 22px);
+}
+
+.lightboxMedia .previewButton:hover {
+  transform: none;
+}
+
+.lightboxMedia .previewImage {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+@keyframes oneprep-preview-loop {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (min-width: 768px) {
+  .rail {
+    --preview-width: 150px;
+    padding-block: 24px;
+  }
+
+}
+
+@media (min-width: 1280px) {
+  .rail {
+    --preview-width: 162px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .track {
+    margin-left: 0;
+    animation: none;
+    will-change: auto;
+  }
+
+  .duplicateGroup {
+    display: none;
+  }
+
+  .previewButton {
+    transition: none;
+  }
+
+  .previewButton:hover,
+  .previewButton:focus-visible {
+    transform: none;
+  }
+}

@@ -66,6 +66,8 @@ type ImagePreviewProps = {
   onActiveIndexChange?: (index: number) => void;
   open: boolean;
   onClose: () => void;
+  /** Custom media rendered inside the standard fitted preview frame. */
+  media?: React.ReactNode;
 };
 
 /** Top/bottom (and side) margin around the full preview stack. */
@@ -88,6 +90,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
   onActiveIndexChange,
   open,
   onClose,
+  media,
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const [mounted, setMounted] = React.useState(false);
@@ -310,7 +313,9 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                 <AnimatePresence initial={false} custom={direction} mode="sync">
                   <motion.div
                     key={
-                      activeItem.video?.sources[0]?.src ??
+                      media
+                        ? `custom-${activeItem.src}`
+                        : activeItem.video?.sources[0]?.src ??
                       activeItem.rive?.src ??
                       activeItem.src
                     }
@@ -335,7 +340,9 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                     }
                     transition={slideTransition}
                   >
-                    {activeItem.video ? (
+                    {media ? (
+                      media
+                    ) : activeItem.video ? (
                       <div className="absolute inset-0 flex items-center justify-center">
                         <ShowcaseLoopingVideo
                           sources={activeItem.video.sources}
