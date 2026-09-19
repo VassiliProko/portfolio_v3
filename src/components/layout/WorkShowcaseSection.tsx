@@ -31,7 +31,6 @@ type WorkCardShellProps = {
   children: React.ReactNode;
   reveal?: boolean;
   delayMs?: number;
-  hideHoverPills?: boolean;
   /**
    * When false, the surface is in-flow so padded media can define height
    * (illustration cards). Default true keeps absolute fill for aspect-ratio cards.
@@ -210,7 +209,6 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
   children,
   reveal = true,
   delayMs = 0,
-  hideHoverPills = false,
   fillSurface = true,
 }) => {
   const prefersReducedMotion = useReducedMotion();
@@ -261,7 +259,7 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
     <HoverSurfaceContext.Provider value={hoverContextValue}>
       <div className={surfaceClassName} style={style}>
         {children}
-        {!hideHoverPills && <HoverMetaPill title={hoverTitle} />}
+        <HoverMetaPill title={hoverTitle} />
       </div>
     </HoverSurfaceContext.Provider>
   );

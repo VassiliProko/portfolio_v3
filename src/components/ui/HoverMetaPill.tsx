@@ -104,34 +104,34 @@ export const HoverMetaPill: React.FC<HoverMetaPillProps> = ({ title = 'Project' 
   const { isPointerWithin } = useHoverSurface();
   const visible = isPointerWithin;
   const visibleClass = visible
-    ? 'translate-y-0 scale-100 opacity-100 blur-0'
-    : 'translate-y-4 scale-95 opacity-0 blur-[4px]';
+    ? 'translate-y-0 opacity-100 blur-0'
+    : 'translate-y-full opacity-0 blur-[4px]';
   const pillStyle: React.CSSProperties = {
     background:
       'linear-gradient(180deg, color-mix(in srgb, var(--color-background) 24%, transparent), color-mix(in srgb, var(--color-surface-1) 8%, transparent)) padding-box, linear-gradient(180deg, color-mix(in srgb, var(--color-background) 38%, transparent), color-mix(in srgb, var(--color-text) 8%, transparent)) border-box',
   };
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-3 z-10 flex items-center justify-start px-3">
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10">
       <div
         className={[
-          'relative inline-flex max-w-full transition-all duration-pill ease-move will-change-[transform,opacity,filter]',
+          'relative flex w-full transition-all duration-pill ease-move will-change-[transform,opacity,filter]',
           visibleClass,
-          'origin-bottom-left group-focus-visible:translate-y-0 group-focus-visible:scale-100 group-focus-visible:opacity-100 group-focus-visible:blur-0',
-          'motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:blur-0 motion-reduce:transition-none',
+          'group-focus-visible:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:blur-0',
+          'motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:blur-0 motion-reduce:transition-none',
         ].join(' ')}
       >
         <div
           aria-hidden
           className={[
-            'absolute inset-0 rounded-sm bg-background transition-opacity duration-pill ease-move',
+            'absolute inset-0 bg-background transition-opacity duration-pill ease-move',
             'motion-reduce:transition-none',
           ].join(' ')}
           style={{ opacity: FROST_UNDERLAY_OPACITY }}
         />
         <div
           className={[
-            'type-paragraph relative box-border overflow-hidden rounded-sm border border-transparent px-3 py-2 leading-none text-text backdrop-blur-2xl backdrop-saturate-150',
+            'type-paragraph relative box-border w-full overflow-hidden border border-transparent px-3 py-3 leading-none text-text backdrop-blur-2xl backdrop-saturate-150',
           ].join(' ')}
           style={pillStyle}
         >
