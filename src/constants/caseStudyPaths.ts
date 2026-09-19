@@ -1,7 +1,6 @@
 export const CASE_STUDY_PATHS = [
   '/mcss',
   '/prettify-minerva',
-  '/usthing',
   '/dojo-icons',
   '/jetpacks',
 ] as const;

@@ -10,7 +10,6 @@ const PAGES = [
   { path: '/prettify-minerva', priority: 0.9, changeFrequency: 'monthly' },
   { path: '/dojo-icons', priority: 0.9, changeFrequency: 'monthly' },
   { path: '/jetpacks', priority: 0.9, changeFrequency: 'monthly' },
-  { path: '/usthing', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/mcss', priority: 0.8, changeFrequency: 'monthly' },
 ] as const;
 

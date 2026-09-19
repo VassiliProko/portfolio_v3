@@ -1,6 +1,6 @@
 .surface,
 .lightboxMedia {
-  background: linear-gradient(172deg, #c8f7df 6.48%, #8dd9fa 95.31%);
+  background: linear-gradient(144deg, #303a3a 4.19%, #060a16 87.32%);
 }
 
 .rail {
@@ -27,9 +27,12 @@
 }
 
 .previewButton {
+  box-sizing: border-box;
   width: var(--preview-width);
   flex: 0 0 var(--preview-width);
   overflow: hidden;
+  outline: clamp(2px, 0.28vw, 4px) solid rgb(255 255 255 / 10%);
+  outline-offset: 0;
   border-radius: 22px;
   background: transparent;
   transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -72,7 +75,7 @@
 
 .lightboxMedia .previewButton {
   width: auto;
-  height: min(calc(100% - 32px), 541px);
+  height: 86.2%;
   aspect-ratio: 1241 / 2688;
   flex-basis: auto;
   border-radius: clamp(7px, 1.5vw, 22px);

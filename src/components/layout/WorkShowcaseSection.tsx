@@ -14,6 +14,7 @@ import {
 import { JetpacksShowcaseLockup } from '@/src/components/ui/JetpacksShowcaseLockup';
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
 import { ShowcaseRivePreview } from '@/src/components/ui/ShowcaseRivePreview';
+import { OnePrepAppStorePreview } from '@/src/components/ui/OnePrepAppStorePreview';
 import { getPopdownRevealProps } from '@/src/components/ui/PopdownReveal';
 import { trackEvent } from '@/src/utils/analytics';
 import { cn } from '@/src/utils/cn';
@@ -144,7 +145,7 @@ type ShowcaseCardKey =
   | 'dojo-icons'
   | 'jetpacks'
   | 'figma-summer-camp'
-  | 'usthing'
+  | 'oneprep-app-store-previews'
   | 'mcss'
   | 'coursework-grader'
   | 'mathsgenie'
@@ -568,31 +569,22 @@ const FigmaSummerCampPreview: React.FC<{ reveal?: boolean; delayMs?: number }> =
   );
 };
 
-const UsthingCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+const OnePrepAppStorePreviews: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   reveal = true,
   delayMs = 0,
 }) => {
   return (
     <WorkCardShell
-      href="/usthing"
-      className="aspect-[255/292]"
-      ariaLabel="Open USThing case study"
-      hoverTitle="USThing App Feature"
-      style={{ background: 'var(--gradient-usthing-app)' }}
+      className="relative"
+      ariaLabel="OnePrep App Store preview gallery"
+      hoverTitle="App Store Previews"
       reveal={reveal}
       delayMs={delayMs}
+      fillSurface={false}
     >
-      <div className="flex h-full w-full items-center justify-center p-2xs md:p-xs xl:p-sm">
-        <Image
-          src="/images/optimized/Other/usthing-preview.png"
-          alt="USThing grade distribution feature displayed on a mobile phone"
-          width={633}
-          height={1314}
-          className="pointer-events-none h-auto max-h-[90%] w-[72%] select-none object-contain md:max-h-[86%] md:w-[62%] xl:max-h-[82%] xl:w-[55%]"
-          sizes="(max-width: 768px) 36vw, (max-width: 1279px) 32vw, 190px"
-          priority={false}
-        />
-      </div>
+      <OnePrepAppStorePreview
+        onPreviewOpen={() => trackPreviewOpened('oneprep-app-store-previews')}
+      />
     </WorkCardShell>
   );
 };
@@ -865,10 +857,10 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     render: (props) => <JetpacksCaseStudy {...props} />,
   },
   {
-    key: 'usthing',
+    key: 'oneprep-app-store-previews',
     priority: 7,
-    delayMs: 125,
-    render: (props) => <UsthingCaseStudy {...props} />,
+    delayMs: 113,
+    render: (props) => <OnePrepAppStorePreviews {...props} />,
   },
   {
     key: 'figma-summer-camp',
@@ -914,12 +906,12 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
     ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'jetpacks', 'figma-summer-camp'],
-    ['dojo-icons', 'mcss', 'coursework-grader', /* 'mathsgenie', */ 'usthing'],
+    ['dojo-icons', 'mcss', 'coursework-grader', /* 'mathsgenie', */ 'oneprep-app-store-previews'],
   ],
   3: [
     ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace'],
     ['dojo-icons', 'mcss', 'coursework-grader' /* 'mathsgenie' */],
-    ['jetpacks', 'figma-summer-camp', 'usthing'],
+    ['jetpacks', 'figma-summer-camp', 'oneprep-app-store-previews'],
   ],
 };
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import { CaseStudyLayout } from '@/src/components/layout/CaseStudyLayout';
 import { BackgroundSafeVideo } from '@/src/components/ui/BackgroundSafeVideo';
 import { JsonLd } from '@/src/components/JsonLd';
@@ -61,6 +62,8 @@ const USTHING_HERO = (
 );
 
 export default function USThingCaseStudyPage() {
+  notFound();
+
   return (
     <>
       <JsonLd data={usthingJsonLd} />
