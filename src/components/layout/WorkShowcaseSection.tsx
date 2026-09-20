@@ -15,6 +15,7 @@ import { JetpacksShowcaseLockup } from '@/src/components/ui/JetpacksShowcaseLock
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
 import { ShowcaseRivePreview } from '@/src/components/ui/ShowcaseRivePreview';
 import { OnePrepAppStorePreview } from '@/src/components/ui/OnePrepAppStorePreview';
+import { OnePrepOnboardingPreview } from '@/src/components/ui/OnePrepOnboardingPreview';
 import { getPopdownRevealProps } from '@/src/components/ui/PopdownReveal';
 import { trackEvent } from '@/src/utils/analytics';
 import { cn } from '@/src/utils/cn';
@@ -64,6 +65,17 @@ const OASIS_IMAGE_PREVIEW: ImagePreviewItem = {
     'A visual workspace that renders markdown files for displaying design and art inspiration',
   width: 1920,
   height: 1080,
+};
+
+const TEST_UI_IMAGE_PREVIEW: ImagePreviewItem = {
+  src: '/images/optimized/home/test-ui-skeleton.svg',
+  name: 'Test UI',
+  description:
+    "Simplified test skeletons offering a more visual, scannable experience for OnePrep's predicted tests page",
+  alt: 'Four OnePrep predicted test cards with visual test skeleton previews',
+  width: 16,
+  height: 9,
+  mediaBackground: 'var(--color-surface-2)',
 };
 
 const MATHSGENIE_IMAGE_PREVIEW: ImagePreviewItem = {
@@ -145,9 +157,11 @@ type ShowcaseCardKey =
   | 'dojo-icons'
   | 'jetpacks'
   | 'figma-summer-camp'
+  | 'oneprep-onboarding'
   | 'oneprep-app-store-previews'
   | 'mcss'
   | 'coursework-grader'
+  | 'test-ui'
   | 'mathsgenie'
   | 'oneprep-pro-trial'
   | 'visual-explorations'
@@ -452,6 +466,56 @@ const CourseworkGraderCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }
   );
 };
 
+const TestUiArtwork: React.FC<{ preview?: boolean }> = ({ preview = false }) => (
+  <div className="flex h-full w-full items-center justify-center bg-surface-2">
+    <Image
+      src={TEST_UI_IMAGE_PREVIEW.src}
+      alt={TEST_UI_IMAGE_PREVIEW.alt ?? TEST_UI_IMAGE_PREVIEW.name}
+      width={381}
+      height={347}
+      className={cn(
+        'pointer-events-none select-none',
+        preview ? 'h-[82.8%] w-auto' : 'h-auto w-[84.45%]',
+      )}
+      sizes="(max-width: 768px) 85vw, (max-width: 1279px) 42vw, 28vw"
+    />
+  </div>
+);
+
+const TestUiCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+
+  return (
+    <>
+      <WorkCardShell
+        className="aspect-[450/419]"
+        style={{ backgroundColor: 'var(--color-surface-2)' }}
+        ariaLabel="Open Test UI preview"
+        reveal={reveal}
+        delayMs={delayMs}
+        hoverTitle="Test UI"
+        onActivate={() => {
+          trackPreviewOpened('test-ui');
+          setPreviewOpen(true);
+        }}
+      >
+        <div className={cn('absolute inset-0', IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS)}>
+          <TestUiArtwork />
+        </div>
+      </WorkCardShell>
+      <ImagePreview
+        item={TEST_UI_IMAGE_PREVIEW}
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+        media={<TestUiArtwork preview />}
+      />
+    </>
+  );
+};
+
 const OnePrepProTrialCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   reveal = true,
   delayMs = 0,
@@ -584,6 +648,26 @@ const OnePrepAppStorePreviews: React.FC<{ reveal?: boolean; delayMs?: number }> 
     >
       <OnePrepAppStorePreview
         onPreviewOpen={() => trackPreviewOpened('oneprep-app-store-previews')}
+      />
+    </WorkCardShell>
+  );
+};
+
+const OnePrepOnboarding: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
+  reveal = true,
+  delayMs = 0,
+}) => {
+  return (
+    <WorkCardShell
+      className="relative"
+      ariaLabel="Open OnePrep Product Tour preview"
+      hoverTitle="OnePrep Product Tour"
+      reveal={reveal}
+      delayMs={delayMs}
+      fillSurface={false}
+    >
+      <OnePrepOnboardingPreview
+        onPreviewOpen={() => trackPreviewOpened('oneprep-onboarding')}
       />
     </WorkCardShell>
   );
@@ -857,9 +941,15 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     render: (props) => <JetpacksCaseStudy {...props} />,
   },
   {
-    key: 'oneprep-app-store-previews',
+    key: 'oneprep-onboarding',
     priority: 7,
     delayMs: 113,
+    render: (props) => <OnePrepOnboarding {...props} />,
+  },
+  {
+    key: 'oneprep-app-store-previews',
+    priority: 8,
+    delayMs: 125,
     render: (props) => <OnePrepAppStorePreviews {...props} />,
   },
   {
@@ -879,6 +969,12 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
     priority: 9,
     delayMs: 163,
     render: (props) => <CourseworkGraderCaseStudy {...props} />,
+  },
+  {
+    key: 'test-ui',
+    priority: 10,
+    delayMs: 175,
+    render: (props) => <TestUiCaseStudy {...props} />,
   },
   // MathsGenie is intentionally hidden from the homepage for now.
   // Keep this configuration to make restoring the card a one-line change.
@@ -906,12 +1002,12 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   2: [
     ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'jetpacks', 'figma-summer-camp'],
-    ['dojo-icons', 'mcss', 'coursework-grader', /* 'mathsgenie', */ 'oneprep-app-store-previews'],
+    ['dojo-icons', 'mcss', 'coursework-grader', 'test-ui', /* 'mathsgenie', */ 'oneprep-onboarding'],
   ],
   3: [
     ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace'],
-    ['dojo-icons', 'mcss', 'coursework-grader' /* 'mathsgenie' */],
-    ['jetpacks', 'figma-summer-camp', 'oneprep-app-store-previews'],
+    ['dojo-icons', 'mcss', 'coursework-grader', 'test-ui' /* 'mathsgenie' */],
+    ['jetpacks', 'figma-summer-camp', 'oneprep-onboarding'],
   ],
 };
 
