@@ -77,18 +77,28 @@ const satisfy = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: 'Vassili Prokopenko',
-  description: 'a young lad busy munching & cooking delightful creations',
+  title: {
+    default: 'Vassili Prokopenko — Product, Brand & Web Designer',
+    template: '%s — Vassili Prokopenko',
+  },
+  description:
+    'Portfolio of Vassili Prokopenko, a multidisciplinary product, brand, and web designer creating digital products, visual systems, and interactive experiences.',
+  authors: [{ name: 'Vassili Prokopenko', url: SITE_URL }],
+  creator: 'Vassili Prokopenko',
   openGraph: {
-    title: 'Vassili Prokopenko',
-    description: 'a young lad busy munching & cooking delightful creations',
+    title: 'Vassili Prokopenko — Product, Brand & Web Designer',
+    description:
+      'Selected product design, branding, illustration, motion, and web experiences by Vassili Prokopenko.',
+    url: SITE_URL,
+    siteName: 'Vassili Prokopenko',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vassili Prokopenko',
-    description: 'a young lad busy munching & cooking delightful creations',
+    title: 'Vassili Prokopenko — Product, Brand & Web Designer',
+    description:
+      'Selected product design, branding, illustration, motion, and web experiences by Vassili Prokopenko.',
   },
 };
 

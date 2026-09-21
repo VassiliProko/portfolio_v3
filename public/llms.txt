@@ -2,7 +2,7 @@
 
 Multidisciplinary product, brand, and web designer; Business Analytics student at McGill University.
 
-Vassili creates thoughtful digital products, visual systems, and interactive web experiences for education, student communities, and consumer tools. Experience includes product design at General Learning (YC F24), web design and development, Figma, JavaScript, Next.js, and AI prototyping.
+Vassili creates thoughtful digital products, visual systems, and interactive web experiences for education, student communities, and consumer tools. Experience includes product design at General Learning (YC F24), web design and development, Figma, JavaScript, Next.js, Rive, and AI prototyping.
 
 ## Core Content
 
@@ -13,7 +13,13 @@ Vassili creates thoughtful digital products, visual systems, and interactive web
 - [About and Experience](https://www.vassiliprokopenko.com/about): Background, product design experience, education at McGill University, and community work.
 - [Contact / Hire](mailto:vassiligb12@gmail.com): Contact Vassili for product design, brand design, web design, and creative collaboration.
 
-## Optional
+## Additional Selected Work
 
-- [Project Archive](https://www.vassiliprokopenko.com/): Additional selected work, including USThing product design, MCSS web design, illustration, and motion projects.
+- [OnePrep Product Tour](https://www.vassiliprokopenko.com/): Onboarding and product-tour design for OnePrep.
+- [Test UI](https://www.vassiliprokopenko.com/): Visual, scannable test-card concepts for OnePrep's predicted tests experience.
+- [Coursework Grader](https://www.vassiliprokopenko.com/): Responsive light- and dark-mode Rive animation for RevisionDojo's coursework grader.
+- [MCSS Website](https://mcss.ca/): Website design and development for the McGill Chinese Students' Society.
+- [Oasis Visual Workspace](https://www.vassiliprokopenko.com/): A macOS visual workspace for browsing design and art inspiration stored in Markdown.
+- [Figma Summer Camp](https://www.vassiliprokopenko.com/): A bento animation created during Figma Summer Camp, Cohort 02.
+- [Illustration](https://www.vassiliprokopenko.com/): Selected digital illustration, including the prize-winning Discord Snowsgiving Wumpus artwork and Yinlin fan art.
 - [Resume / CV](https://docs.google.com/document/d/1W0-QIjajoPcEnDEO99qnTczTWo3l3Wu7W1VPZ29Igfw/edit?usp=sharing): Experience, education, skills, and selected achievements.
