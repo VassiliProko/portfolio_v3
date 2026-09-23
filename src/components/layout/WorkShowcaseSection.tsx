@@ -53,7 +53,7 @@ const DISCORD_SNOWSGIVING_IMAGE_PREVIEW: ImagePreviewItem = {
   src: '/images/optimized/home/discord-snowsgiving-preview.jpg',
   name: 'Discord Snowsgiving',
   description:
-    'I won the Best Digital Art Prize (1 of 5 category winners) at Discord Snowsgiving for the "Draw a Wumpus" theme. I recieved some cool Discord merch, including a cute Wumpus plushie.',
+    'I won the Best Digital Art Prize (1 of 5 category winners) at Discord Snowsgiving for the "Draw a Wumpus" theme.',
   width: 1200,
   height: 675,
 };
