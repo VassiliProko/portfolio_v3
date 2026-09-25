@@ -353,13 +353,11 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
       delayMs={delayMs}
       hoverTitle="Cultural Website"
     >
-      <Image
-        src="/images/optimized/home/mcss-preview.jpg"
-        alt="MCSS website preview"
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
-        priority={false}
+      <ShowcaseLoopingVideo
+        sources={[{ src: '/other/mcss-website-preview.mp4', type: 'video/mp4' }]}
+        poster="/images/optimized/home/mcss-preview.jpg"
+        className="h-full w-full object-cover"
+        ariaLabel="MCSS website preview animation"
       />
     </WorkCardShell>
   );
