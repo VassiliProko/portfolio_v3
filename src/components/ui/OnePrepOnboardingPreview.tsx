@@ -42,7 +42,7 @@ const ONEPREP_ONBOARDING_LIGHTBOX: ImagePreviewItem = {
   alt: 'Animated OnePrep mobile product tour in an iPhone frame',
   width: 16,
   height: 9,
-  mediaBackground: 'var(--gradient-usthing-app)',
+  mediaBackground: 'linear-gradient(144deg, #303A3A 4.19%, #060A16 87.32%)',
 };
 
 const SLIDE_INTERVAL_MS = 3200;

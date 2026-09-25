@@ -70,8 +70,7 @@ const OASIS_IMAGE_PREVIEW: ImagePreviewItem = {
 const TEST_UI_IMAGE_PREVIEW: ImagePreviewItem = {
   src: '/images/optimized/home/test-ui-skeleton.svg',
   name: 'Test UI',
-  description:
-    "Simplified test skeletons offering a more visual, scannable experience for OnePrep's predicted tests page",
+  description: 'OnePrep predicted SAT tests',
   alt: 'Four OnePrep predicted test cards with visual test skeleton previews',
   width: 16,
   height: 9,

@@ -24,7 +24,7 @@
 
 .trigger,
 .lightboxStage {
-  background: var(--gradient-usthing-app);
+  background: linear-gradient(144deg, #303a3a 4.19%, #060a16 87.32%);
 }
 
 .trigger {
