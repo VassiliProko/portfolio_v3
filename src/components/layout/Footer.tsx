@@ -4,6 +4,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { CaretDown } from '@phosphor-icons/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { trackEvent } from '@/src/utils/analytics';
 import { cn } from '@/src/utils/cn';
 
@@ -179,25 +181,21 @@ function renderConsoleLine(
   );
 }
 
-const LINE_START_DELAY_MS = 100;
-const CHAR_DELAY_MS = 35;
+const LINE_START_DELAY_MS = 50;
+const CHAR_DELAY_MS = 18;
+const TERMINAL_PANEL_HEIGHT = 282;
+const TERMINAL_HANDLE_HEIGHT = 46;
 
 export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
   const pathname = usePathname();
   const consoleRef = useRef<HTMLDivElement>(null);
   const imageCardRef = useRef<HTMLDivElement>(null);
+  const hasPlayedTypingRef = useRef(false);
   const [hasRevealed, setHasRevealed] = useState(false);
   const [visibleCounts, setVisibleCounts] = useState<number[]>(() => CONSOLE_LINES.map(() => 0));
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const prefersReducedMotion = useReducedMotion() ?? false;
   const [parallaxProgress, setParallaxProgress] = useState(0);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mq.matches);
-    const handler = () => setPrefersReducedMotion(mq.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(true);
 
   useEffect(() => {
     const el = consoleRef.current;
@@ -239,7 +237,10 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
 
   // When in view, run typewriter: each line starts after LINE_START_DELAY, then types one char every CHAR_DELAY
   useEffect(() => {
-    if (!hasRevealed) return;
+    if (!hasRevealed || !isTerminalOpen) return;
+    if (hasPlayedTypingRef.current) return;
+    hasPlayedTypingRef.current = true;
+
     const lineLengths = CONSOLE_LINES.map(getLineLength);
     const lineDelay = prefersReducedMotion ? 0 : LINE_START_DELAY_MS;
     const charDelay = prefersReducedMotion ? 0 : CHAR_DELAY_MS;
@@ -279,7 +280,14 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
       timeouts.forEach(clearTimeout);
       intervals.forEach(clearInterval);
     };
-  }, [hasRevealed, prefersReducedMotion]);
+  }, [hasRevealed, isTerminalOpen, prefersReducedMotion]);
+
+  const toggleTerminal = () => {
+    if (!isTerminalOpen && hasPlayedTypingRef.current) {
+      setVisibleCounts(CONSOLE_LINES.map(getLineLength));
+    }
+    setIsTerminalOpen((open) => !open);
+  };
 
   return (
     <footer className="w-full py-8 md:py-10">
@@ -323,38 +331,78 @@ export const Footer: React.FC<FooterProps> = ({ lastUpdated }) => {
               />
             </div>
 
-            {/* Console text content — scroll-triggered line-by-line reveal */}
-            <div
-              ref={consoleRef}
-              className="relative z-10 flex flex-col justify-between h-full min-h-[432px] md:min-h-[528px] p-5 md:p-6"
+            {/* A flush, retractable terminal tray keeps the image unobstructed when closed. */}
+            <motion.section
+              className="absolute left-4 top-0 z-20 w-max max-w-[calc(100%-2rem)] overflow-hidden rounded-b-md border-x border-b border-black/80 bg-[#18191a]/80 outline outline-[4px] outline-black/40 backdrop-blur-xl sm:left-6 sm:max-w-[calc(100%-3rem)] sm:outline-[8px]"
+              style={{ height: TERMINAL_PANEL_HEIGHT }}
+              initial={false}
+              animate={{
+                y: isTerminalOpen ? 0 : -(TERMINAL_PANEL_HEIGHT - TERMINAL_HANDLE_HEIGHT),
+              }}
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : { type: 'spring', duration: 0.42, bounce: 0 }
+              }
             >
-              <pre
-                className="type-paragraph-mono text-footer-console-text leading-relaxed grid w-fit max-w-full min-w-0 whitespace-pre-wrap break-words rounded-sm px-[8px] py-[5px] backdrop-blur-sm"
-                style={{
-                  backgroundColor: 'color-mix(in srgb, var(--color-surface-dark-1) 28%, transparent)',
-                }}
+              <div
+                id="footer-terminal-panel"
+                ref={consoleRef}
+                className="relative h-[236px] px-4 pb-5 pt-5 sm:px-5 sm:pt-6"
+                aria-hidden={!isTerminalOpen}
+                inert={!isTerminalOpen}
               >
-                {/* Invisible sizer keeps one stable blur panel while typewriter runs */}
-                <div className="invisible col-start-1 row-start-1 flex flex-col gap-[5px]" aria-hidden>
-                  {CONSOLE_LINES.map((line) => (
-                    <span key={line.id} className="block">
-                      &gt;{' '}
-                      {line.type === 'text'
-                        ? line.text
-                        : `${line.linkText}${line.suffix ?? ''}`}
-                    </span>
-                  ))}
-                </div>
-                <div className="col-start-1 row-start-1 flex flex-col gap-[5px]">
-                  {CONSOLE_LINES.map((line, index) => (
-                    <span key={line.id} className="block">
-                      <span className="text-primary-base">&gt;</span>{' '}
-                      {renderConsoleLine(line, visibleCounts[index] ?? 0, { pathname, prefersReducedMotion })}
-                    </span>
-                  ))}
-                </div>
-              </pre>
-            </div>
+                <div
+                  className="absolute inset-0 opacity-50"
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px)',
+                    backgroundSize: '100% 4px, 8px 100%',
+                  }}
+                  aria-hidden
+                />
+                <pre className="type-paragraph-mono relative grid max-w-full min-w-0 whitespace-pre-wrap break-words leading-relaxed text-footer-console-text">
+                  <div className="invisible col-start-1 row-start-1 flex flex-col gap-[5px]" aria-hidden>
+                    {CONSOLE_LINES.map((line) => (
+                      <span key={line.id} className="block">
+                        &gt; {line.type === 'text' ? line.text : `${line.linkText}${line.suffix ?? ''}`}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="col-start-1 row-start-1 flex flex-col gap-[5px]">
+                    {CONSOLE_LINES.map((line, index) => (
+                      <span key={line.id} className="block">
+                        <span className="text-primary-base">&gt;</span>{' '}
+                        {renderConsoleLine(line, visibleCounts[index] ?? 0, { pathname, prefersReducedMotion })}
+                      </span>
+                    ))}
+                  </div>
+                </pre>
+              </div>
+
+              <button
+                type="button"
+                onClick={toggleTerminal}
+                aria-expanded={isTerminalOpen}
+                aria-controls="footer-terminal-panel"
+                aria-label={isTerminalOpen ? 'Hide terminal' : 'Show terminal'}
+                className="group relative flex h-[46px] w-full items-center rounded-b-md border-t border-white/10 bg-black/30 px-3 text-white/55 outline-none transition-colors duration-micro ease-snap hover:bg-black/45 hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-focus-outline motion-reduce:transition-none sm:px-4"
+              >
+                <span className="absolute inset-x-0 top-[5px] h-px bg-black/70" aria-hidden />
+                <span className="font-mono text-sm leading-none" aria-hidden>
+                  /ᐠ - ˕ -マ
+                </span>
+                <CaretDown
+                  size={15}
+                  weight="bold"
+                  className={cn(
+                    'absolute right-3 shrink-0 transition-transform duration-medium ease-move motion-reduce:transition-none sm:right-4',
+                    isTerminalOpen && 'rotate-180',
+                  )}
+                  aria-hidden
+                />
+              </button>
+            </motion.section>
           </div>
           {/* Color stripe */}
           <div className="relative z-10 flex h-2 w-full shrink-0">

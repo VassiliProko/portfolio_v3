@@ -150,7 +150,7 @@ type WorkShowcaseSectionProps = {
   /** Animate the whole grid once (return home visit) instead of staggering cards */
   unifiedReveal?: boolean;
 };
-type ShowcaseColumnCount = 2 | 3;
+type ShowcaseColumnCount = 1 | 2 | 3;
 type ShowcaseCardKey =
   | 'prettify-minerva'
   | 'dojo-icons'
@@ -175,36 +175,47 @@ type ShowcaseCardConfig = {
   render: (props: ShowcaseCardProps) => React.ReactNode;
 };
 
+const SHOWCASE_TWO_COLUMN_QUERY = '(min-width: 768px)';
 const SHOWCASE_THREE_COLUMN_QUERY = '(min-width: 1280px)';
 
 const subscribeToShowcaseColumnChanges = (onStoreChange: () => void) => {
   if (typeof window === 'undefined') return () => {};
 
-  const mediaQueryList = window.matchMedia(SHOWCASE_THREE_COLUMN_QUERY);
+  const mediaQueryLists = [
+    window.matchMedia(SHOWCASE_TWO_COLUMN_QUERY),
+    window.matchMedia(SHOWCASE_THREE_COLUMN_QUERY),
+  ];
 
-  if (typeof mediaQueryList.addEventListener === 'function') {
-    mediaQueryList.addEventListener('change', onStoreChange);
-    return () => mediaQueryList.removeEventListener('change', onStoreChange);
+  if (typeof mediaQueryLists[0].addEventListener === 'function') {
+    mediaQueryLists.forEach((mediaQueryList) =>
+      mediaQueryList.addEventListener('change', onStoreChange),
+    );
+    return () =>
+      mediaQueryLists.forEach((mediaQueryList) =>
+        mediaQueryList.removeEventListener('change', onStoreChange),
+      );
   }
 
-  mediaQueryList.addListener(onStoreChange);
-  return () => mediaQueryList.removeListener(onStoreChange);
+  mediaQueryLists.forEach((mediaQueryList) => mediaQueryList.addListener(onStoreChange));
+  return () =>
+    mediaQueryLists.forEach((mediaQueryList) => mediaQueryList.removeListener(onStoreChange));
 };
 
-const getShowcaseColumnSnapshot = () => {
-  return typeof window !== 'undefined' && window.matchMedia(SHOWCASE_THREE_COLUMN_QUERY).matches;
+const getShowcaseColumnSnapshot = (): ShowcaseColumnCount => {
+  if (typeof window === 'undefined') return 1;
+  if (window.matchMedia(SHOWCASE_THREE_COLUMN_QUERY).matches) return 3;
+  if (window.matchMedia(SHOWCASE_TWO_COLUMN_QUERY).matches) return 2;
+  return 1;
 };
 
-const getShowcaseServerSnapshot = () => false;
+const getShowcaseServerSnapshot = (): ShowcaseColumnCount => 1;
 
 const useShowcaseColumnCount = (): ShowcaseColumnCount => {
-  const hasThreeColumns = React.useSyncExternalStore(
+  return React.useSyncExternalStore(
     subscribeToShowcaseColumnChanges,
     getShowcaseColumnSnapshot,
     getShowcaseServerSnapshot,
   );
-
-  return hasThreeColumns ? 3 : 2;
 };
 
 function trackPreviewOpened(project: ShowcaseCardKey): void {
@@ -675,7 +686,14 @@ const WorkColumns: React.FC<{ visible: boolean }> = ({ visible }) => {
   const columnGroups = getShowcaseColumnGroups(columnCount);
 
   return (
-    <div className={['grid gap-3', columnCount === 3 ? 'grid-cols-3' : 'grid-cols-2'].join(' ')}>
+    <div
+      className={cn(
+        'grid gap-3',
+        columnCount === 1 && 'grid-cols-1',
+        columnCount === 2 && 'grid-cols-2',
+        columnCount === 3 && 'grid-cols-3',
+      )}
+    >
       {columnGroups.map((column, columnIndex) => (
         <div key={`${columnCount}-${columnIndex}`} className="flex flex-col gap-3">
           {column.map((card) => (
@@ -997,8 +1015,22 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
 
 /** Card keys per column at each breakpoint — add/move keys here to change layout. */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
+  1: [
+    [
+      'prettify-minerva',
+      'dojo-icons',
+      'jetpacks',
+      'discord-snowsgiving',
+      'mcss',
+      'oasis-visual-workspace',
+      'coursework-grader',
+      'test-ui',
+      'figma-summer-camp',
+      'oneprep-onboarding',
+    ],
+  ],
   2: [
-    ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace', 'jetpacks', 'figma-summer-camp'],
+    ['prettify-minerva', 'jetpacks', 'discord-snowsgiving', 'oasis-visual-workspace', 'figma-summer-camp'],
     ['dojo-icons', 'mcss', 'coursework-grader', 'test-ui', /* 'mathsgenie', */ 'oneprep-onboarding'],
   ],
   3: [
