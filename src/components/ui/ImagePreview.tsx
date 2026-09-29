@@ -112,6 +112,9 @@ const PREVIEW_MAX_WIDTH_PX = 2160;
 const PREVIEW_STACK_GAP_PX = 10;
 const PREVIEW_CLOSE_ROW_HEIGHT_PX = 36;
 const PREVIEW_RADIUS_PX = 8;
+const PREVIEW_MIN_FRAME_HEIGHT_PX = 180;
+const PREVIEW_SWIPE_DISTANCE_PX = 48;
+const PREVIEW_SWIPE_VELOCITY_PX_PER_SECOND = 500;
 
 const slideEase = [0.22, 1, 0.36, 1] as const;
 const enterEase = [0.45, 0, 0.2, 1] as const;
@@ -219,14 +222,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
       }
     };
 
-    // Block wheel/touch scroll from reaching the page behind the lightbox.
-    const preventScroll = (event: Event) => {
-      event.preventDefault();
-    };
-
     window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('wheel', preventScroll, { passive: false });
-    window.addEventListener('touchmove', preventScroll, { passive: false });
 
     return () => {
       html.style.overflow = previousHtmlOverflow;
@@ -234,8 +230,6 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
       html.style.overscrollBehavior = previousHtmlOverscroll;
       body.style.overscrollBehavior = previousBodyOverscroll;
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('wheel', preventScroll);
-      window.removeEventListener('touchmove', preventScroll);
     };
   }, [open, handleClose, isGallery, gallery, goToIndex, safeIndex]);
 
@@ -265,36 +259,19 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
     const chrome = chromeRef.current;
     if (!chrome) return;
 
-    const syncChromeHeight = () => {
-      const measuredHeight = chrome.offsetHeight;
-
-      if (layoutPhase === 'measuring') {
-        if (Math.abs(measuredHeight - chromeHeightPx) > 0.5) {
-          setChromeHeightPx(measuredHeight);
-        } else {
-          setLayoutPhase('entering');
-        }
-        return;
-      }
-
-      if (layoutPhase === 'settled') {
-        setChromeHeightPx(measuredHeight);
-      }
-    };
-
-    syncChromeHeight();
-    if (layoutPhase !== 'settled') return;
-
-    const observer = new ResizeObserver(syncChromeHeight);
-    observer.observe(chrome);
-    return () => observer.disconnect();
+    // Measure once before entering. Repeatedly feeding the measured caption
+    // height back into the frame width can oscillate when the viewport is
+    // short and text wraps differently at each computed width.
+    if (layoutPhase === 'measuring') {
+      setChromeHeightPx(chrome.offsetHeight);
+      setLayoutPhase('entering');
+    }
   }, [
     open,
     activeItem,
     isGallery,
     safeIndex,
     layoutPhase,
-    chromeHeightPx,
     viewportSize.width,
     viewportSize.height,
   ]);
@@ -336,9 +313,15 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
     PREVIEW_STACK_GAP_PX +
     (chromeHeightPx > 0 ? PREVIEW_STACK_GAP_PX : 0);
   const stackChromeHeightPx = PREVIEW_CLOSE_ROW_HEIGHT_PX + chromeHeightPx;
-  const imageMaxHeightPx = Math.max(
+  const fittedImageMaxHeightPx = Math.max(
     0,
     availableHeightPx - stackChromeHeightPx - stackGapPx,
+  );
+  const widthLimitedFrameHeightPx =
+    aspect > 0 ? availableWidthPx / aspect : 0;
+  const imageMaxHeightPx = Math.min(
+    widthLimitedFrameHeightPx,
+    Math.max(fittedImageMaxHeightPx, PREVIEW_MIN_FRAME_HEIGHT_PX),
   );
   const frameWidthPx = Math.max(0, Math.min(availableWidthPx, imageMaxHeightPx * aspect));
   const frameHeightPx = aspect > 0 ? frameWidthPx / aspect : 0;
@@ -408,7 +391,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
         <div
           ref={dialogRef}
           key="image-preview"
-          className="fixed inset-0 z-[100] outline-none"
+          className="fixed inset-0 z-[100] overflow-y-auto overscroll-contain bg-background outline-none"
           role="dialog"
           aria-modal="true"
           aria-label={`${activeItem.name} image preview`}
@@ -451,7 +434,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
           />
 
           <motion.div
-            className="relative z-[1] box-border flex h-full w-full items-center justify-center"
+            className="relative z-[1] box-border flex min-h-full w-full items-center justify-center"
             style={{ padding: previewInsetPx }}
             initial={false}
             onClick={handleClose}
@@ -459,7 +442,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
             <motion.div
               key={layoutPhase === 'measuring' ? 'preview-measurement' : 'preview'}
               className={cn(
-                'flex max-h-full max-w-full flex-col gap-xs',
+                'flex max-w-full flex-col gap-xs',
                 layoutPhase === 'measuring' &&
                   'pointer-events-none invisible',
               )}
@@ -509,9 +492,25 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                 style={{
                   aspectRatio: aspect,
                   maxHeight: imageMaxHeightPx,
+                  touchAction: isGallery ? 'pan-y' : undefined,
                   clipPath: finalFrameClipPath,
                   background:
                     activeItem.mediaBackground ?? activeItem.rive?.backgroundColor,
+                }}
+                onPanEnd={(_, info) => {
+                  if (!isGallery || layoutPhase !== 'settled') return;
+
+                  if (
+                    info.offset.x <= -PREVIEW_SWIPE_DISTANCE_PX ||
+                    info.velocity.x <= -PREVIEW_SWIPE_VELOCITY_PX_PER_SECOND
+                  ) {
+                    goToIndex(safeIndex + 1);
+                  } else if (
+                    info.offset.x >= PREVIEW_SWIPE_DISTANCE_PX ||
+                    info.velocity.x >= PREVIEW_SWIPE_VELOCITY_PX_PER_SECOND
+                  ) {
+                    goToIndex(safeIndex - 1);
+                  }
                 }}
                 initial={frameInitial}
                 animate={{
