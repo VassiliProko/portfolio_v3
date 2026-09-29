@@ -181,8 +181,8 @@ type ShowcaseCardConfig = {
   render: (props: ShowcaseCardProps) => React.ReactNode;
 };
 
-const SHOWCASE_TWO_COLUMN_QUERY = '(min-width: 768px)';
-const SHOWCASE_THREE_COLUMN_QUERY = '(min-width: 1280px)';
+const SHOWCASE_TWO_COLUMN_QUERY = '(min-width: 560px)';
+const SHOWCASE_THREE_COLUMN_QUERY = '(min-width: 920px)';
 
 const subscribeToShowcaseColumnChanges = (onStoreChange: () => void) => {
   if (typeof window === 'undefined') return () => {};
