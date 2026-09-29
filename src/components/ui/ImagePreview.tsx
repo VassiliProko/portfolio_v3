@@ -391,7 +391,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
         <div
           ref={dialogRef}
           key="image-preview"
-          className="fixed inset-0 z-[100] overflow-y-auto overscroll-contain bg-background outline-none"
+          className="fixed inset-0 z-[100] overflow-y-auto overscroll-contain outline-none"
           role="dialog"
           aria-modal="true"
           aria-label={`${activeItem.name} image preview`}
@@ -416,19 +416,19 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
 
           <motion.div
             aria-hidden
-            className="absolute inset-0 bg-background"
+            className="fixed inset-0 bg-background"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0, transition: exitTransition }}
             transition={backdropTransition}
           />
           <motion.button
             type="button"
             aria-label="Close image preview"
-            className="absolute inset-0"
+            className="fixed inset-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0, transition: exitTransition }}
             transition={backdropTransition}
             onClick={handleClose}
           />
