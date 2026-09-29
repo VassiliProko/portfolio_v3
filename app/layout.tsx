@@ -78,7 +78,7 @@ const satisfy = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Vassili Prokopenko — Product, Brand & Web Designer',
+    default: 'Vassili Prokopenko',
     template: '%s — Vassili Prokopenko',
   },
   description:
