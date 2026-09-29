@@ -196,13 +196,13 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
     const html = document.documentElement;
     const body = document.body;
     const previousHtmlOverflow = html.style.overflow;
-    const previousBodyOverflow = body.style.overflow;
     const previousHtmlOverscroll = html.style.overscrollBehavior;
     const previousBodyOverscroll = body.style.overscrollBehavior;
 
-    // Lock both roots — viewport scroll often lives on `html`, not only `body`.
+    // Lock the root scroller without turning `body` into a new scroll container.
+    // A body overflow lock makes the sticky navbar lose its viewport anchor and
+    // disappear before the lightbox backdrop has time to fade over it.
     html.style.overflow = 'hidden';
-    body.style.overflow = 'hidden';
     html.style.overscrollBehavior = 'none';
     body.style.overscrollBehavior = 'none';
 
@@ -226,7 +226,6 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
 
     return () => {
       html.style.overflow = previousHtmlOverflow;
-      body.style.overflow = previousBodyOverflow;
       html.style.overscrollBehavior = previousHtmlOverscroll;
       body.style.overscrollBehavior = previousBodyOverscroll;
       window.removeEventListener('keydown', handleKeyDown);
@@ -391,7 +390,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
         <div
           ref={dialogRef}
           key="image-preview"
-          className="fixed inset-0 z-[100] overflow-y-auto overscroll-contain outline-none"
+          className="fixed inset-0 z-[100] overflow-x-hidden overflow-y-auto overscroll-contain outline-none"
           role="dialog"
           aria-modal="true"
           aria-label={`${activeItem.name} image preview`}

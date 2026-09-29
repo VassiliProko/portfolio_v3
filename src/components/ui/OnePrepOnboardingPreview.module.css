@@ -55,6 +55,8 @@
 .phone[data-dragging='true'] { cursor: grabbing; }
 
 .screen {
+  --top-content-end: 58.6%;
+  --carousel-chrome-height: 5.75%;
   container-type: inline-size;
   position: absolute;
   inset: 2.1% 4.1% 2.45%;
@@ -68,7 +70,7 @@
 .slideViewport {
   position: absolute;
   inset: 0 0 auto;
-  height: 53.76%;
+  height: var(--top-content-end);
   overflow: hidden;
   background: #fff;
 }
@@ -102,9 +104,9 @@
 
 .carouselChrome {
   position: absolute;
-  inset: 53.76% 0 auto;
+  inset: var(--top-content-end) 0 auto;
   display: flex;
-  height: 9.74%;
+  height: var(--carousel-chrome-height);
   align-items: center;
   justify-content: center;
   background: #fff;
@@ -116,6 +118,7 @@
   gap: 3.05cqw;
   width: max-content;
   height: 2.04cqw;
+  transform: translateY(-1.5cqw);
 }
 
 .dot {
@@ -139,7 +142,7 @@
 
 .fixedFooter {
   position: absolute;
-  inset: 63.5% 0 0;
+  inset: calc(var(--top-content-end) + var(--carousel-chrome-height)) 0 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
