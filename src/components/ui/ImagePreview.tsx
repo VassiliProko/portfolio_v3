@@ -38,6 +38,10 @@ export type ImagePreviewItem = {
   alt?: string;
   width?: number;
   height?: number;
+  /** Optional narrow-viewport frame ratio for custom media that needs a taller stage. */
+  mobilePreviewAspectRatio?: number;
+  /** How differently shaped custom media should fill its launch rectangle. */
+  originFit?: 'contain' | 'cover';
   /** Unused — close control is always light. Kept for existing call sites. */
   captionTone?: 'default' | 'on-dark';
   /** When set, lightbox media is this Rive animation (same as work showcase). */
@@ -46,6 +50,32 @@ export type ImagePreviewItem = {
   video?: ImagePreviewVideo;
   /** CSS background for the media frame (color or gradient). */
   mediaBackground?: string;
+};
+
+export type ImagePreviewOriginRect = {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  borderRadius: number;
+};
+
+/** Capture the on-page media bounds before opening the portalled lightbox. */
+export const getImagePreviewOriginRect = (
+  element: Element | null,
+): ImagePreviewOriginRect | null => {
+  if (!element) return null;
+  const rect = element.getBoundingClientRect();
+  if (rect.width <= 0 || rect.height <= 0) return null;
+
+  return {
+    left: rect.left,
+    top: rect.top,
+    width: rect.width,
+    height: rect.height,
+    borderRadius:
+      Number.parseFloat(window.getComputedStyle(element).borderTopLeftRadius) || 0,
+  };
 };
 
 /**
@@ -68,16 +98,24 @@ type ImagePreviewProps = {
   onClose: () => void;
   /** Custom media rendered inside the standard fitted preview frame. */
   media?: React.ReactNode;
+  /** Viewport bounds of the media that launched this preview. */
+  originRect?: ImagePreviewOriginRect | null;
 };
 
-/** Top/bottom (and side) margin around the full preview stack. */
-const PREVIEW_INSET_PX = 40;
+/** Desktop inset; narrow screens use the same 20px gutter as the homepage. */
+const PREVIEW_DESKTOP_INSET_PX = 40;
+const PREVIEW_MOBILE_INSET_PX = 20;
+const PREVIEW_MOBILE_BREAKPOINT_PX = 768;
 /** Cap preview width on ultra-wide / 4K viewports. */
 const PREVIEW_MAX_WIDTH_PX = 2160;
 /** Matches `--spacing-xs` / `gap-xs` between image, caption, and carousel. */
 const PREVIEW_STACK_GAP_PX = 10;
+const PREVIEW_CLOSE_ROW_HEIGHT_PX = 36;
+const PREVIEW_RADIUS_PX = 8;
 
 const slideEase = [0.22, 1, 0.36, 1] as const;
+const enterEase = [0.45, 0, 0.2, 1] as const;
+type PreviewLayoutPhase = 'measuring' | 'entering' | 'settled';
 
 /**
  * Full-screen image lightbox. Pass `items` + `activeIndex` for a gallery
@@ -91,6 +129,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
   open,
   onClose,
   media,
+  originRect = null,
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const [mounted, setMounted] = React.useState(false);
@@ -100,7 +139,10 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
     height: 800,
   });
   const [chromeHeightPx, setChromeHeightPx] = React.useState(0);
+  const [layoutPhase, setLayoutPhase] =
+    React.useState<PreviewLayoutPhase>('measuring');
   const closeButtonRef = React.useRef<HTMLButtonElement>(null);
+  const dialogRef = React.useRef<HTMLDivElement>(null);
   const chromeRef = React.useRef<HTMLDivElement>(null);
 
   const gallery = items && items.length > 0 ? items : null;
@@ -109,6 +151,10 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
     ? Math.min(Math.max(activeIndex, 0), gallery.length - 1)
     : 0;
   const activeItem = gallery ? gallery[safeIndex] : item;
+
+  const handleClose = React.useCallback(() => {
+    onClose();
+  }, [onClose]);
 
   const goToIndex = React.useCallback(
     (nextIndex: number) => {
@@ -125,14 +171,18 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
   );
 
   React.useEffect(() => {
+    setViewportSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
     setMounted(true);
   }, []);
 
-  // Focus close only when the lightbox opens — not on every gallery index change.
+  // Focus the dialog itself so opening does not activate the close control.
   React.useEffect(() => {
     if (!open) return;
     const focusTimer = window.setTimeout(() => {
-      closeButtonRef.current?.focus();
+      dialogRef.current?.focus();
     }, 0);
     return () => window.clearTimeout(focusTimer);
   }, [open]);
@@ -156,7 +206,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault();
-        onClose();
+        handleClose();
         return;
       }
       if (!isGallery || !gallery) return;
@@ -187,12 +237,13 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
       window.removeEventListener('wheel', preventScroll);
       window.removeEventListener('touchmove', preventScroll);
     };
-  }, [open, onClose, isGallery, gallery, goToIndex, safeIndex]);
+  }, [open, handleClose, isGallery, gallery, goToIndex, safeIndex]);
 
   React.useLayoutEffect(() => {
     if (!open) return;
 
     const syncViewport = () => {
+      if (layoutPhase === 'entering') return;
       setViewportSize({
         width: window.innerWidth,
         height: window.innerHeight,
@@ -202,6 +253,10 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
     syncViewport();
     window.addEventListener('resize', syncViewport);
     return () => window.removeEventListener('resize', syncViewport);
+  }, [layoutPhase, open]);
+
+  React.useEffect(() => {
+    if (!open) setLayoutPhase('measuring');
   }, [open]);
 
   React.useLayoutEffect(() => {
@@ -211,54 +266,171 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
     if (!chrome) return;
 
     const syncChromeHeight = () => {
-      setChromeHeightPx(chrome.offsetHeight);
+      const measuredHeight = chrome.offsetHeight;
+
+      if (layoutPhase === 'measuring') {
+        if (Math.abs(measuredHeight - chromeHeightPx) > 0.5) {
+          setChromeHeightPx(measuredHeight);
+        } else {
+          setLayoutPhase('entering');
+        }
+        return;
+      }
+
+      if (layoutPhase === 'settled') {
+        setChromeHeightPx(measuredHeight);
+      }
     };
 
     syncChromeHeight();
+    if (layoutPhase !== 'settled') return;
+
     const observer = new ResizeObserver(syncChromeHeight);
     observer.observe(chrome);
     return () => observer.disconnect();
-  }, [open, activeItem, isGallery, safeIndex]);
+  }, [
+    open,
+    activeItem,
+    isGallery,
+    safeIndex,
+    layoutPhase,
+    chromeHeightPx,
+    viewportSize.width,
+    viewportSize.height,
+  ]);
 
   if (!mounted) return null;
 
   const enterTransition = prefersReducedMotion
     ? { duration: 0 }
-    : { type: 'spring' as const, duration: 0.45, bounce: 0 };
+    : { duration: 0.62, ease: enterEase };
   const exitTransition = prefersReducedMotion
     ? { duration: 0 }
     : { duration: 0.18, ease: [0.4, 0, 1, 1] as const };
   const backdropTransition = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: 0.28, ease: [0.4, 0, 0.2, 1] as const };
+    : { duration: 0.42, ease: enterEase };
   const slideTransition = prefersReducedMotion
     ? { duration: 0 }
     : { duration: 0.32, ease: slideEase };
 
   const imageWidth = activeItem?.width ?? 1200;
   const imageHeight = activeItem?.height ?? 675;
-  const aspect = imageWidth / imageHeight;
+  const intrinsicAspect = imageWidth / imageHeight;
+  const aspect =
+    viewportSize.width < PREVIEW_MOBILE_BREAKPOINT_PX
+      ? activeItem?.mobilePreviewAspectRatio ?? intrinsicAspect
+      : intrinsicAspect;
 
   // Fit image + caption (+ carousel) + top/bottom insets inside the viewport.
-  const availableHeightPx = Math.max(0, viewportSize.height - PREVIEW_INSET_PX * 2);
+  const previewInsetPx =
+    viewportSize.width < PREVIEW_MOBILE_BREAKPOINT_PX
+      ? PREVIEW_MOBILE_INSET_PX
+      : PREVIEW_DESKTOP_INSET_PX;
+  const availableHeightPx = Math.max(0, viewportSize.height - previewInsetPx * 2);
   const availableWidthPx = Math.max(
     0,
-    Math.min(viewportSize.width - PREVIEW_INSET_PX * 2, PREVIEW_MAX_WIDTH_PX),
+    Math.min(viewportSize.width - previewInsetPx * 2, PREVIEW_MAX_WIDTH_PX),
   );
-  const stackGapPx = chromeHeightPx > 0 ? PREVIEW_STACK_GAP_PX : 0;
-  const imageMaxHeightPx = Math.max(0, availableHeightPx - chromeHeightPx - stackGapPx);
+  const stackGapPx =
+    PREVIEW_STACK_GAP_PX +
+    (chromeHeightPx > 0 ? PREVIEW_STACK_GAP_PX : 0);
+  const stackChromeHeightPx = PREVIEW_CLOSE_ROW_HEIGHT_PX + chromeHeightPx;
+  const imageMaxHeightPx = Math.max(
+    0,
+    availableHeightPx - stackChromeHeightPx - stackGapPx,
+  );
   const frameWidthPx = Math.max(0, Math.min(availableWidthPx, imageMaxHeightPx * aspect));
+  const frameHeightPx = aspect > 0 ? frameWidthPx / aspect : 0;
+  const stackHeightPx = frameHeightPx + stackGapPx + stackChromeHeightPx;
+  const frameLeftPx = (viewportSize.width - frameWidthPx) / 2;
+  const frameTopPx = (viewportSize.height - stackHeightPx) / 2;
+  const hasOriginTransition = Boolean(
+    !prefersReducedMotion &&
+      originRect &&
+      frameWidthPx > 0 &&
+      frameHeightPx > 0,
+  );
+  const useOriginMaskMorph = Boolean(
+    hasOriginTransition && originRect && media && activeItem?.originFit,
+  );
+  const originScaleX =
+    hasOriginTransition && originRect ? originRect.width / frameWidthPx : 1;
+  const originScaleY =
+    hasOriginTransition && originRect ? originRect.height / frameHeightPx : 1;
+  const fittedOriginScale =
+    activeItem?.originFit === 'cover'
+      ? Math.max(originScaleX, originScaleY)
+      : Math.min(originScaleX, originScaleY);
+  // Keep the same clip-path grammar at both ends so the crop and corner radius
+  // interpolate continuously instead of the browser swapping the final shape.
+  const finalFrameClipPath = `inset(0px 0px 0px 0px round ${PREVIEW_RADIUS_PX}px)`;
+  const originClipX = originRect
+    ? Math.max(0, (frameWidthPx - originRect.width / fittedOriginScale) / 2)
+    : 0;
+  const originClipY = originRect
+    ? Math.max(0, (frameHeightPx - originRect.height / fittedOriginScale) / 2)
+    : 0;
+  const originFrameClipPath = originRect
+    ? `inset(${originClipY}px ${originClipX}px ${originClipY}px ${originClipX}px round ${originRect.borderRadius / fittedOriginScale}px)`
+    : finalFrameClipPath;
+  const frameInitial =
+    hasOriginTransition && originRect
+      ? {
+          x:
+            originRect.left + originRect.width / 2 -
+            (frameLeftPx + frameWidthPx / 2),
+          y:
+            originRect.top + originRect.height / 2 -
+            (frameTopPx + frameHeightPx / 2),
+          ...(useOriginMaskMorph
+            ? {
+                scale: fittedOriginScale,
+                clipPath: originFrameClipPath,
+              }
+            : { scale: fittedOriginScale }),
+        }
+      : prefersReducedMotion
+        ? false
+        : { opacity: 0, scale: 0.96 };
+  const mediaInitial = useOriginMaskMorph
+    ? {
+        opacity: 1,
+        x: 0,
+      }
+    : prefersReducedMotion
+      ? { opacity: 0 }
+      : { opacity: 0, x: direction * 28 };
 
   return createPortal(
     <AnimatePresence>
       {open && activeItem ? (
         <div
+          ref={dialogRef}
           key="image-preview"
-          className="fixed inset-0 z-[100]"
+          className="fixed inset-0 z-[100] outline-none"
           role="dialog"
           aria-modal="true"
           aria-label={`${activeItem.name} image preview`}
+          tabIndex={-1}
         >
+          {originRect ? (
+            <motion.div
+              aria-hidden
+              className="pointer-events-none absolute bg-background"
+              style={{
+                left: originRect.left,
+                top: originRect.top,
+                width: originRect.width,
+                height: originRect.height,
+                borderRadius: originRect.borderRadius,
+              }}
+              initial={false}
+              exit={{ opacity: 0 }}
+              transition={exitTransition}
+            />
+          ) : null}
+
           <motion.div
             aria-hidden
             className="absolute inset-0 bg-background"
@@ -275,42 +447,92 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={backdropTransition}
-            onClick={onClose}
+            onClick={handleClose}
           />
 
           <motion.div
             className="relative z-[1] box-border flex h-full w-full items-center justify-center"
-            style={{ padding: PREVIEW_INSET_PX }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: exitTransition }}
-            transition={backdropTransition}
-            onClick={onClose}
+            style={{ padding: previewInsetPx }}
+            initial={false}
+            onClick={handleClose}
           >
             <motion.div
-              className="flex max-h-full max-w-full flex-col gap-xs"
+              key={layoutPhase === 'measuring' ? 'preview-measurement' : 'preview'}
+              className={cn(
+                'flex max-h-full max-w-full flex-col gap-xs',
+                layoutPhase === 'measuring' &&
+                  'pointer-events-none invisible',
+              )}
               style={{ width: frameWidthPx > 0 ? frameWidthPx : undefined }}
-              initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={false}
+              animate={{ opacity: 1, y: 0 }}
               exit={
                 prefersReducedMotion
                   ? undefined
-                  : { opacity: 0, scale: 0.98, transition: exitTransition }
+                  : { opacity: 0, y: -12, transition: exitTransition }
               }
-              transition={enterTransition}
+              transition={exitTransition}
               onClick={(event) => event.stopPropagation()}
             >
-              <div
+              <motion.div
+                initial={prefersReducedMotion ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : { duration: 0.34, delay: 0.5, ease: enterEase }
+                }
+                onClick={handleClose}
+                className="flex h-9 w-full shrink-0 cursor-zoom-out items-center justify-end"
+              >
+                <button
+                  ref={closeButtonRef}
+                  type="button"
+                  aria-label="Close preview"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleClose();
+                  }}
+                  className={cn(
+                    'inline-flex size-9 cursor-pointer items-center justify-center rounded-sm',
+                    'bg-overlay-uniform text-footer-console-text opacity-70 backdrop-blur-2xl backdrop-saturate-150',
+                    'transition-opacity duration-micro ease-snap hover:opacity-100 focus-visible:opacity-100',
+                    'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
+                  )}
+                >
+                  <X size={20} aria-hidden />
+                </button>
+              </motion.div>
+
+              <motion.div
                 className="relative w-full shrink-0 overflow-hidden rounded-image-preview bg-background"
                 style={{
-                  aspectRatio: `${imageWidth} / ${imageHeight}`,
+                  aspectRatio: aspect,
                   maxHeight: imageMaxHeightPx,
-                  clipPath: 'inset(0 round var(--radius-image-preview))',
+                  clipPath: finalFrameClipPath,
                   background:
                     activeItem.mediaBackground ?? activeItem.rive?.backgroundColor,
                 }}
+                initial={frameInitial}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  scale: 1,
+                  clipPath: finalFrameClipPath,
+                }}
+                transition={enterTransition}
+                onAnimationComplete={() => {
+                  if (layoutPhase === 'entering') {
+                    setLayoutPhase('settled');
+                  }
+                }}
               >
-                <AnimatePresence initial={false} custom={direction} mode="sync">
+                <AnimatePresence
+                  initial={useOriginMaskMorph}
+                  custom={direction}
+                  mode="sync"
+                >
                   <motion.div
                     key={
                       media
@@ -321,14 +543,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                     }
                     className="absolute -inset-[2px]"
                     custom={direction}
-                    initial={
-                      prefersReducedMotion
-                        ? { opacity: 0 }
-                        : {
-                            opacity: 0,
-                            x: direction * 28,
-                          }
-                    }
+                    initial={mediaInitial}
                     animate={{ opacity: 1, x: 0 }}
                     exit={
                       prefersReducedMotion
@@ -375,27 +590,19 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                     )}
                   </motion.div>
                 </AnimatePresence>
+              </motion.div>
 
-                <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-end p-md">
-                  <button
-                    ref={closeButtonRef}
-                    type="button"
-                    aria-label="Close preview"
-                    onClick={onClose}
-                    className={cn(
-                      'pointer-events-auto inline-flex size-9 items-center justify-center rounded-sm',
-                      'bg-overlay-uniform text-footer-console-text opacity-70 backdrop-blur-2xl backdrop-saturate-150',
-                      'transition-opacity duration-micro ease-snap',
-                      'hover:opacity-100 focus-visible:opacity-100',
-                      'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-outline focus-visible:outline-offset-2',
-                    )}
-                  >
-                    <X size={20} aria-hidden />
-                  </button>
-                </div>
-              </div>
-
-              <div ref={chromeRef} className="flex w-full shrink-0 flex-col gap-xs">
+              <motion.div
+                ref={chromeRef}
+                className="flex w-full shrink-0 flex-col gap-xs"
+                initial={prefersReducedMotion ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : { duration: 0.34, delay: 0.5, ease: enterEase }
+                }
+              >
                 <div className="relative w-full rounded-image-preview bg-surface-1 p-md">
                   <AnimatePresence initial={false} mode="wait">
                     <motion.div
@@ -447,7 +654,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                     })}
                   </div>
                 ) : null}
-              </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>

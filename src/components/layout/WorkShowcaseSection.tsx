@@ -9,7 +9,9 @@ import { HoverMetaPill, HoverSurfaceContext, usePointerWithinElement } from '@/s
 import {
   ImagePreview,
   IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
+  getImagePreviewOriginRect,
   type ImagePreviewItem,
+  type ImagePreviewOriginRect,
 } from '@/src/components/ui/ImagePreview';
 import { JetpacksShowcaseLockup } from '@/src/components/ui/JetpacksShowcaseLockup';
 import { ShowcaseLoopingVideo } from '@/src/components/ui/ShowcaseLoopingVideo';
@@ -28,7 +30,7 @@ type WorkCardShellProps = {
   href?: string;
   externalHref?: string;
   /** Opens a non-navigating action (e.g. image preview). Uses zoom-in cursor. */
-  onActivate?: () => void;
+  onActivate?: (originRect: ImagePreviewOriginRect | null) => void;
   style?: React.CSSProperties;
   children: React.ReactNode;
   reveal?: boolean;
@@ -74,6 +76,10 @@ const TEST_UI_IMAGE_PREVIEW: ImagePreviewItem = {
   alt: 'Four OnePrep predicted test cards with visual test skeleton previews',
   width: 16,
   height: 9,
+  // Match the custom artwork so its horizontal padding is never tighter than
+  // its vertical padding on narrow viewports.
+  mobilePreviewAspectRatio: 381 / 347,
+  originFit: 'cover',
   mediaBackground: 'var(--color-surface-2)',
 };
 
@@ -330,7 +336,12 @@ const WorkCardShell: React.FC<WorkCardShellProps> = ({
         aria-label={ariaLabel}
         className={cn(layoutClassName, 'border-0 bg-transparent p-0 text-left')}
         style={layoutStyle}
-        onClick={onActivate}
+        onClick={(event) => {
+          const mediaElement = event.currentTarget.querySelector<HTMLElement>(
+            '[data-image-preview-origin], img, video, canvas',
+          );
+          onActivate(getImagePreviewOriginRect(mediaElement ?? event.currentTarget));
+        }}
       >
         {innerContent}
       </button>
@@ -366,6 +377,8 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
       <ShowcaseLoopingVideo
         sources={[{ src: '/other/mcss-website-preview.mp4', type: 'video/mp4' }]}
         poster="/images/optimized/home/mcss-preview.jpg"
+        preload="auto"
+        shouldPlay={reveal}
         className="h-full w-full object-cover"
         ariaLabel="MCSS website preview animation"
       />
@@ -404,6 +417,8 @@ const MathsGenieCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   delayMs = 0,
 }) => {
   const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewOriginRect, setPreviewOriginRect] =
+    React.useState<ImagePreviewOriginRect | null>(null);
 
   return (
     <>
@@ -414,7 +429,8 @@ const MathsGenieCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
         reveal={reveal}
         delayMs={delayMs}
         hoverTitle="MathsGenie Animation"
-        onActivate={() => {
+        onActivate={(originRect) => {
+          setPreviewOriginRect(originRect);
           trackPreviewOpened('mathsgenie');
           setPreviewOpen(true);
         }}
@@ -429,6 +445,7 @@ const MathsGenieCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
       </WorkCardShell>
       <ImagePreview
         item={MATHSGENIE_IMAGE_PREVIEW}
+        originRect={previewOriginRect}
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
       />
@@ -441,6 +458,8 @@ const CourseworkGraderCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }
   delayMs = 0,
 }) => {
   const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewOriginRect, setPreviewOriginRect] =
+    React.useState<ImagePreviewOriginRect | null>(null);
 
   return (
     <>
@@ -451,7 +470,8 @@ const CourseworkGraderCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }
         reveal={reveal}
         delayMs={delayMs}
         hoverTitle="Coursework Grader"
-        onActivate={() => {
+        onActivate={(originRect) => {
+          setPreviewOriginRect(originRect);
           trackPreviewOpened('coursework-grader');
           setPreviewOpen(true);
         }}
@@ -467,6 +487,7 @@ const CourseworkGraderCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }
       </WorkCardShell>
       <ImagePreview
         item={COURSEWORK_GRADER_IMAGE_PREVIEW}
+        originRect={previewOriginRect}
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
       />
@@ -495,6 +516,8 @@ const TestUiCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   delayMs = 0,
 }) => {
   const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewOriginRect, setPreviewOriginRect] =
+    React.useState<ImagePreviewOriginRect | null>(null);
 
   return (
     <>
@@ -505,17 +528,25 @@ const TestUiCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
         reveal={reveal}
         delayMs={delayMs}
         hoverTitle="Test UI"
-        onActivate={() => {
+        onActivate={(originRect) => {
+          setPreviewOriginRect(originRect);
           trackPreviewOpened('test-ui');
           setPreviewOpen(true);
         }}
       >
-        <div className={cn('absolute inset-0', IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS)}>
+        <div
+          data-image-preview-origin
+          className={cn(
+            'absolute inset-0 overflow-hidden rounded-lg',
+            IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
+          )}
+        >
           <TestUiArtwork />
         </div>
       </WorkCardShell>
       <ImagePreview
         item={TEST_UI_IMAGE_PREVIEW}
+        originRect={previewOriginRect}
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
         media={<TestUiArtwork preview />}
@@ -551,6 +582,8 @@ const VisualExplorationsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
   delayMs = 0,
 }) => {
   const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewOriginRect, setPreviewOriginRect] =
+    React.useState<ImagePreviewOriginRect | null>(null);
 
   return (
     <>
@@ -560,7 +593,8 @@ const VisualExplorationsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
         reveal={reveal}
         delayMs={delayMs}
         hoverTitle="A Cute Heart Animation"
-        onActivate={() => {
+        onActivate={(originRect) => {
+          setPreviewOriginRect(originRect);
           trackPreviewOpened('visual-explorations');
           setPreviewOpen(true);
         }}
@@ -577,6 +611,7 @@ const VisualExplorationsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
       </WorkCardShell>
       <ImagePreview
         item={HEART_ANIMATION_IMAGE_PREVIEW}
+        originRect={previewOriginRect}
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
       />
@@ -608,6 +643,8 @@ const FigmaSummerCampPreview: React.FC<{ reveal?: boolean; delayMs?: number }> =
   delayMs = 0,
 }) => {
   const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewOriginRect, setPreviewOriginRect] =
+    React.useState<ImagePreviewOriginRect | null>(null);
 
   return (
     <>
@@ -617,7 +654,8 @@ const FigmaSummerCampPreview: React.FC<{ reveal?: boolean; delayMs?: number }> =
         hoverTitle="Figma Summer Camp"
         reveal={reveal}
         delayMs={delayMs}
-        onActivate={() => {
+        onActivate={(originRect) => {
+          setPreviewOriginRect(originRect);
           trackPreviewOpened('figma-summer-camp');
           setPreviewOpen(true);
         }}
@@ -634,6 +672,7 @@ const FigmaSummerCampPreview: React.FC<{ reveal?: boolean; delayMs?: number }> =
       </WorkCardShell>
       <ImagePreview
         item={FIGMA_SUMMER_CAMP_IMAGE_PREVIEW}
+        originRect={previewOriginRect}
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
       />
@@ -757,6 +796,8 @@ const IllustrationShowcaseCard: React.FC<IllustrationShowcaseCardProps> = ({
   previewItem,
 }) => {
   const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewOriginRect, setPreviewOriginRect] =
+    React.useState<ImagePreviewOriginRect | null>(null);
   const opensPreview = Boolean(previewItem);
 
   return (
@@ -769,7 +810,8 @@ const IllustrationShowcaseCard: React.FC<IllustrationShowcaseCardProps> = ({
         delayMs={delayMs}
         fillSurface={false}
         style={{ background }}
-        onActivate={opensPreview ? () => {
+        onActivate={opensPreview ? (originRect) => {
+          setPreviewOriginRect(originRect);
           trackPreviewOpened(project);
           setPreviewOpen(true);
         } : undefined}
@@ -800,6 +842,7 @@ const IllustrationShowcaseCard: React.FC<IllustrationShowcaseCardProps> = ({
       {previewItem ? (
         <ImagePreview
           item={previewItem}
+          originRect={previewOriginRect}
           open={previewOpen}
           onClose={() => setPreviewOpen(false)}
         />
@@ -830,6 +873,8 @@ const OasisVisualWorkspaceCaseStudy: React.FC<{ reveal?: boolean; delayMs?: numb
   delayMs = 0,
 }) => {
   const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewOriginRect, setPreviewOriginRect] =
+    React.useState<ImagePreviewOriginRect | null>(null);
 
   return (
     <>
@@ -840,7 +885,8 @@ const OasisVisualWorkspaceCaseStudy: React.FC<{ reveal?: boolean; delayMs?: numb
         reveal={reveal}
         delayMs={delayMs}
         fillSurface={false}
-        onActivate={() => {
+        onActivate={(originRect) => {
+          setPreviewOriginRect(originRect);
           trackPreviewOpened('oasis-visual-workspace');
           setPreviewOpen(true);
         }}
@@ -861,6 +907,7 @@ const OasisVisualWorkspaceCaseStudy: React.FC<{ reveal?: boolean; delayMs?: numb
       </WorkCardShell>
       <ImagePreview
         item={OASIS_IMAGE_PREVIEW}
+        originRect={previewOriginRect}
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
       />
@@ -874,6 +921,8 @@ const YinlinIllustrationCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
   delayMs = 0,
 }) => {
   const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewOriginRect, setPreviewOriginRect] =
+    React.useState<ImagePreviewOriginRect | null>(null);
 
   return (
     <>
@@ -884,7 +933,8 @@ const YinlinIllustrationCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
         reveal={reveal}
         delayMs={delayMs}
         fillSurface={false}
-        onActivate={() => {
+        onActivate={(originRect) => {
+          setPreviewOriginRect(originRect);
           trackPreviewOpened('yinlin');
           setPreviewOpen(true);
         }}
@@ -905,6 +955,7 @@ const YinlinIllustrationCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number
       </WorkCardShell>
       <ImagePreview
         item={YINLIN_IMAGE_PREVIEW}
+        originRect={previewOriginRect}
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
       />

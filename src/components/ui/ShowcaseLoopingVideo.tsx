@@ -14,6 +14,7 @@ type ShowcaseLoopingVideoProps = {
   className?: string;
   ariaLabel: string;
   poster?: string;
+  preload?: 'none' | 'metadata' | 'auto';
   /** Pause before replay; 0 uses native seamless loop. */
   loopDelayMs?: number;
   /** When false, keep the video paused (e.g. while a lightbox is open). */
@@ -26,6 +27,7 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
   className,
   ariaLabel,
   poster,
+  preload = 'metadata',
   loopDelayMs = 0,
   shouldPlay = true,
 }) => {
@@ -76,7 +78,7 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
       playsInline
       autoPlay={false}
       loop={!useDelayedLoop}
-      preload="metadata"
+      preload={preload}
       poster={poster}
       aria-label={ariaLabel}
     >

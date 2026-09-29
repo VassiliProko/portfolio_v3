@@ -4,7 +4,9 @@ import Image from 'next/image';
 import React from 'react';
 import {
   ImagePreview,
+  getImagePreviewOriginRect,
   type ImagePreviewItem,
+  type ImagePreviewOriginRect,
 } from '@/src/components/ui/ImagePreview';
 import { cn } from '@/src/utils/cn';
 import styles from './OnePrepAppStorePreview.module.css';
@@ -77,8 +79,13 @@ type OnePrepAppStorePreviewProps = {
 
 export function OnePrepAppStorePreview({ onPreviewOpen }: OnePrepAppStorePreviewProps) {
   const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewOriginRect, setPreviewOriginRect] =
+    React.useState<ImagePreviewOriginRect | null>(null);
 
-  const openPreview = () => {
+  const openPreview = (event: React.MouseEvent<HTMLElement>) => {
+    setPreviewOriginRect(getImagePreviewOriginRect(
+      event.currentTarget.querySelector('img') ?? event.currentTarget,
+    ));
     setPreviewOpen(true);
     onPreviewOpen?.();
   };
@@ -136,6 +143,7 @@ export function OnePrepAppStorePreview({ onPreviewOpen }: OnePrepAppStorePreview
 
       <ImagePreview
         item={ONEPREP_ANIMATION_PREVIEW}
+        originRect={previewOriginRect}
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
         media={

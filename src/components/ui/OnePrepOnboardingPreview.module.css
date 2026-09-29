@@ -34,7 +34,9 @@
   aspect-ratio: 255 / 292;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   border: 0;
+  border-radius: inherit;
   padding: 8px;
 }
 
@@ -234,7 +236,7 @@
 
 .lightboxPhone {
   width: auto;
-  height: 91%;
+  height: 95%;
 }
 
 @media (min-width: 768px) {

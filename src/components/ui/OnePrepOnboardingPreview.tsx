@@ -3,7 +3,12 @@
 import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import React from 'react';
-import { ImagePreview, type ImagePreviewItem } from '@/src/components/ui/ImagePreview';
+import {
+  ImagePreview,
+  getImagePreviewOriginRect,
+  type ImagePreviewItem,
+  type ImagePreviewOriginRect,
+} from '@/src/components/ui/ImagePreview';
 import { cn } from '@/src/utils/cn';
 import styles from './OnePrepOnboardingPreview.module.css';
 
@@ -42,6 +47,8 @@ const ONEPREP_ONBOARDING_LIGHTBOX: ImagePreviewItem = {
   alt: 'Animated OnePrep mobile product tour in an iPhone frame',
   width: 16,
   height: 9,
+  mobilePreviewAspectRatio: 1,
+  originFit: 'cover',
   mediaBackground: 'linear-gradient(144deg, #303A3A 4.19%, #060A16 87.32%)',
 };
 
@@ -69,13 +76,23 @@ type PhoneCarouselProps = {
   shouldPlay?: boolean;
   className?: string;
   onDragInteraction?: () => void;
+  activeIndex?: number;
+  onActiveIndexChange?: React.Dispatch<React.SetStateAction<number>>;
 };
 
-function PhoneCarousel({ shouldPlay = true, className, onDragInteraction }: PhoneCarouselProps) {
+function PhoneCarousel({
+  shouldPlay = true,
+  className,
+  onDragInteraction,
+  activeIndex: controlledActiveIndex,
+  onActiveIndexChange,
+}: PhoneCarouselProps) {
   const prefersReducedMotion = useReducedMotion();
-  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [internalActiveIndex, setInternalActiveIndex] = React.useState(0);
   const [isPointerPaused, setIsPointerPaused] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
+  const activeIndex = controlledActiveIndex ?? internalActiveIndex;
+  const setActiveIndex = onActiveIndexChange ?? setInternalActiveIndex;
 
   React.useEffect(() => {
     if (!shouldPlay || prefersReducedMotion || isPointerPaused || isDragging) return;
@@ -84,11 +101,11 @@ function PhoneCarousel({ shouldPlay = true, className, onDragInteraction }: Phon
       SLIDE_INTERVAL_MS,
     );
     return () => window.clearInterval(interval);
-  }, [isDragging, isPointerPaused, prefersReducedMotion, shouldPlay]);
+  }, [isDragging, isPointerPaused, prefersReducedMotion, setActiveIndex, shouldPlay]);
 
   const showAdjacentSlide = React.useCallback((direction: -1 | 1) => {
     setActiveIndex((current) => (current + direction + SLIDES.length) % SLIDES.length);
-  }, []);
+  }, [setActiveIndex]);
 
   const slideTransition = prefersReducedMotion
     ? { duration: 0 }
@@ -161,14 +178,18 @@ type OnePrepOnboardingPreviewProps = { onPreviewOpen?: () => void };
 
 export function OnePrepOnboardingPreview({ onPreviewOpen }: OnePrepOnboardingPreviewProps) {
   const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [activeIndex, setActiveIndex] = React.useState(0);
   const [triggerFocused, setTriggerFocused] = React.useState(false);
   const suppressNextOpenRef = React.useRef(false);
+  const [previewOriginRect, setPreviewOriginRect] =
+    React.useState<ImagePreviewOriginRect | null>(null);
 
-  const openPreview = () => {
+  const openPreview = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (suppressNextOpenRef.current) {
       suppressNextOpenRef.current = false;
       return;
     }
+    setPreviewOriginRect(getImagePreviewOriginRect(event.currentTarget));
     setPreviewOpen(true);
     onPreviewOpen?.();
   };
@@ -193,13 +214,24 @@ export function OnePrepOnboardingPreview({ onPreviewOpen }: OnePrepOnboardingPre
         <PhoneCarousel
           shouldPlay={!previewOpen && !triggerFocused}
           onDragInteraction={handleDragInteraction}
+          activeIndex={activeIndex}
+          onActiveIndexChange={setActiveIndex}
         />
       </button>
       <ImagePreview
         item={ONEPREP_ONBOARDING_LIGHTBOX}
+        originRect={previewOriginRect}
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
-        media={<div className={styles.lightboxStage}><PhoneCarousel className={styles.lightboxPhone} /></div>}
+        media={
+          <div className={styles.lightboxStage}>
+            <PhoneCarousel
+              className={styles.lightboxPhone}
+              activeIndex={activeIndex}
+              onActiveIndexChange={setActiveIndex}
+            />
+          </div>
+        }
       />
     </>
   );

@@ -9,7 +9,9 @@ import { ScrollPopdownReveal } from '@/src/components/ui/PopdownReveal';
 import {
   ImagePreview,
   IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
+  getImagePreviewOriginRect,
   type ImagePreviewItem,
+  type ImagePreviewOriginRect,
 } from '@/src/components/ui/ImagePreview';
 
 const ABOUT_HERO_IMAGE = '/images/optimized/about/about.jpg';
@@ -206,6 +208,8 @@ const AboutRoleList: React.FC<AboutRoleListProps> = ({ heading, items }) => {
 
 export const AboutSection: React.FC = () => {
   const [previewIndex, setPreviewIndex] = React.useState<number | null>(null);
+  const [previewOriginRect, setPreviewOriginRect] =
+    React.useState<ImagePreviewOriginRect | null>(null);
 
   return (
     <section
@@ -256,7 +260,13 @@ export const AboutSection: React.FC = () => {
             <button
               key={image.src}
               type="button"
-              onClick={() => setPreviewIndex(index)}
+              onClick={(event) => {
+                const imageElement = event.currentTarget.querySelector('img');
+                setPreviewOriginRect(getImagePreviewOriginRect(
+                  imageElement ?? event.currentTarget,
+                ));
+                setPreviewIndex(index);
+              }}
               aria-label={`Open ${image.name} image preview`}
               className={cn(
                 'group relative aspect-[335/200] cursor-zoom-in overflow-hidden rounded-sm border-0 bg-surface-2 p-0',
@@ -304,6 +314,7 @@ export const AboutSection: React.FC = () => {
 
       <ImagePreview
         items={SHOWCASE_IMAGES}
+        originRect={previewOriginRect}
         activeIndex={previewIndex ?? 0}
         onActiveIndexChange={setPreviewIndex}
         open={previewIndex !== null}
