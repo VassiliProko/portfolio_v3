@@ -3,7 +3,6 @@ import localFont from 'next/font/local';
 import '@/src/styles/globals.css';
 import { ConditionalNav } from '@/src/components/layout/ConditionalNav';
 import { Footer } from '@/src/components/layout/Footer';
-import { FooterLastUpdated } from '@/src/components/layout/FooterLastUpdated';
 import { MainContentShell } from '@/src/components/layout/MainContentShell';
 import { ThemeProvider } from '@/src/components/ThemeProvider';
 import { ThemeScript } from '@/src/components/ThemeScript';
@@ -122,7 +121,7 @@ export default function RootLayout({
             <ConditionalNav />
             <MainContentShell>
               {children}
-              <Footer lastUpdated={<FooterLastUpdated />} />
+              <Footer />
             </MainContentShell>
           </HomeEnterAnimationProvider>
         </ThemeProvider>

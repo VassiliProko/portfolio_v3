@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { useBackgroundSafeVideo } from '@/src/hooks/useBackgroundSafeVideo';
 import { playVideoSafely } from '@/src/utils/playVideoSafely';
+import { useHoverSurface } from '@/src/components/ui/HoverMetaPill';
 
 type ShowcaseLoopingVideoProps = {
   src?: string;
@@ -19,6 +20,8 @@ type ShowcaseLoopingVideoProps = {
   loopDelayMs?: number;
   /** When false, keep the video paused (e.g. while a lightbox is open). */
   shouldPlay?: boolean;
+  /** Only play while the containing hover surface is under the pointer. */
+  playOnHover?: boolean;
 };
 
 export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
@@ -30,13 +33,26 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
   preload = 'metadata',
   loopDelayMs = 0,
   shouldPlay = true,
+  playOnHover = false,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const { isPointerWithin } = useHoverSurface();
   const useDelayedLoop = loopDelayMs > 0;
-  const canPlay = shouldPlay && !prefersReducedMotion;
+  const canPlay =
+    shouldPlay && !prefersReducedMotion && (!playOnHover || isPointerWithin);
 
   useBackgroundSafeVideo(videoRef, { enabled: true, shouldPlay: canPlay });
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !playOnHover || canPlay) {
+      return;
+    }
+
+    video.pause();
+    video.currentTime = 0;
+  }, [canPlay, playOnHover]);
 
   useEffect(() => {
     if (!useDelayedLoop || !canPlay) {

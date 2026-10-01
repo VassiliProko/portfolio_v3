@@ -379,6 +379,7 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
         poster="/images/optimized/home/mcss-preview.jpg"
         preload="auto"
         shouldPlay={reveal}
+        playOnHover
         className="h-full w-full object-cover"
         ariaLabel="MCSS website preview animation"
       />
@@ -407,6 +408,8 @@ const DojoIconsCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
         className="h-full w-full object-cover"
         ariaLabel="Dojo Icons preview animation"
         loopDelayMs={1000}
+        shouldPlay={reveal}
+        playOnHover
       />
     </WorkCardShell>
   );
@@ -626,7 +629,7 @@ const JetpacksCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = ({
   return (
     <WorkCardShell
       href="/jetpacks"
-      className="aspect-[451/183]"
+      className="aspect-[877/720]"
       ariaLabel="Open Jetpacks case study"
       hoverTitle="Edtech Branding (Mascot)"
       style={{ backgroundColor: 'var(--color-jetpacks-showcase-bg)' }}
@@ -662,7 +665,7 @@ const FigmaSummerCampPreview: React.FC<{ reveal?: boolean; delayMs?: number }> =
       >
         <ShowcaseLoopingVideo
           sources={[...FIGMA_SUMMER_CAMP_VIDEO_SOURCES]}
-          shouldPlay={!previewOpen}
+          shouldPlay={reveal && !previewOpen}
           className={cn(
             'h-full w-full object-contain',
             IMAGE_PREVIEW_TRIGGER_MEDIA_CLASS,
@@ -757,7 +760,7 @@ const PrettifyMinervaFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: n
       ariaLabel="Open Prettify Minerva case study"
       reveal={reveal}
       delayMs={delayMs}
-      hoverTitle="Prettify Minerva ∙ Browser Extension"
+      hoverTitle="University Portal ∙ Browser Extension"
     >
       <ShowcaseLoopingVideo
         sources={[...PRETTIFY_MINERVA_VIDEO_SOURCES]}
@@ -1064,30 +1067,32 @@ const SHOWCASE_CARD_CONFIGS: ShowcaseCardConfig[] = [
   },
 ];
 
-/** Card keys per column at each breakpoint — add/move keys here to change layout. */
+/**
+ * Card keys per column at each breakpoint — add/move keys here to change layout.
+ * Discord Snowsgiving and the featured Coursework Grader Rive icon are intentionally
+ * omitted from these columns while they are hidden from the homepage.
+ */
 const SHOWCASE_COLUMN_KEYS: Record<ShowcaseColumnCount, ShowcaseCardKey[][]> = {
   1: [
     [
       'prettify-minerva',
       'dojo-icons',
       'jetpacks',
-      'discord-snowsgiving',
       'mcss',
       'oasis-visual-workspace',
-      'coursework-grader',
-      'test-ui',
       'figma-summer-camp',
+      'test-ui',
       'oneprep-onboarding',
     ],
   ],
   2: [
-    ['prettify-minerva', 'jetpacks', 'discord-snowsgiving', 'oasis-visual-workspace', 'figma-summer-camp'],
-    ['dojo-icons', 'mcss', 'coursework-grader', 'test-ui', /* 'mathsgenie', */ 'oneprep-onboarding'],
+    ['prettify-minerva', 'jetpacks', 'oasis-visual-workspace', 'figma-summer-camp'],
+    ['dojo-icons', 'mcss', 'test-ui', /* 'mathsgenie', */ 'oneprep-onboarding'],
   ],
   3: [
-    ['prettify-minerva', 'discord-snowsgiving', 'oasis-visual-workspace'],
-    ['dojo-icons', 'mcss', 'coursework-grader', 'test-ui' /* 'mathsgenie' */],
-    ['jetpacks', 'figma-summer-camp', 'oneprep-onboarding'],
+    ['prettify-minerva', 'oasis-visual-workspace', 'figma-summer-camp'],
+    ['dojo-icons', 'mcss', 'test-ui' /* 'mathsgenie' */],
+    ['jetpacks', 'oneprep-onboarding'],
   ],
 };
 
