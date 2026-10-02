@@ -34,7 +34,7 @@ export function Footer() {
         <div className="flex-[0.75] bg-accent-base" />
         <div className="flex-[1] bg-footer-console-text" />
       </div>
-      <div className="relative border-t border-black/80">
+      <div className="relative">
         <motion.div
           className="pointer-events-none absolute -inset-y-4 inset-x-0 bg-[url('/images/optimized/home/footer-image.webp')] bg-cover bg-[center_35%] opacity-25 grayscale will-change-transform"
           style={{ y: prefersReducedMotion ? 0 : imageY }}

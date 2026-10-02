@@ -241,7 +241,8 @@ export const AboutSection: React.FC = () => {
             <div className="max-w-[672px]">
               <p className="type-paragraph mb-0">
                 I&apos;m a multidisciplinary designer and business analytics student at McGill
-                University in Montreal.
+                University in Montreal. I started out drawing choo choo trains with crayons. Now, I
+                work across brand, product, and interaction.
               </p>
               <p className="type-paragraph mb-0">&nbsp;</p>
               <p className="type-paragraph mb-0">
