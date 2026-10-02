@@ -246,9 +246,8 @@ export const AboutSection: React.FC = () => {
               </p>
               <p className="type-paragraph mb-0">&nbsp;</p>
               <p className="type-paragraph mb-0">
-                I design for a more curious, healthier, and prettier world. A place where people
-                feel that they belong and are loved. By bringing a deep level of care and thought, I
-                believe that we can design a wonderful future.
+                I design for a more curious, healthier, and prettier world. By bringing a deep level
+                of care and thought, I believe that we can design a wonderful future.
               </p>
               <p className="type-paragraph mb-0">&nbsp;</p>
               <p className="type-paragraph mb-0">I also enjoy crispy tofu and dragon boat.</p>

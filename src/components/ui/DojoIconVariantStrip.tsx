@@ -1,5 +1,6 @@
 import React from 'react';
 import { CaseStudyCaption } from '@/src/components/ui/CaseStudyCaption';
+import { CASE_STUDY_OVERVIEW_COLUMNS_CLASS } from '@/src/constants/caseStudy';
 import { cn } from '@/src/utils/cn';
 import { type DojoIconRef, iconSrc } from '@/src/components/ui/dojoIcons';
 
@@ -80,10 +81,14 @@ export function DojoIconVariantStrip() {
       </section>
       <CaseStudyCaption
         captionLabel="ICONS"
+        captionClassName={CASE_STUDY_OVERVIEW_COLUMNS_CLASS}
         caption={
           <p>
-            4 icon variants were opted to ensure WCAG color accessibility across different screens
-            and appearance themes.
+            4 icon variants were opted to ensure color accessibility across different screens
+            and appearance themes. As the icon library grew, it became crucial to ensure each asset
+            was visually distinct while sharing the same illustration style. Colors were based on
+            the Tailwind CSS palette, offering a shared foundation alongside consistent proportions
+            and stroke widths for cohesiveness.
           </p>
         }
         captionLayout="compact"
