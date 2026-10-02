@@ -293,10 +293,10 @@
 html {
   scroll-behavior: auto;
   background-color: var(--color-background);
+  overscroll-behavior-y: none;
 }
 
-html,
-body {
+html {
   overflow-x: clip;
 }
 
