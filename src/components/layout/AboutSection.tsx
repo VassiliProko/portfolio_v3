@@ -240,14 +240,10 @@ export const AboutSection: React.FC = () => {
             </h2>
             <div className="max-w-[672px]">
               <p className="type-paragraph mb-0">
-                I&apos;m a multidisciplinary designer and business analytics student at McGill
-                University in Montreal. I started out drawing choo choo trains with crayons. Now, I
-                work across brand, product, and interaction.
-              </p>
-              <p className="type-paragraph mb-0">&nbsp;</p>
-              <p className="type-paragraph mb-0">
-                I design for a more curious, healthier, and prettier world. By bringing a deep level
-                of care and thought, I believe that we can design a wonderful future.
+                I started out drawing choo choo trains with crayons. Since then, I&apos;ve never
+                really stopped making things, inspired by the limitless capacity to create beauty
+                in this world. I think design is a wonderful tool, and with AI expanding what we
+                can create, I hope to make things that improve people&apos;s lives at scale.
               </p>
               <p className="type-paragraph mb-0">&nbsp;</p>
               <p className="type-paragraph mb-0">I also enjoy crispy tofu and dragon boat.</p>

@@ -166,8 +166,8 @@ export const IntroDelightfulWord: React.FC = () => {
 };
 
 export const HOME_INTRO_HEADLINE_SEGMENTS = [
-  { key: 'hi', content: 'hi,' },
-  { key: 'im', content: 'im' },
+  { key: 'hi', content: 'Hi,' },
+  { key: 'im', content: 'I’m' },
   { key: 'a', content: 'a' },
   { key: 'young', content: 'young' },
   { key: 'lad', content: 'lad' },
@@ -176,5 +176,14 @@ export const HOME_INTRO_HEADLINE_SEGMENTS = [
   { key: 'and', content: '&' },
   { key: 'cooking', content: 'cooking' },
   { key: 'delightful', content: <IntroDelightfulWord />, className: 'relative z-10' },
-  { key: 'creations', content: 'creations', className: 'relative z-0', skipLeadingSpace: true },
+  { key: 'creations', content: 'creations,', className: 'relative z-0', skipLeadingSpace: true },
+  ...'working across brand, product, and interaction.'.split(' ').map((content, index) => ({
+    key: `practice-${index}`,
+    content,
+  })),
 ] as const;
+
+export const HOME_INTRO_DESCRIPTION_SEGMENTS =
+  'I design for a more curious, healthier, and prettier world. By bringing a deep level of care and thought, I believe that we can design a wonderful future.'
+    .split(' ')
+    .map((content, index) => ({ key: `description-${index}`, content }));
