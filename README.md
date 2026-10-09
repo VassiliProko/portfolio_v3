@@ -4,7 +4,7 @@ A production-quality Creative Portfolio website built with React, TypeScript, an
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + CSS Modules
 - **Icons**: Phosphor Icons
@@ -46,7 +46,7 @@ portfolio_v3/
 
 1. **Install dependencies**:
    ```bash
-   npm install
+   npm ci
    ```
 
 2. **Add the Satoshi Variable font**:
@@ -60,6 +60,31 @@ portfolio_v3/
 
 4. **Open your browser**:
    Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Preventing local dev hangs on macOS
+
+Keep this repository in a local development folder such as `~/Developer`, outside
+cloud-managed Documents/Desktop folders. Cloud storage can evict dependency files;
+Node then blocks in filesystem reads before Next.js can even print its startup
+banner. Clearing `.next` or changing bundlers does not fix that cause.
+
+`npm run dev` runs a macOS metadata check first and exits with an actionable error
+if dependencies, source, or public assets are cloud placeholders (`dataless`). The
+check does not download files or delete caches. Other operating systems skip the
+macOS-specific check.
+
+If this check fails:
+
+1. Move the complete repository, including hidden files and uncommitted work, to a
+   folder outside cloud storage, then run `npm ci` to recreate dependencies.
+2. If you keep the project in iCloud Drive, select **Keep Downloaded** on the project
+   folder in Finder and wait for downloads to finish before retrying. **Download
+   Now** alone does not prevent later eviction.
+3. Stop the old dev server before restarting with `npm run dev`.
+
+Apple documents [keeping iCloud files downloaded](https://support.apple.com/guide/mac-help/work-with-folders-and-files-in-icloud-drive-mchl1a02d711/mac).
+The check catches files already offloaded at startup; keeping the working tree
+outside cloud storage also removes the risk of files being evicted during a session.
 
 ## Design System
 

@@ -85,7 +85,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'Vassili Prokopenko', url: SITE_URL }],
   creator: 'Vassili Prokopenko',
   openGraph: {
-    title: 'Vassili Prokopenko — Product, Brand & Web Designer',
+    title: 'Vassili Prokopenko — Designer',
     description:
       'Selected product design, branding, illustration, motion, and web experiences by Vassili Prokopenko.',
     url: SITE_URL,
@@ -95,7 +95,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vassili Prokopenko — Product, Brand & Web Designer',
+    title: 'Vassili Prokopenko — Designer',
     description:
       'Selected product design, branding, illustration, motion, and web experiences by Vassili Prokopenko.',
   },

@@ -176,8 +176,8 @@ export const HOME_INTRO_HEADLINE_SEGMENTS = [
   { key: 'and', content: '&' },
   { key: 'cooking', content: 'cooking' },
   { key: 'delightful', content: <IntroDelightfulWord />, className: 'relative z-10' },
-  { key: 'creations', content: 'creations,', className: 'relative z-0', skipLeadingSpace: true },
-  ...'working across brand, product, and interaction.'.split(' ').map((content, index) => ({
+  { key: 'creations', content: 'creations', className: 'relative z-0', skipLeadingSpace: true },
+  ...'across brand, product, and interaction.'.split(' ').map((content, index) => ({
     key: `practice-${index}`,
     content,
   })),
