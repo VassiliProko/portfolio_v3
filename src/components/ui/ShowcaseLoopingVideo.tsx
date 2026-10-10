@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { useBackgroundSafeVideo } from '@/src/hooks/useBackgroundSafeVideo';
 import { playVideoSafely } from '@/src/utils/playVideoSafely';
@@ -36,13 +36,30 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
   playOnHover = false,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [nearViewport, setNearViewport] = useState(false);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      setNearViewport(true);
+      observer.disconnect();
+    }, { rootMargin: '200px' });
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
   const prefersReducedMotion = useReducedMotion();
   const { isPointerWithin } = useHoverSurface();
   const useDelayedLoop = loopDelayMs > 0;
   const canPlay =
-    shouldPlay && !prefersReducedMotion && (!playOnHover || isPointerWithin);
+    nearViewport && shouldPlay && !prefersReducedMotion && (!playOnHover || isPointerWithin);
 
-  useBackgroundSafeVideo(videoRef, { enabled: true, shouldPlay: canPlay });
+  const sourceKey = sources?.map((source) => `${source.type}:${source.src}`).join('|');
+  useEffect(() => {
+    if (nearViewport) videoRef.current?.load();
+  }, [nearViewport, src, sourceKey]);
+
+  useBackgroundSafeVideo(videoRef, { enabled: nearViewport, shouldPlay: canPlay });
 
   useEffect(() => {
     const video = videoRef.current;
@@ -51,7 +68,8 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
     }
 
     video.pause();
-    video.currentTime = 0;
+    // Seeking an untouched video can force a download despite preload="none".
+    if (video.currentTime > 0) video.currentTime = 0;
   }, [canPlay, playOnHover]);
 
   useEffect(() => {
@@ -88,17 +106,17 @@ export const ShowcaseLoopingVideo: React.FC<ShowcaseLoopingVideoProps> = ({
   return (
     <video
       ref={videoRef}
-      src={src}
+      src={nearViewport ? src : undefined}
       className={className}
       muted
       playsInline
       autoPlay={false}
       loop={!useDelayedLoop}
-      preload={preload}
+      preload={nearViewport ? (poster && playOnHover && !canPlay ? 'none' : preload) : 'none'}
       poster={poster}
       aria-label={ariaLabel}
     >
-      {sources?.map((source) => (
+      {nearViewport && sources?.map((source) => (
         <source key={source.src} src={source.src} type={source.type} />
       ))}
     </video>

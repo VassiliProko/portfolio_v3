@@ -28,7 +28,8 @@ export function useBackgroundSafeVideo(
       return;
     }
 
-    let isIntersecting = true;
+    // Wait for the first observation before starting network/decode work.
+    let isIntersecting = false;
 
     const syncPlayback = () => {
       const canPlay = shouldPlay && !document.hidden && isIntersecting;

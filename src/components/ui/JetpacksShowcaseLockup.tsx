@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
-import { useReducedMotion } from 'motion/react';
+import { useReducedMotion, useInView } from 'motion/react';
 import { Alignment, Fit, Layout, useRive } from '@rive-app/react-canvas';
 
 const RIVE_SRC = '/images/optimized/jetpacks/rive/jetpacks-loading-flying.riv';
@@ -50,6 +50,7 @@ function getScaledLogomarkPlacement() {
 function JetpacksFlyingMark() {
   const containerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const inView = useInView(containerRef);
   const { RiveComponent, rive } = useRive(
     {
       src: RIVE_SRC,
@@ -88,22 +89,21 @@ function JetpacksFlyingMark() {
   useEffect(() => {
     if (!rive) return;
 
-    if (prefersReducedMotion) {
+    const syncPlayback = () => {
+      if (prefersReducedMotion || !inView || document.hidden) {
+        rive.pause();
+        return;
+      }
+      const playback = rive.stateMachineNames[0] ?? rive.animationNames[0];
+      if (playback) rive.play(playback);
+    };
+    syncPlayback();
+    document.addEventListener('visibilitychange', syncPlayback);
+    return () => {
+      document.removeEventListener('visibilitychange', syncPlayback);
       rive.pause();
-      return;
-    }
-
-    const stateMachine = rive.stateMachineNames[0];
-    if (stateMachine) {
-      rive.play(stateMachine);
-      return;
-    }
-
-    const animation = rive.animationNames[0];
-    if (animation) {
-      rive.play(animation);
-    }
-  }, [rive, prefersReducedMotion]);
+    };
+  }, [rive, prefersReducedMotion, inView]);
 
   return (
     <div ref={containerRef} className="h-full w-full">

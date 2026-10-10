@@ -1,26 +1,33 @@
 'use client';
 
-import posthog from 'posthog-js';
+import type { PostHog } from 'posthog-js';
 
-export function initPostHog(): void {
-  if (typeof window === 'undefined') return;
-  if (posthog.__loaded) return;
+let posthogPromise: Promise<PostHog | null> | undefined;
 
-  const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-  if (!key) return;
+export function initPostHog(): Promise<PostHog | null> {
+  if (typeof window === 'undefined' || !process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+    return Promise.resolve(null);
+  }
 
-  posthog.init(key, {
-    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-    defaults: '2026-05-30',
-    capture_pageview: 'history_change',
-    autocapture: false,
-    person_profiles: 'identified_only',
-    disable_session_recording: false,
-    session_recording: {
-      maskAllInputs: true,
-    },
-    disable_surveys: true,
+  posthogPromise ??= import('posthog-js').then(({ default: posthog }) => {
+    if (!posthog.__loaded) {
+      posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+        defaults: '2026-05-30',
+        capture_pageview: 'history_change',
+        autocapture: false,
+        person_profiles: 'identified_only',
+        disable_session_recording: false,
+        session_recording: { maskAllInputs: true },
+        disable_surveys: true,
+      });
+    }
+    return posthog;
+  }).catch(() => {
+    posthogPromise = undefined;
+    return null;
   });
+  return posthogPromise;
 }
 
 export type AnalyticsEventName =
@@ -40,7 +47,7 @@ export function trackEvent(
 ): void {
   if (typeof window === 'undefined') return;
   if (!process.env.NEXT_PUBLIC_POSTHOG_KEY) return;
-  posthog.capture(event, properties);
+  void initPostHog().then((posthog) => posthog?.capture(event, properties));
 }
 
 export function projectSlugFromPathname(pathname: string): string {

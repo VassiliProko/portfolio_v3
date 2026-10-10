@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion, useInView } from 'motion/react';
 import React from 'react';
 import {
   ImagePreview,
@@ -88,6 +88,8 @@ function PhoneCarousel({
   onActiveIndexChange,
 }: PhoneCarouselProps) {
   const prefersReducedMotion = useReducedMotion();
+  const phoneRef = React.useRef<HTMLDivElement>(null);
+  const inView = useInView(phoneRef, { amount: 0.1 });
   const [internalActiveIndex, setInternalActiveIndex] = React.useState(0);
   const [isPointerPaused, setIsPointerPaused] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -95,13 +97,13 @@ function PhoneCarousel({
   const setActiveIndex = onActiveIndexChange ?? setInternalActiveIndex;
 
   React.useEffect(() => {
-    if (!shouldPlay || prefersReducedMotion || isPointerPaused || isDragging) return;
+    if (!inView || !shouldPlay || prefersReducedMotion || isPointerPaused || isDragging) return;
     const interval = window.setInterval(
-      () => setActiveIndex((current) => (current + 1) % SLIDES.length),
+      () => { if (!document.hidden) setActiveIndex((current) => (current + 1) % SLIDES.length); },
       SLIDE_INTERVAL_MS,
     );
     return () => window.clearInterval(interval);
-  }, [isDragging, isPointerPaused, prefersReducedMotion, setActiveIndex, shouldPlay]);
+  }, [inView, isDragging, isPointerPaused, prefersReducedMotion, setActiveIndex, shouldPlay]);
 
   const showAdjacentSlide = React.useCallback((direction: -1 | 1) => {
     setActiveIndex((current) => (current + direction + SLIDES.length) % SLIDES.length);
@@ -113,6 +115,7 @@ function PhoneCarousel({
 
   return (
     <motion.div
+      ref={phoneRef}
       className={cn(styles.phone, className)}
       role="img"
       aria-label="Five-screen OnePrep mobile product tour carousel"
@@ -147,7 +150,7 @@ function PhoneCarousel({
                   alt={SLIDES[activeIndex].alt}
                   fill
                   sizes="(max-width: 767px) 220px, 300px"
-                  priority={activeIndex === 0}
+                  loading="lazy"
                   draggable={false}
                 />
               </div>

@@ -377,7 +377,7 @@ const McssFeaturedCaseStudy: React.FC<{ reveal?: boolean; delayMs?: number }> = 
       <ShowcaseLoopingVideo
         sources={[{ src: '/other/mcss-website-preview.mp4', type: 'video/mp4' }]}
         poster="/images/optimized/home/mcss-preview.jpg"
-        preload="auto"
+        preload="none"
         shouldPlay={reveal}
         playOnHover
         className="h-full w-full object-cover"

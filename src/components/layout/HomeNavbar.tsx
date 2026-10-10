@@ -43,6 +43,7 @@ export const HomeNavbar: React.FC = () => {
   const aboutLinkRef = useRef<HTMLAnchorElement>(null);
   const mobileMenuToggleRef = useRef<HTMLButtonElement>(null);
   const mobileMenuPanelRef = useRef<HTMLDivElement>(null);
+  const [aboutProfileRequested, setAboutProfileRequested] = useState(false);
   const [isAboutHovering, setIsAboutHovering] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [menuPathname, setMenuPathname] = useState(pathname);
@@ -305,6 +306,7 @@ export const HomeNavbar: React.FC = () => {
               className="relative overflow-visible"
               onMouseEnter={() => {
                 if (!isAboutPage) {
+                  setAboutProfileRequested(true);
                   setIsAboutHovering(true);
                 }
               }}
@@ -338,7 +340,7 @@ export const HomeNavbar: React.FC = () => {
                 aria-hidden={!showAboutProfile}
                 >
                   <Image
-                    src={HOME_NAV_ABOUT_PROFILE_SRC}
+                    src={aboutProfileRequested ? HOME_NAV_ABOUT_PROFILE_SRC : "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="}
                     alt=""
                     width={aboutProfileSizePx}
                     height={aboutProfileSizePx}
