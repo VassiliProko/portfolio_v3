@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
 import { HomeIntroSection } from '@/src/components/ui/HomeIntroSection';
 import { useHomeEnterAnimation } from '@/src/contexts/HomeEnterAnimationContext';
@@ -14,18 +14,14 @@ const WorkShowcaseSection = dynamic(
 );
 
 export default function HomePageClient() {
-  const { isReturnHomeVisit } = useHomeEnterAnimation();
+  const { introBlurReady, isReturnHomeVisit } = useHomeEnterAnimation();
   const returnReveal = useMountPopdownReveal();
-  const [firstVisitShowcaseVisible, setFirstVisitShowcaseVisible] = useState(false);
 
-  const showcaseVisible = isReturnHomeVisit ? returnReveal : firstVisitShowcaseVisible;
+  const showcaseVisible = isReturnHomeVisit ? returnReveal : introBlurReady;
 
   return (
     <>
-      <HomeIntroSection
-        returnReveal={returnReveal}
-        onHeadlineComplete={() => setFirstVisitShowcaseVisible(true)}
-      />
+      <HomeIntroSection returnReveal={returnReveal} />
       <WorkShowcaseSection visible={showcaseVisible} unifiedReveal={isReturnHomeVisit} />
     </>
   );

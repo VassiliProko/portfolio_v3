@@ -58,7 +58,7 @@ const StaticIntroHeadline: React.FC<{ segments: readonly BlurTextSegment[] }> = 
 
 const IntroSubtitle: React.FC = () => (
   <>
-    {'// Currently studying at '}
+    {'// Currently studying analytics at '}
     <IntroSubtitleLink href="https://www.mcgill.ca/">
       McGill University
     </IntroSubtitleLink>
@@ -77,16 +77,25 @@ export const HomeIntroSection: React.FC<HomeIntroSectionProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const { introBlurReady, isReturnHomeVisit } = useHomeEnterAnimation();
   const reveal = isReturnHomeVisit ? returnReveal : introBlurReady;
+  const enterBlur = prefersReducedMotion || isReturnHomeVisit ? 'blur(0px)' : 'blur(6px)';
   const completedRef = useRef(false);
 
   return (
     <motion.div
       className="relative flex w-full max-w-[516px] flex-col items-start gap-6 py-6"
       aria-label="Introduction"
-      initial={{ opacity: 0, y: prefersReducedMotion ? 0 : -8 }}
-      animate={{ opacity: reveal ? 1 : 0, y: reveal || prefersReducedMotion ? 0 : -8 }}
+      initial={{
+        opacity: prefersReducedMotion ? 1 : 0,
+        y: prefersReducedMotion ? 0 : -8,
+        filter: enterBlur,
+      }}
+      animate={{
+        opacity: reveal || prefersReducedMotion ? 1 : 0,
+        y: reveal || prefersReducedMotion ? 0 : -8,
+        filter: reveal ? 'blur(0px)' : enterBlur,
+      }}
       transition={{
-        duration: prefersReducedMotion ? 0 : 0.45,
+        duration: prefersReducedMotion ? 0 : isReturnHomeVisit ? 0.45 : 0.65,
         ease: [0.22, 1, 0.36, 1],
       }}
       onAnimationComplete={() => {

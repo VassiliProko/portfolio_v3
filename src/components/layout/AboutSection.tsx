@@ -240,13 +240,10 @@ export const AboutSection: React.FC = () => {
             </h2>
             <div className="max-w-[672px]">
               <p className="type-paragraph mb-0">
-                I started out drawing choo choo trains with crayons. Since then, I&apos;ve never
-                really stopped making things, inspired by the limitless capacity to create beauty
-                in this world. I think design is a wonderful tool, and with AI expanding what we
-                can create, I hope to make things that improve people&apos;s lives at scale.
+                I began my journey drawing choo choo trains with crayons. Since then, I&apos;ve never really stopped making things, inspired by the limitless capacity to create beauty and delight in this world. I think design is a wonderful tool to yield, and with AI expanding what we can create, I hope to make things that improve people&apos;s lives at scale.
               </p>
               <p className="type-paragraph mb-0">&nbsp;</p>
-              <p className="type-paragraph mb-0">I also enjoy crispy tofu and dragon boat.</p>
+              <p className="type-paragraph mb-0">Originally from Bethesda, Maryland, I enjoy crispy tofu and dragon boat.</p>
             </div>
           </div>
         </ScrollPopdownReveal>
