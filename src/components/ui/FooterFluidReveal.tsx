@@ -1001,8 +1001,8 @@ export function FooterFluidReveal({
     function getLocalPos(clientX: number, clientY: number) {
       const rect = canvas.getBoundingClientRect();
       return {
-        x: scaleByPixelRatio(clientX - rect.left),
-        y: scaleByPixelRatio(clientY - rect.top),
+        x: ((clientX - rect.left) / Math.max(rect.width, 1)) * canvas.width,
+        y: ((clientY - rect.top) / Math.max(rect.height, 1)) * canvas.height,
       };
     }
 

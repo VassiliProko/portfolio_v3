@@ -363,6 +363,11 @@ main:has([data-not-found]) footer {
   display: none;
 }
 
+main:has([data-not-found]) {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *,
